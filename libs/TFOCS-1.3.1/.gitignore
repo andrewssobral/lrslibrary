@@ -1,0 +1,10 @@
+# See https://help.github.com/articles/ignoring-files
+.dropbox
+.DS_Store
+# Latex helper files
+*.aux
+*.dvi
+*.log
+*.out
+*.synctex.gz
+*.toc

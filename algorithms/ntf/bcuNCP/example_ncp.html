@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- saved from url=(0063)http://www.caam.rice.edu/~optimization/bcu/ncp/example_ncp.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>example_ncp</title><meta name="generator" content="MATLAB 7.13"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2013-01-14"><meta name="DC.source" content="example_ncp.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style><script type="text/javascript" src="chrome-extension://bfbmjmiodbnnpllbbbfblcplfjjepjdn/js/injected.js"></script></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="http://www.caam.rice.edu/~optimization/bcu/ncp/example_ncp.html#2">Generate synthetic 4-order tensor</a></li><li><a href="http://www.caam.rice.edu/~optimization/bcu/ncp/example_ncp.html#3">Solve problem</a></li><li><a href="http://www.caam.rice.edu/~optimization/bcu/ncp/example_ncp.html#4">Reporting</a></li><li><a href="http://www.caam.rice.edu/~optimization/bcu/ncp/example_ncp.html#5"></a><a href="http://www.caam.rice.edu/~optimization/bcu/ncp/example_ncp.m">Download this m-file</a></li></ul></div><pre class="codeinput"><span class="comment">% An example of nonnegative CP decomposition</span>
+</pre><h2>Generate synthetic 4-order tensor<a name="2"></a></h2><pre class="codeinput">rand(<span class="string">'seed'</span>,0); randn(<span class="string">'seed'</span>,0);
+N1 = 30; N2 = 30; N3 = 30; N4 = 30; <span class="comment">% tensor dimension</span>
+R=10; <span class="comment">% tensor rank</span>
+
+<span class="comment">% randomly generate factor matrices</span>
+A_org = max(0,randn(N1,R));
+B_org = max(0,randn(N2,R));
+C_org = max(0,randn(N3,R));
+D_org = max(0,randn(N4,R));
+
+<span class="comment">% get tensor M using the above factor matrices</span>
+M = ktensor({A_org,B_org,C_org,D_org});
+M = arrange(M);
+Mtrue = full(ktensor(M));
+
+sn = 60; <span class="comment">% signal to noise ratio</span>
+<span class="comment">% -- add noise --</span>
+N = tensor(max(0,randn(N1,N2,N3,N4)));
+M = Mtrue + 10^(-sn/20) * norm(Mtrue)*N/norm(N);
+</pre><h2>Solve problem<a name="3"></a></h2><pre class="codeinput">opts.maxit = 1000; <span class="comment">% max number of iterations</span>
+opts.tol = 1e-4; <span class="comment">% stopping tolerance</span>
+t0 = tic;
+[A,Out] = ncp(M,R,opts);
+time = toc(t0);
+</pre><pre class="codeoutput">Iteration:   84
+</pre><h2>Reporting<a name="4"></a></h2><pre class="codeinput">relerr = norm(full(A)-Mtrue)/norm(Mtrue);
+fprintf(<span class="string">'time = %4.2e, '</span>,time);
+fprintf(<span class="string">'solution relative error = %4.2e\n\n'</span>,relerr);
+
+figure;
+semilogy(1:Out.iter, Out.hist_obj,<span class="string">'k-'</span>,<span class="string">'linewidth'</span>,2);
+xlabel(<span class="string">'iteration'</span>,<span class="string">'fontsize'</span>,12);
+ylabel(<span class="string">'objective value'</span>,<span class="string">'fontsize'</span>,12)
+
+figure;
+semilogy(1:Out.iter, Out.hist_rel(2,:),<span class="string">'k-'</span>,<span class="string">'linewidth'</span>,2);
+xlabel(<span class="string">'iteration'</span>,<span class="string">'fontsize'</span>,12);
+ylabel(<span class="string">'relative residual'</span>,<span class="string">'fontsize'</span>,12)
+</pre><pre class="codeoutput">time = 9.65e-001, solution relative error = 4.26e-004
+
+</pre><img vspace="5" hspace="5" src="./example_ncp_files/example_ncp_01.png" alt=""> <img vspace="5" hspace="5" src="./example_ncp_files/example_ncp_02.png" alt=""> <h2><a href="http://www.caam.rice.edu/~optimization/bcu/ncp/example_ncp.m">Download this m-file</a><a name="5"></a></h2><p class="footer"><br>
+      Published with MATLAB® 7.13<br></p></div><!--
+##### SOURCE BEGIN #####
+% An example of nonnegative CP decomposition
+%% Generate synthetic 4-order tensor
+rand('seed',0); randn('seed',0);
+N1 = 30; N2 = 30; N3 = 30; N4 = 30; % tensor dimension
+R=10; % tensor rank
+
+% randomly generate factor matrices
+A_org = max(0,randn(N1,R));
+B_org = max(0,randn(N2,R));
+C_org = max(0,randn(N3,R));
+D_org = max(0,randn(N4,R));
+
+% get tensor M using the above factor matrices
+M = ktensor({A_org,B_org,C_org,D_org});
+M = arrange(M);
+Mtrue = full(ktensor(M));
+
+sn = 60; % signal to noise ratio
+% REPLACE_WITH_DASH_DASH add noise REPLACE_WITH_DASH_DASH
+N = tensor(max(0,randn(N1,N2,N3,N4)));
+M = Mtrue + 10^(-sn/20) * norm(Mtrue)*N/norm(N);
+
+%% Solve problem
+opts.maxit = 1000; % max number of iterations
+opts.tol = 1e-4; % stopping tolerance
+t0 = tic;
+[A,Out] = ncp(M,R,opts);
+time = toc(t0);
+
+%% Reporting
+relerr = norm(full(A)-Mtrue)/norm(Mtrue);
+fprintf('time = %4.2e, ',time);
+fprintf('solution relative error = %4.2e\n\n',relerr);
+
+figure;
+semilogy(1:Out.iter, Out.hist_obj,'k-','linewidth',2);
+xlabel('iteration','fontsize',12);
+ylabel('objective value','fontsize',12)
+
+figure;
+semilogy(1:Out.iter, Out.hist_rel(2,:),'k-','linewidth',2);
+xlabel('iteration','fontsize',12);
+ylabel('relative residual','fontsize',12)
+
+%% <http://www.caam.rice.edu/~optimization/bcu/ncp/example_ncp.m Download this m-file>
+##### SOURCE END #####
+--><style>.tb_button {padding:1px;cursor:pointer;border-right: 1px solid #8b8b8b;border-left: 1px solid #FFF;border-bottom: 1px solid #fff;}.tb_button.hover {borer:2px outset #def; background-color: #f8f8f8 !important;}.ws_toolbar {z-index:100000} .ws_toolbar .ws_tb_btn {cursor:pointer;border:1px solid #555;padding:3px}   .tb_highlight{background-color:yellow} .tb_hide {visibility:hidden} .ws_toolbar img {padding:2px;margin:0px}</style></body><object id="9bebabba-8bdb-b189-38b8-598baaab94a4" width="0" height="0" type="application/gas-events-bb"></object></html>

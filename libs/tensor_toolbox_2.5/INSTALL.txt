@@ -1,0 +1,29 @@
+Please remember to cite the appropriate references when you have used
+Tensor Toolbox in your work. See "How to Cite" under
+http://www.sandia.gov/~tgkolda/TensorToolbox/ for more details.
+
+To install the Tensor Toolbox for MATLAB:
+
+1. Unpack the compressed file. In a linux environment, for example, this can
+   be done from the command line via:
+
+     unzip tensor_toolbox_2.5.zip
+
+   *or*
+
+     gunzip -c tensor_toolbox_2.5.tar.gz | tar xvf -
+
+   This should create a directory named *tensor_toolbox_2.5*.
+
+2. Rename the root directory from *tensor_toolbox_2.5* 
+   to *tensor_toolbox*.
+
+3. Start MATLAB.
+
+4. Within MATLAB, cd to the *tensor_toolbox* directory and execute the
+   following commands:
+
+     addpath(pwd) %<-- Add the tensor toolbox to the MATLAB path
+     cd ../met; addpath(pwd) %<-- [OPTIONAL] Also add the met directory
+     savepath %<-- Save for future MATLAB sessions
+ 

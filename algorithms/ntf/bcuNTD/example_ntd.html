@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- saved from url=(0063)http://www.caam.rice.edu/~optimization/bcu/ntd/example_ntd.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>example_ntd</title><meta name="generator" content="MATLAB 7.13"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2013-01-14"><meta name="DC.source" content="example_ntd.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style><script type="text/javascript" src="chrome-extension://bfbmjmiodbnnpllbbbfblcplfjjepjdn/js/injected.js"></script></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="http://www.caam.rice.edu/~optimization/bcu/ntd/example_ntd.html#2">Generate synthetic 3-order tensor</a></li><li><a href="http://www.caam.rice.edu/~optimization/bcu/ntd/example_ntd.html#3">Solve problem</a></li><li><a href="http://www.caam.rice.edu/~optimization/bcu/ntd/example_ntd.html#4">Reporting</a></li><li><a href="http://www.caam.rice.edu/~optimization/bcu/ntd/example_ntd.html#5"></a><a href="http://www.caam.rice.edu/~optimization/bcu/ntd/example_ntd.m">Download this m-file</a></li></ul></div><pre class="codeinput"><span class="comment">% An example of nonnegative Tucker decomposition</span>
+</pre><h2>Generate synthetic 3-order tensor<a name="2"></a></h2><pre class="codeinput">Nway = [50,50,50]; <span class="comment">% dimension of tensor</span>
+coreNway = [5,5,5]; <span class="comment">% dimension of core tensor</span>
+
+<span class="comment">% randomly generate core tensor</span>
+G = tensor(max(0,randn(coreNway)));
+A = cell(1,ndims(G));
+<span class="comment">% randomly generate factor matrices</span>
+<span class="keyword">for</span> i = 1:ndims(G)
+    A{i} = max(0,randn(Nway(i),coreNway(i)));
+<span class="keyword">end</span>
+<span class="comment">% generate tensor</span>
+Mtrue = full(ttensor(G,A)); N = ndims(Mtrue);
+
+sn = 60; <span class="comment">% signal to noise ratio</span>
+<span class="comment">% -- add noise --</span>
+Noise = tensor(max(0,randn(Nway)));
+M = Mtrue + 10^(-sn/20)*norm(Mtrue)/norm(Noise)*Noise;
+</pre><h2>Solve problem<a name="3"></a></h2><pre class="codeinput">opts.maxit = 1000; opts.tol = 1e-4;
+t0 = tic;
+[A,C,Out] = ntd(M,coreNway,opts);
+time = toc(t0);
+</pre><pre class="codeoutput">Iteration:  582
+</pre><h2>Reporting<a name="4"></a></h2><pre class="codeinput">relerr = norm(full(ttensor(C,A))-Mtrue)/norm(Mtrue);
+fprintf(<span class="string">'time = %4.2e, '</span>,time);
+fprintf(<span class="string">'solution relative error = %4.2e\n\n'</span>,relerr);
+
+figure;
+semilogy(1:Out.iter, Out.hist_obj,<span class="string">'k-'</span>,<span class="string">'linewidth'</span>,2);
+xlabel(<span class="string">'iteration'</span>,<span class="string">'fontsize'</span>,12);
+ylabel(<span class="string">'objective value'</span>,<span class="string">'fontsize'</span>,12)
+
+figure;
+semilogy(1:Out.iter, Out.hist_rel(2,:),<span class="string">'k-'</span>,<span class="string">'linewidth'</span>,2);
+xlabel(<span class="string">'iteration'</span>,<span class="string">'fontsize'</span>,12);
+ylabel(<span class="string">'relative residual'</span>,<span class="string">'fontsize'</span>,12)
+</pre><pre class="codeoutput">time = 2.80e+000, solution relative error = 5.00e-004
+
+</pre><img vspace="5" hspace="5" src="./example_ntd_files/example_ntd_01.png" alt=""> <img vspace="5" hspace="5" src="./example_ntd_files/example_ntd_02.png" alt=""> <h2><a href="http://www.caam.rice.edu/~optimization/bcu/ntd/example_ntd.m">Download this m-file</a><a name="5"></a></h2><p class="footer"><br>
+      Published with MATLAB® 7.13<br></p></div><!--
+##### SOURCE BEGIN #####
+% An example of nonnegative Tucker decomposition
+%% Generate synthetic 3-order tensor
+Nway = [50,50,50]; % dimension of tensor
+coreNway = [5,5,5]; % dimension of core tensor
+
+% randomly generate core tensor
+G = tensor(max(0,randn(coreNway)));
+A = cell(1,ndims(G));
+% randomly generate factor matrices
+for i = 1:ndims(G)
+    A{i} = max(0,randn(Nway(i),coreNway(i)));
+end
+% generate tensor
+Mtrue = full(ttensor(G,A)); N = ndims(Mtrue);
+
+sn = 60; % signal to noise ratio
+% REPLACE_WITH_DASH_DASH add noise REPLACE_WITH_DASH_DASH
+Noise = tensor(max(0,randn(Nway)));
+M = Mtrue + 10^(-sn/20)*norm(Mtrue)/norm(Noise)*Noise;
+
+%% Solve problem
+opts.maxit = 1000; opts.tol = 1e-4;
+t0 = tic;
+[A,C,Out] = ntd(M,coreNway,opts);
+time = toc(t0);
+
+%% Reporting
+relerr = norm(full(ttensor(C,A))-Mtrue)/norm(Mtrue);
+fprintf('time = %4.2e, ',time);
+fprintf('solution relative error = %4.2e\n\n',relerr);
+
+figure;
+semilogy(1:Out.iter, Out.hist_obj,'k-','linewidth',2);
+xlabel('iteration','fontsize',12);
+ylabel('objective value','fontsize',12)
+
+figure;
+semilogy(1:Out.iter, Out.hist_rel(2,:),'k-','linewidth',2);
+xlabel('iteration','fontsize',12);
+ylabel('relative residual','fontsize',12)
+
+%% <http://www.caam.rice.edu/~optimization/bcu/ntd/example_ntd.m Download this m-file>
+##### SOURCE END #####
+--><style>.tb_button {padding:1px;cursor:pointer;border-right: 1px solid #8b8b8b;border-left: 1px solid #FFF;border-bottom: 1px solid #fff;}.tb_button.hover {borer:2px outset #def; background-color: #f8f8f8 !important;}.ws_toolbar {z-index:100000} .ws_toolbar .ws_tb_btn {cursor:pointer;border:1px solid #555;padding:3px}   .tb_highlight{background-color:yellow} .tb_hide {visibility:hidden} .ws_toolbar img {padding:2px;margin:0px}</style></body><object id="c9a84a88-cb88-968d-d9d9-ba812a81afa4" width="0" height="0" type="application/gas-events-bb"></object></html>

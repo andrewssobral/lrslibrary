@@ -1,0 +1,240 @@
+-- Note --
+As of the move to github on Oct 2013, we will not mention
+minor changes in this changelog since minor changes
+can be viewed automatically using github's versioning tools
+----------
+
+Oct 29 2013, v1.3 release 2
+    Renaming solver_OrderedLASSO.m to solver_SLOPE.m
+    Renaming prox_Ol1.m to prox_Sl1.m
+    Renaming examples/smallscale/test_OrderedLASSO.m to ...test_SLOPE.m
+
+Oct 10 2013, v1.3
+        License changed! See LICENSE for details
+    New:
+        proj_linfl2             Projects rows onto l2 norm constraints
+        proj_affine.m           Projects onto generic affine constraints
+        proj_singleAffine.m     Projects onto single affine constraint
+        proj_boxAffine.m        In response to 
+            http://ask.cvxr.com/question/749/tfocs-projecting-on-box-affine-constraint/: 
+            projects onto intersection of box constraint and affine constraints
+        proj_conic.m            Projects onto the second-order (aka Lorentz) cone
+            Contributed by Joseph Salmon
+        proj_l2group.m          Projections onto a partitioned l2 group constraint
+            Contributed by Joseph Salmon
+        linop_TV3D.m            Total variation for 3D grids (linop_TV is for 2D);
+			contributed by Mahdi Hosseini (mahdi.hosseini@mail.utoronto.ca)
+		test_LASSO.m 		    Tests the L1RLS (L1 regularized Least-Squares)
+            problem, aka LASSO
+        @single/*               Allow TFOCS objects to have data type single
+			May not work well with sparse matrices (which are not allowed
+			to be sparse data type). Thanks to Graham Coleman.
+        mexFiles/*              New director with mex files
+            Some non-core functions require mex files, and basic
+            installation routines and the mex files themselves are in this
+            directory.
+		solver_OrderedLASSO.m   Solves the ordered LASSO problem
+		test_OrderedLASSO.m     Test script for solver_OrderedLASSO
+		prox_OL1.m              Proximity operator for the ordered LASSO
+            See http://www-stat.stanford.edu/~candes/OrderedL1/
+             "Statistical Estimation and Testing via the Ordered l1 Norm"
+            by M. Bogdan, E. van den Berg, W. Su, and E. J. Candès, 2013
+		mexFiles/proxAdaptiveL1Mex.c     Mex file helper for the ordered LASSO
+
+    Modified:
+		proj_maxEig.m           Fixed bug with variable names
+        prox_l1linf.m           Fixed bug with typo of repmat for some cases
+        prox_nuclear.m          Removed dependence on ismatrix() for greater compatibility
+        @double/tfocs_dot.m     Fixed bug for multi-dimensional arrays, and generally made
+            the code better. Thanks to Graham Coleman for finding the bug. @single/tfocs_dot.m
+            is similarly updated.
+        smooth_quad.m           Added use_eig mode that makes an expensive
+            one-time calculation and all subsequent calculations are cheaper
+        tfocs_initialize.m      Fixed bug in initialization code for rounding dimensions; added new
+            file private/round.m. This affected the demo for alternating completion.
+            Also allows data to be single data type instead of double (thanks to Graham Coleman)
+        proj_psdUTrace.m        Allows optional constraints that matrix is real-valued. Nov 23 2012
+                                Can now use eigs for large-scale computation. Feb 15 2013
+                                Fixed bug in eigs, March 18 2013
+        proj_psd.m              Modified to allow eigs() version. Feb 15 2013.
+        prox_trace.m            Allows optional constraints that specify the matrix is real-valued. Dec 9 2012
+                                Fixed bug with eigs parameters in largescale mode 
+        linop_TV.m              Implemented norms() function so it is now independent of CVX
+            Also, adjoint operation is much faster due to a data locality trick
+        proj_l2.m               Fixed bad documentation in .m file. 
+            Also, fixed a bug, so we now project onto the norm ball, not its boundary
+            Thanks to Graham Coleman, fixed a bug for multidimensional arrays
+        prox_l1l2.m             Using bsxfun for speed improvement
+        tfocs_SCD.m             lines 41-44 were commented out but shouldn't have been; 
+            thanks to Mark Harfouche for noticing this on the ask.cvxr.com forums
+
+	Modified for Octave compatibility:
+		private/tfocs_prox.m
+		prox_l1.m
+		prox_l1l2.m
+        prox_hingeDual.m 
+        prox_hinge.m 
+        prox_l1linf.m 
+        prox_l1pos.m 
+        prox_nuclear.m 
+        prox_trace.m
+        proj_maxEig.m
+        proj_psd.m
+
+
+Sept 7 2012, v1.2
+    New:
+        proj_nuclear.m          Projection onto nuclear norm ball.
+        proj_spectral.m         Projection onto spectral norm ball.
+        prox_max.m              Maximum. Dual of proj_simplex.m
+        proj_max.m              Projection so max <= 1. Dual of prox_l1pos.m
+        prox_maxEig.m           Maximum eigenvalue. Dual of proj_psdUTrace.m
+        proj_maxEig.m           Projection so max eig <= 1. Dual of prox_trace.m
+        prox_dualize.m          Computes the Legendre dual of a function.
+        examples/demos/         Directory with demos (featured on website) is
+            added
+        test_TraceLS.m          Added. Shows how to run solver_TraceLS.m
+        test_psdCompletion.m    Added. Shows how to run solver_psdComp.m and
+            solver_psdCompConstrainedTrace.m
+        Contents.m              Added. Describes the relevant functions.
+
+    Modified private/tfocs_prox.m, prox_l1.m, and tfocs_SCD.m to allow
+        mu to be a vector. Need to modify other prox functions.
+    Modified test_proxPair.m to test with symmetric, psd, and sparse matrices.
+    Modified prox_spectral.m to take advantage of symmetric matrices
+    Modified linop_subsample.m to work in more situations
+    Modified proj_psd.m to use eigs() if requested, though this is usually not
+        beneficial
+
+    Fixed bug in prox_hinge.m (for y = [] case ). 
+    Fixed bug in private/tfocs_iterate.m for stopCrit = Inf case
+        Thanks to Masoud Ahookhosh for finding this. 
+    Fixed bugs in solver_psdComp.m and solver_psdCompConstrainedTrace.m
+    Made proj_l1.m more numerically stable; thanks to Chris Kauffman for finding
+        and fixing this.
+    Made size_compat.m allow multiple singleton dimensions in ND arrays; thanks
+        to Graham Coleman for finding and fixing this.
+
+Feb 29 2012, v1.1a
+    Minor bug fixes, thanks to Graham Coleman for finding them:
+    
+    private/print_cell_size.m incorrectly displayed the size of inputs (only
+        applied in "debug" mode)
+    private/size_compat.m has been fixed to work with 3D (or ND) arrays
+        when the final array dimension is a singleton (e.g. 20 x 30 x 1)
+
+Jan 25 2012, v1.1 
+    User guide updated.
+    Changes to code:
+    New:
+        linop_fft.m         FFT and its transpose. Supports sub-sampling.
+        test_proxPair.m     Tests whether f and fDual are really duals. Not yet
+            documented in user guide, but see the help text.
+        solver_sLP_box.m    LP with equality and box constraints
+        test_sBPDN_nonnegative.m    Tests BPDN using x >= 0 constraint.
+        image_denoising_withSPOT.m  An example of image denoising
+            and using the SPOT toolbox. The helper file "plotNow.m" is
+            also new, and allows you to watch a movie in real-time of
+            the iterates. Also shows how to use reweighting.
+        prox_l1pos.m        proximity operator for ||x||_1 restricted to x >= 0
+        test_SVM.m          demo with support vector machines and hinge-loss
+        test_complicatedUsage.m     demo with several matrix variables and
+            other complicated terms
+        test_all.m          runs all small scale examples
+        linop_reshape.m     reshapes input (an extension of linop_vec). Thanks
+            to Graham Coleman for contributing.
+        tfocs.m             "debug" option added to main tfocs routine
+
+    Bug fixes:
+        solver_sSDP.m       fixed bug, thanks to Brian Borchers.  
+        prox_hingeDual.m    fixed NaN bug
+        continuation.m      fixed bug for case when there are multiple matrix
+            variables, and for 3D arrays (thanks to Graham Coleman).
+        prox_spectral.m     fixed bugs
+        test_sTV_largescale.m   fixed myAwgn() bug (thanks to Matthew Suttinger)
+        linop_stack.m       fixed bug that occurs when domain is a set of
+            matrices rather than vectors; thanks to Graham Coleman for discovering.
+        all solvers:        fixed a bug with variable "L" that arose whenever
+            there is a function called "L.m" in the path (for example, WaveLab has
+            such a function).
+        tfocs_LLM.m         fixed bug that occurs when restart is used
+        tfos_initialize.m   fixed bug for strong convexity case when Lexact not
+            specified
+        prox_boxDual.m      fixed bug with bounds were not scalars
+        proj_l2.m           fixed bug for q ~= 1 case
+        proj_0.m            fixed bug for non-constant offsetsl thanks to Graham
+            Colemen
+
+    Improvements:
+        tfocs.m             allows new "debug" flag that gives more verbose
+            information, useful when debugging
+        tfocs_inizialize.m  gives more useful error message when sizes are
+            incorrect
+        tfocs_iterate.m     Improved performance for stopCrit = 3
+        tfocs_iterate.m     Now supports 'printStopCrit' to display progress of
+            whatever value is used to determine the stopping criteria
+        linop_test.m        Supports conjugate-symmetric complex inputs/outputs
+        test_sBPDN_withContinuation.m         Updated 
+        solver_sBP.m        Supports non-negativity constraints
+        solver_sBPDN.m      Supports non-negativity constraints
+        tfocs_AT.m          Now includes cntr_reset field, which explicitly
+            recalculates some quantities every so often to avoid accumulation
+            of roundoff error.
+        proj_boxDual.m --> prox_boxDual.m   to have more consistent naming.
+        proj_l2.m           handles diagonal scaling term; this feature is
+            experimental and uses a 1D optimization routine. It should
+            be efficient for N <= 2^18 at least
+        prox_l2.m           same experimental modification as in proj_l2.m
+        linop_scale.m       allows user to specify size explicitly, if desired
+        prox_hinge.m and prox_hingeDual.m   allow more general form with "y"
+            variable
+        example_{LMI, LinearProgram, SDP} renamed to test_{LMI, LinearProgram,
+            SDP }
+
+
+March 20 2011, v1.0c
+    An almost comprehensive lists of changes since December 2010:
+    New:
+        solver_TraceLS.m    Solves trace-regularized least-squares problem
+        solver_sLP.m        Linear Program solver
+        solver_sSDP.m       Semi-Definite Program solver
+        solver_sLMI.m       Linear Matrix Inequality solver
+        prox_hinge.m        Proximity fcn for hinge-loss
+        prox_hingeDual.m    Proximity fcn for dual of hinge-loss
+        proj_0.m            Projection onto zero. Added for completeness
+        proj_boxDual.m      Proximity fcn for dual of prox_box.m
+        smooth_huber.m      Huber function
+        smooth_logLLogistic.m   Log-likelihood of the logistic function
+        smooth_logLPoisson.m    Log-likelihood of independent Poisson r.v.
+
+        The continuation feature is now builtin to tfocs_SCD.m
+
+    Updated and/or bug fixes:
+        linop_subsample.m   -- can now handle matrix entry sampling
+        proj_l2.m   -- bug fix
+        prox_l1.m   -- allow scaling "q" to be a non-negative vector
+        proj_box.m  -- bug fix
+        private/tfocs_initialize.m  -- bug fixes
+        private/tfocs_iterate.m     -- bug fixes
+
+        smallscale/examples: the .mat files have been moved to a separate
+            directory
+        smooth_quad.m   -- allows nonsmooth usage too now
+        solver_L1RS.m   -- bug fix (typo); thanks to Ewout van den Berg
+        linop_test.m    -- now compatible with multidemensional arrays
+
+    New demos:
+        smallscale/example_LinearProgram.m  linear programming
+        smallscale/example_SDP.m        semi-definite programming
+        smallscale/example_LMI.m        linear matrix inequality
+        largescale/image_denosing_withSPOT.m
+
+    User guide:
+        Updated to mention the new routines
+        Describes scaling issues
+        Describes continuation
+        Added acknowledgements section
+
+    Misc:
+        Thanks to Graham Coleman for bug-fixes related to multidimensional
+        arrays

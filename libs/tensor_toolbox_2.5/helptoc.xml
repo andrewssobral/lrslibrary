@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<!-- $Revision: 1.1 $ $Date: 2006/08/30 23:22:37 $ -->
+
+<toc version="1.0">
+
+<tocitem target="tensor_toolbox_product_page.html" >Tensor 
+
+<tocitem image="$toolbox/matlab/icons/pageicon.gif"
+ target="doc/html/A1_tensor_doc.html">Tensors</tocitem>
+<tocitem image="$toolbox/matlab/icons/pageicon.gif"
+ target="doc/html/A2_sptensor_doc.html">Sparse Tensors</tocitem>
+<tocitem image="$toolbox/matlab/icons/pageicon.gif"
+ target="doc/html/B1_tenmat_doc.html">Converting a tensor to a matrix and vice versa</tocitem>
+<tocitem image="$toolbox/matlab/icons/pageicon.gif"
+ target="doc/html/B2_sptenmat_doc.html">Converting sparse tensors to matrices and vice versa</tocitem>
+<tocitem image="$toolbox/matlab/icons/pageicon.gif"
+ target="doc/html/C_ttensor_doc.html">Tucker Tensors</tocitem>
+<tocitem image="$toolbox/matlab/icons/pageicon.gif"
+ target="doc/html/D_ktensor_doc.html">Kruskal tensors</tocitem>
+<tocitem image="$toolbox/matlab/icons/pageicon.gif"
+ target="doc/html/M1_multiply_doc.html">Multiplying tensors</tocitem>
+<tocitem image="$toolbox/matlab/icons/pageicon.gif"
+ target="doc/html/N_nvecs_doc.html">Generating the leading mode-n vectors</tocitem>
+<tocitem image="$toolbox/matlab/icons/pageicon.gif"
+ target="doc/html/Q_collapse_scale_doc.html">Collapsing and scaling tensors</tocitem>
+<tocitem image="$toolbox/matlab/icons/pageicon.gif"
+ target="doc/html/S_test_problems_doc.html">Creating test problems and initial guesses</tocitem>
+<tocitem image="$toolbox/matlab/icons/pageicon.gif"
+ target="doc/html/T1_algorithms_doc.html">ALS optimization for CP and Tucker tensor decompositions</tocitem>
+<tocitem image="$toolbox/matlab/icons/pageicon.gif"
+ target="doc/html/T2_opt_algorithms_doc.html">All-at-once optimization for CP tensor decomposition</tocitem>
+<tocitem image="$toolbox/matlab/icons/pageicon.gif"
+ target="doc/html/T3_wopt_algorithms_doc.html">Weighted optimization for CP tensor decomposition with incomplete data</tocitem>
+<tocitem image="$toolbox/matlab/icons/pageicon.gif"
+ target="doc/html/T4_cpapr_doc.html">Alternating Poisson Regression for fitting CP to sparse count data</tocitem>
+<tocitem image="$toolbox/matlab/icons/pageicon.gif"
+ target="doc/html/V_SSHOPM_doc.html">Shifted Symmetric Higher-Order Power Method (SSHOPM)</tocitem>
+
+<tocitem target="http://csmr.ca.sandia.gov/~tgkolda/TensorToolbox/"
+image="$toolbox/matlab/icons/webicon.gif">Tensor Toolbox Site</tocitem>
+
+</tocitem>
+</toc>

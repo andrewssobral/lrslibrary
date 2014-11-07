@@ -1,0 +1,81 @@
+-
+RPCA | PCP  | Principal Component Pursuit (Candes et al. 2009) | 2
+RPCA | FPCP | Fast PCP (Rodriguez and Wohlberg 2013) | 1
+RPCA | AS-RPCA | Active Subspace: Towards Scalable Low-Rank Learning (Liu and Yan, 2012) | 1
+RPCA | R2PCP | Riemannian Robust Principal Component Pursuit (Hintermüller and Wu, 2014) | 1
+RPCA | ALM   | Augmented Lagrange Multiplier (Tang and Nehorai 2011) | 3
+RPCA | EALM  | Exact ALM (Lin et al. 2009) | 2
+RPCA | IALM  | Inexact ALM (Lin et al. 2009) | 1
+RPCA | IALM_LMSVDS | IALM with LMSVDS (Liu et al. 2012) | 1
+RPCA | IALM_BLWS   | IALM with BLWS (Lin and Wei 2010) | 2
+RPCA | APG_PARTIAL | Partial Accelerated Proximal Gradient (Lin et al. 2009) | 1
+RPCA | APG     | Accelerated Proximal Gradient (Lin et al. 2009) | 2
+RPCA | DUAL    | Dual RPCA (Lin et al. 2009) | 4
+RPCA | SVT     | Singular Value Thresholding (Cai et al. 2008) | 5
+RPCA | ADM     | Alternating Direction Method (Yuan and Yang 2009) | 2
+RPCA | LSADM   | LSADM (Goldfarb et al. 2010) | 1
+RPCA | L1F     | L1 Filtering (Liu et al. 2011) | 1
+RPCA | DECOLOR | Contiguous Outliers in the Low-Rank Representation (Zhou et al. 2011) | 1
+---
+--- RPCA-SPCP
+RPCA | NSA1 | Non-Smooth Augmented Lagrangian v1 (Aybat et al. 2011) | 1
+RPCA | NSA2 | Non-Smooth Augmented Lagrangian v2 (Aybat et al. 2011) | 1
+RPCA | PSPG | Partially Smooth Proximal Gradient (Aybat et al. 2012) | 1
+---
+--- Probabilistic/Bayesian RPCA
+RPCA | BRPCA-MD     | Bayesian Robust PCA with Markov Dependency (Ding et al. 2011) | 4
+RPCA | BRPCA-MD-NSS | BRPCA-MD with Non-Stationary Noise (Ding et al. 2011) | 4
+RPCA | VBRPCA       | Variational Bayesian RPCA (Babacan et al. 2011) | 2
+RPCA | PRMF         | Probabilistic Robust Matrix Factorization (Wang et al. 2012) | 2
+RPCA | OPRMF        | Online PRMF (Wang et al. 2012) | 4
+RPCA | MBRMF        | Markov BRMF (Wang and Yeung 2013) | 4
+---
+--- RPCA-QPCP
+RPCA | TFOCS-EC | TFOCS with equality constraints (Becker et al. 2011) | 2
+RPCA | TFOCS-IC | TFOCS with inequality constraints (Becker et al. 2011) | 2
+---
+--- Approximated RPCA ---
+RPCA | GoDec   | Go Decomposition (Zhou and Tao 2011) | 1
+RPCA | SSGoDec | Semi-Soft GoDec (Zhou and Tao 2011) | 1
+---
+--- LRR (Low Rank Recovery) ---
+LRR | EALM   | Exact ALM (Lin et al. 2009) | 2
+LRR | IALM   | Inexact ALM (Lin et al. 2009) | 1
+LRR | ADM    | Alternating Direction Method (Lin et al. 2011) | 1
+LRR | LADMAP | Linearized ADM with Adaptive Penalty (Lin et al. 2011) | 1
+LRR | FastLADMAP | Fast LADMAP (Lin et al. 2011) | 1
+---
+--- NMF (Non-Negative Matrix Factorization) ---
+NMF | NMF-MU      | NMF solved by Multiplicative Updates | 1
+NMF | NMF-PG      | NMF solved by Projected Gradient | 1
+NMF | NMF-ALS     | NMF solved by Alternating Least Squares | 1
+NMF | NMF-ALS-OBS | NMF solved by Alternating Least Squares with Optimal Brain Surgeon | 1
+NMF | PNMF        | Probabilistic Non-negative Matrix Factorization | 2
+NMF | ManhNMF  | Manhattan NMF (Guan et al. 2013) | 1
+NMF | NeNMF    | NMF via Nesterov's Optimal Gradient Method (Guan et al. 2012) | 1
+NMF | LNMF     | Spatially Localized NMF (Li et al. 2001) | 1
+NMF | ENMF     | Exact NMF (Gillis and Glineur, 2012) | 2
+NMF | nmfLS2   | Non-negative Matrix Factorization with sparse matrix (Ji and Eisenstein, 2013) | 2
+NMF | Semi-NMF | Semi Non-negative Matrix Factorization (Trigeorgis et al. 2014) | 1
+NMF | Deep-Semi-NMF | Deep Semi Non-negative Matrix Factorization (Trigeorgis et al. 2014) | 1
+---
+--- NTF (Non-Negative Tensor Factorization) ---
+NTF | betaNTF  | Simple beta-NTF implementation (Antoine Liutkus, 2012) | 2
+NTF | bcuNTD   | Non-negative Tucker Decomposition by block-coordinate update (Xu and Yin, 2012) | 2
+NTF | bcuNCP   | Non-negative CP Decomposition by block-coordinate update (Xu and Yin, 2012) | 1
+NTF | NTD-MU   | Non-negative Tucker Decomposition solved by Multiplicative Updates (Zhou et al. 2012) | 2
+NTF | NTD-APG  | Non-negative Tucker Decomposition solved by Accelerated Proximal Gradient (Zhou et al. 2012) | 2
+NTF | NTD-HALS | Non-negative Tucker Decomposition solved by Hierarchical ALS  (Zhou et al. 2012) | 2
+---
+--- TD (Tensor Decomposition) ---
+TD | HoSVD        | Higher-order Singular Value Decomposition (Tucker Decomposition) | 1
+TD | HoRPCA-IALM  | HoRPCA solved by IALM (Goldfarb and Qin, 2013) | 2
+TD | HoRPCA-S     | HoRPCA with Singleton model solved by ADAL (Goldfarb and Qin, 2013) | 2
+TD | HoRPCA-S-NCX | HoRPCA with Singleton model solved by ADAL (non-convex) (Goldfarb and Qin, 2013) | 4
+TD | Tucker-ADAL  | Tucker Decomposition solved by ADAL (Goldfarb and Qin, 2013) | 2
+TD | Tucker-ALS   | Tucker Decomposition solved by ALS | 1
+TD | CP-ALS       | PARAFAC/CP decomposition solved by ALS | 1
+TD | CP-APR       | PARAFAC/CP decomposition solved by Alternating Poisson Regression (Chi et al. 2011) | 4
+TD | CP2          | PARAFAC2 decomposition solved by ALS (Bro et al. 1999) | 4
+TD | RSTD         | Rank Sparsity Tensor Decomposition (Yin Li 2010) | 2
+TD | t-SVD        | Tensor SVD in Fourrier Domain (Zhang et al. 2013) | 1

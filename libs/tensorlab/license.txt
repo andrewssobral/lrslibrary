@@ -1,0 +1,220 @@
+Tensorlab - Software License Agreement
+
+This Software was developed by the research groups SISTA, Dept. of
+Electrical Engineering (ESAT), and NALAG, Dept. of Computer Science, and is
+owned by the KU Leuven (hereinafter referred to as "KU LEUVEN").
+
+Article 1 - Definitions
+
+1.1 "Software" shall mean KU LEUVEN's software described in Annex A.
+
+1.2 "Effective Date" shall mean the date on which you download or install
+the Software and associated files on your system.
+
+1.3 "Academic User" shall mean a user of Software: who is employed by, or a
+student enrolled at, or a scientist legitimately affiliated with an
+academic, non-profit or government institution; and whose use of the
+Software is on behalf of and in the interest of such academic, non-profit
+or government institution and is not on behalf of a commercial entity.
+
+Article 2 - License
+
+2.1 As long as you qualify as an Academic User, KU LEUVEN hereby grants you
+a royalty-free, non-exclusive, non-transferable, time limited license to
+the Software supplied by KU LEUVEN for internal, non-commercial research
+use only. You acknowledge and agree that you may not use the Software for
+commercial purpose without first obtaining a commercial license from
+KU LEUVEN.
+
+2.2 For the purposes of this Agreement "use for commercial purposes" shall
+include the use or transfer of the Software for a consideration as well as
+the use of the Software to support commercial activities including
+providing services with the Software to third parties. Any use of Software
+for commercial purposes without first obtaining a license from KU LEUVEN
+shall be deemed a breach of this Agreement for which KU LEUVEN shall be
+entitled to whatever remedies it may have under law or equity, including
+recovery of consequential damages.
+
+2.3 You shall not sublicense any of your rights to the Software. Neither
+will you transfer the Software to a third party, unless prior written
+agreement of KU LEUVEN has been obtained.
+
+2.4 This Agreement does not grant or imply any right, title or license into
+or under any third party software (including but not limited to e.g.,
+MATLAB software) or intellectual property rights relating thereto.
+
+Article 3 - Ownership
+
+The Software is copyrighted and KU LEUVEN retains all title and ownership
+to the Software. Nothing in this Agreement shall preclude KU LEUVEN from
+entering into agreements with third parties concerning the Software.
+
+Improvements or modifications of the Software may not be distributed
+without obtaining a prior written agreement of KU LEUVEN.
+
+Article 4 - Publication
+
+You shall acknowledge KU LEUVEN as the provider of the Software and shall
+cite the references listed in Annex A in any manuscript describing data
+obtained using the Software.
+
+Article 5 - No Support
+
+This license does not entitle you to receive from KU LEUVEN technical
+support, telephone assistance, or enhancements or updates to the Software.
+Any support that may be given by the authors of the Software on voluntary
+basis is provided "as is" and KU LEUVEN makes no representations or
+warranties of  any type whatsoever, express or implied, regarding the
+provided support.
+
+Article 6 - Warranty
+
+6.1 The Software is provided "as is" by KU LEUVEN without warranty of any
+kind, whether express or implied.  KU LEUVEN specifically disclaims the
+implied warranties of merchantability and fitness for a particular purpose
+or that the use of the Software will not infringe any patents, copyrights
+or trademarks or other rights of third parties. The entire risk as to the
+quality and performance of the Software is borne by you.
+
+6.2 KU LEUVEN shall not be responsible for any loss, direct or indirect
+damage or other liability incurred by you or any third party in connection
+with the Software licensed by KU LEUVEN under this Agreement. Under no
+circumstances shall KU LEUVEN be liable for any direct, indirect, special,
+incidental, or consequential damages arising out of any performance of this
+Agreement, whether such damages are based on contract, tort or any other
+legal theory. You shall defend, indemnify and hold harmless KU LEUVEN from
+all losses, damages, expenses, costs and other liabilities in connection
+with your use or disclosure of the Software.
+
+Article 7 - Indemnification
+
+You will indemnify, defend and hold harmless KU LEUVEN, its directors,
+officers, employees and agents from and against all liability, losses,
+damages and expenses (including attorney's fees and costs) arising out of
+any claims, demands, actions or other proceedings made or instituted by any
+third party against any of them and arising out of or relating to any
+breach of this Agreement by you, or any use of the Software by you, except
+insofar as such claims or liability result from KU LEUVEN gross negligence
+or willful misconduct.
+
+Article 8 - Term
+
+8.1 This Agreement is effective from the Effective Date until August 1,
+2015. This Agreement will terminate immediately without notice from
+KU LEUVEN if you fail to comply with any provision of this Agreement.
+
+8.2 In case of termination the provisions of Article 3, 6, and 7 shall
+remain in full force and effect.
+
+8.3 Upon termination you will delete all copies of Software and the
+attendant documentation.
+
+Article 9 - Miscellaneous
+
+9.1 Any notice authorised or required to be given to KU LEUVEN under this
+Agreement shall be in writing and shall be deemed to be duly given if left
+at or sent by registered post.
+
+9.2 The terms and conditions herein contained constitute the entire
+agreement between the Parties and supersede all previous agreements and
+understandings, whether oral or written, between the parties hereto with
+respect to the subject matter thereof.
+
+Article 10 - Conflicts
+
+In the event of conflicts in the interpretation and/or performance of this
+Agreement, the parties shall first undertake to settle their differences
+amicably. If no amicable settlement can be reached concerning the execution
+and/or interpretation of this Agreement, such conflict shall be brought
+before the courts of Leuven and Belgian Law shall be applicable.
+
+Annex A:
+
+A.1 Description of the Software:
+
+The Software constitutes any software distributed as part of or pertaining
+to the MATLAB toolbox Tensorlab as made available online at
+http://www.tensorlab.net/.
+
+A.2 References:
+
+[1] Laurent Sorber, Marc Van Barel and Lieven De Lathauwer. Tensorlab v2.0,
+    Available online, January 2014. URL: http://www.tensorlab.net/.
+
+---------------------------------------------------------------------------
+
+MINPACK - Software License Agreement
+
+Minpack Copyright Notice (1999) University of Chicago. All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice,
+this list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright
+notice, this list of conditions and the following disclaimer in the
+documentation and/or other materials provided with the distribution.
+
+3. The end-user documentation included with the redistribution, if any,
+must include the following acknowledgment:
+
+   "This product includes software developed by the University of Chicago,
+    as Operator of Argonne National Laboratory."
+
+Alternately, this acknowledgment may appear in the software itself, if and
+wherever such third-party acknowledgments normally appear.
+
+4. WARRANTY DISCLAIMER. THE SOFTWARE IS SUPPLIED "AS IS" WITHOUT WARRANTY
+OF ANY KIND. THE COPYRIGHT HOLDER, THE UNITED STATES, THE UNITED STATES
+DEPARTMENT OF ENERGY, AND THEIR EMPLOYEES: (1) DISCLAIM ANY WARRANTIES,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY IMPLIED WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE OR
+NON-INFRINGEMENT, (2) DO NOT ASSUME ANY LEGAL LIABILITY OR RESPONSIBILITY
+FOR THE ACCURACY, COMPLETENESS, OR USEFULNESS OF THE SOFTWARE, (3) DO NOT
+REPRESENT THAT USE OF THE SOFTWARE WOULD NOT INFRINGE PRIVATELY OWNED
+RIGHTS, (4) DO NOT WARRANT THAT THE SOFTWARE WILL FUNCTION UNINTERRUPTED,
+THAT IT IS ERROR-FREE OR THAT ANY ERRORS WILL BE CORRECTED.
+
+5. LIMITATION OF LIABILITY. IN NO EVENT WILL THE COPYRIGHT HOLDER, THE
+UNITED STATES, THE UNITED STATES DEPARTMENT OF ENERGY, OR THEIR EMPLOYEES:
+BE LIABLE FOR ANY INDIRECT, INCIDENTAL, CONSEQUENTIAL, SPECIAL OR PUNITIVE
+DAMAGES OF ANY KIND OR NATURE, INCLUDING BUT NOT LIMITED TO LOSS OF PROFITS
+OR LOSS OF DATA, FOR ANY REASON WHATSOEVER, WHETHER SUCH LIABILITY IS
+ASSERTED ON THE BASIS OF CONTRACT, TORT (INCLUDING NEGLIGENCE OR STRICT
+LIABILITY), OR OTHERWISE, EVEN IF ANY OF SAID PARTIES HAS BEEN WARNED OF
+THE POSSIBILITY OF SUCH LOSS OR DAMAGES.
+
+---------------------------------------------------------------------------
+
+GenRTR - Software License Agreement
+
+Copyright (c) 2007,2012 Christopher G. Baker, Pierre-Antoine Absil,
+Kyle A. Gallivan. All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice,
+this list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright
+notice, this list of conditions and the following disclaimer in the
+documentation and/or other materials provided with the distribution.
+
+3. Neither the names of the contributors nor of their affiliated
+institutions may be used to endorse or promote products derived from this
+software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+DAMAGE.

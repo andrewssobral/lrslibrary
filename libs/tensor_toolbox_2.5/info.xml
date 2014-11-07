@@ -1,0 +1,25 @@
+<productinfo
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="optional">
+<?xml-stylesheet type="text/xsl" href="optional"?>
+
+<matlabrelease>R2006a</matlabrelease>
+<name>Tensor</name>
+<type>toolbox</type>
+<icon>$toolbox/matlab/icons/unknownicon.gif</icon>
+<help_location>.</help_location>
+
+<list>
+  <listitem>
+    <label>Help</label>
+    <callback>doc tensor_toolbox/</callback>
+    <icon>$toolbox/matlab/icons/webicon.gif</icon>
+  </listitem>
+  <listitem>
+    <label>Tensor Toolbox Web Site</label>
+    <callback>web http://www.sandia.gov/~tgkolda/TensorToolbox</callback>
+    <icon>$toolbox/matlab/icons/webicon.gif</icon>
+  </listitem>
+</list>
+
+</productinfo>
