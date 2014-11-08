@@ -66,7 +66,7 @@ List of the algorithms available in LRSLibrary
 
 * * APG: Accelerated Proximal Gradient [(Lin et al. 2009)](http://arxiv.org/abs/1009.5055)  [website](http://perception.csl.illinois.edu/matrix-rank/sample_code.html)
 
-* * DUAL: Dual RPCA[(Lin et al. 2009)](http://arxiv.org/abs/1009.5055)  [website](http://perception.csl.illinois.edu/matrix-rank/sample_code.html)
+* * DUAL: Dual RPCA [(Lin et al. 2009)](http://arxiv.org/abs/1009.5055)  [website](http://perception.csl.illinois.edu/matrix-rank/sample_code.html)
 
 * * SVT: Singular Value Thresholding [(Cai et al. 2008)](http://arxiv.org/abs/0810.3286)  [website](http://perception.csl.illinois.edu/matrix-rank/sample_code.html)
 
@@ -105,15 +105,15 @@ List of the algorithms available in LRSLibrary
 * * SSGoDec: Semi-Soft GoDec [(Zhou and Tao 2011)](http://www.icml-2011.org/papers/41_icmlpaper.pdf) [website](https://sites.google.com/site/godecomposition/home)
 
 * LRR: Low Rank Recovery (5)
-* * EALM: Exact ALM (Lin et al. 2009) 
+* * EALM: Exact ALM [(Lin et al. 2009)](http://arxiv.org/abs/1009.5055) 
 
-* * IALM: Inexact ALM (Lin et al. 2009) 
+* * IALM: Inexact ALM [(Lin et al. 2009)](http://arxiv.org/abs/1009.5055) 
 
-* * ADM: Alternating Direction Method (Lin et al. 2011) 
+* * ADM: Alternating Direction Method [(Lin et al. 2011)](http://arxiv.org/abs/1109.0367)
 
-* * LADMAP: Linearized ADM with Adaptive Penalty (Lin et al. 2011) 
+* * LADMAP: Linearized ADM with Adaptive Penalty [(Lin et al. 2011)](http://arxiv.org/abs/1109.0367)
 
-* * FastLADMAP: Fast LADMAP (Lin et al. 2011) 
+* * FastLADMAP: Fast LADMAP [(Lin et al. 2011)](http://arxiv.org/abs/1109.0367) 
 
 * NMF: Non-Negative Matrix Factorization (12)
 * * NMF-MU: NMF solved by Multiplicative Updates 
@@ -126,55 +126,55 @@ List of the algorithms available in LRSLibrary
 
 * * PNMF: Probabilistic Non-negative Matrix Factorization 
 
-* * ManhNMF: Manhattan NMF (Guan et al. 2013) 
+* * ManhNMF: Manhattan NMF [(Guan et al. 2013)](http://arxiv.org/abs/1207.3438) [website](https://sites.google.com/site/nmfsolvers/) 
 
-* * NeNMF: NMF via Nesterovs Optimal Gradient Method (Guan et al. 2012) 
+* * NeNMF: NMF via Nesterovs Optimal Gradient Method [(Guan et al. 2012)](http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=6166359) [website](https://sites.google.com/site/nmfsolvers/) 
 
-* * LNMF: Spatially Localized NMF (Li et al. 2001) 
+* * LNMF: Spatially Localized NMF [(Li et al. 2001)](http://dx.doi.org/10.1109/CVPR.2001.990477) 
 
-* * ENMF: Exact NMF (Gillis and Glineur, 2012) 
+* * ENMF: Exact NMF [(Gillis and Glineur, 2012)](http://arxiv.org/abs/1009.0880) [website](https://sites.google.com/site/nicolasgillis/code)
 
-* * nmfLS2: Non-negative Matrix Factorization with sparse matrix (Ji and Eisenstein, 2013) 
+* * nmfLS2: Non-negative Matrix Factorization with sparse matrix [(Ji and Eisenstein, 2013)](http://www.cc.gatech.edu/~jeisenst/papers/ji-emnlp-2013.pdf) [website](https://github.com/jiyfeng/tfkld) 
 
-* * Semi-NMF: Semi Non-negative Matrix Factorization (Trigeorgis et al. 2014) 
+* * Semi-NMF: Semi Non-negative Matrix Factorization
 
-* * Deep-Semi-NMF: Deep Semi Non-negative Matrix Factorization (Trigeorgis et al. 2014) 
+* * Deep-Semi-NMF: Deep Semi Non-negative Matrix Factorization [(Trigeorgis et al. 2014)](http://trigeorgis.com/uploads/downloads/file/1/cameraready.pdf) [website](http://trigeorgis.com/papers/deepseminmfmodel-2014) 
 
 * NTF: Non-Negative Tensor Factorization (6)
-* * betaNTF: Simple beta-NTF implementation (Antoine Liutkus, 2012) 
+* * betaNTF: Simple beta-NTF implementation [(Antoine Liutkus, 2012)](http://www.mathworks.com/matlabcentral/fileexchange/38109-nonnegative-matrix-and-tensor-factorization--nmf--ntf--with-any-beta-divergence) 
 
-* * bcuNTD: Non-negative Tucker Decomposition by block-coordinate update (Xu and Yin, 2012) 
+* * bcuNTD: Non-negative Tucker Decomposition by block-coordinate update (Xu and Yin, 2012) [website](http://www.math.ucla.edu/~wotaoyin/papers/bcu/ntd/index.html)
 
-* * bcuNCP: Non-negative CP Decomposition by block-coordinate update (Xu and Yin, 2012) 
+* * bcuNCP: Non-negative CP Decomposition by block-coordinate update (Xu and Yin, 2012) [website](http://www.math.ucla.edu/~wotaoyin/papers/bcu/ncp/index.html)
 
-* * NTD-MU: Non-negative Tucker Decomposition solved by Multiplicative Updates (Zhou et al. 2012) 
+* * NTD-MU: Non-negative Tucker Decomposition solved by Multiplicative Updates [(Zhou et al. 2012)](http://dx.doi.org/10.1109/TSP.2012.2190410) 
 
-* * NTD-APG: Non-negative Tucker Decomposition solved by Accelerated Proximal Gradient (Zhou et al. 2012) 
+* * NTD-APG: Non-negative Tucker Decomposition solved by Accelerated Proximal Gradient [(Zhou et al. 2012)](http://dx.doi.org/10.1109/TSP.2012.2190410) 
 
-* * NTD-HALS: Non-negative Tucker Decomposition solved by Hierarchical ALS (Zhou et al. 2012) 
+* * NTD-HALS: Non-negative Tucker Decomposition solved by Hierarchical ALS [(Zhou et al. 2012)](http://dx.doi.org/10.1109/TSP.2012.2190410)  
 
 * TD: Tensor Decomposition (11)
 * * HoSVD: Higher-order Singular Value Decomposition (Tucker Decomposition) 
 
-* * HoRPCA-IALM: HoRPCA solved by IALM (Goldfarb and Qin, 2013) 
+* * HoRPCA-IALM: HoRPCA solved by IALM [(Goldfarb and Qin, 2013)](http://arxiv.org/abs/1311.6182) [website](https://sites.google.com/site/tonyqin/research)
 
-* * HoRPCA-S: HoRPCA with Singleton model solved by ADAL (Goldfarb and Qin, 2013) 
+* * HoRPCA-S: HoRPCA with Singleton model solved by ADAL [(Goldfarb and Qin, 2013)](http://arxiv.org/abs/1311.6182) [website](https://sites.google.com/site/tonyqin/research)
 
-* * HoRPCA-S-NCX: HoRPCA with Singleton model solved by ADAL (non-convex) (Goldfarb and Qin, 2013) 
+* * HoRPCA-S-NCX: HoRPCA with Singleton model solved by ADAL (non-convex) [(Goldfarb and Qin, 2013)](http://arxiv.org/abs/1311.6182) [website](https://sites.google.com/site/tonyqin/research)
 
-* * Tucker-ADAL: Tucker Decomposition solved by ADAL (Goldfarb and Qin, 2013) 
+* * Tucker-ADAL: Tucker Decomposition solved by ADAL [(Goldfarb and Qin, 2013)](http://arxiv.org/abs/1311.6182) [website](https://sites.google.com/site/tonyqin/research)
 
 * * Tucker-ALS: Tucker Decomposition solved by ALS 
 
 * * CP-ALS: PARAFAC/CP decomposition solved by ALS 
 
-* * CP-APR: PARAFAC/CP decomposition solved by Alternating Poisson Regression (Chi et al. 2011) 
+* * CP-APR: PARAFAC/CP decomposition solved by Alternating Poisson Regression [(Chi et al. 2011)](http://arxiv.org/abs/1112.2414) 
 
-* * CP2: PARAFAC2 decomposition solved by ALS (Bro et al. 1999) 
+* * CP2: PARAFAC2 decomposition solved by ALS [(Bro et al. 1999)](http://www.mathworks.com/matlabcentral/fileexchange/1089-parafac2) 
 
-* * RSTD: Rank Sparsity Tensor Decomposition (Yin Li 2010) 
+* * RSTD: Rank Sparsity Tensor Decomposition [(Yin Li 2010)](www.pami.sjtu.edu.cn/demo/RSTD.pdf) [website](http://yinli.cvpr.net/) 
 
-* * t-SVD: Tensor SVD in Fourrier Domain (Zhang et al. 2013) 
+* * t-SVD: Tensor SVD in Fourrier Domain [(Zhang et al. 2013)](http://arxiv.org/abs/1307.0805) 
 
 * **Some remarks**:
 * * The ADM algorithm of Yuan and Yang (2009) works only on win32 platforms (mexsvd.mexw32).
