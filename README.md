@@ -44,65 +44,65 @@ Each algorithm is classified by its cpu time consumption with the following icon
 List of the algorithms available in LRSLibrary
 ----------------------------------------------
 * RPCA: Robust PCA (30)
-* * PCP: Principal Component Pursuit (Candes et al. 2009) 
+* * PCP: Principal Component Pursuit [(Candes et al. 2009)](http://arxiv.org/abs/0912.3599) 
 
-* * FPCP: Fast PCP (Rodriguez and Wohlberg 2013) 
+* * FPCP: Fast PCP [(Rodriguez and Wohlberg 2013)](http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=6738015) 
 
-* * AS-RPCA: Active Subspace:  Towards Scalable Low-Rank Learning (Liu and Yan, 2012)
+* * AS-RPCA: Active Subspace: Towards Scalable Low-Rank Learning [(Liu and Yan, 2012)](http://dl.acm.org/citation.cfm?id=2421487)
 
-* * R2PCP: Riemannian Robust Principal Component Pursuit (Hintermüller and Wu, 2014) 
+* * R2PCP: Riemannian Robust Principal Component Pursuit [(Hintermüller and Wu, 2014)](http://link.springer.com/article/10.1007/s10851-014-0527-y) 
 
-* * ALM: Augmented Lagrange Multiplier (Tang and Nehorai 2011) 
+* * ALM: Augmented Lagrange Multiplier [(Tang and Nehorai 2011)](http://dx.doi.org/10.1109/CISS.2011.5766144) 
 
-* * EALM: Exact ALM (Lin et al. 2009) 
+* * EALM: Exact ALM [(Lin et al. 2009)]((http://arxiv.org/abs/1009.5055)) 
 
-* * IALM: Inexact ALM (Lin et al. 2009) 
+* * IALM: Inexact ALM [(Lin et al. 2009)]((http://arxiv.org/abs/1009.5055)) 
 
-* * IALM_LMSVDS: IALM with LMSVDS (Liu et al. 2012) 
+* * IALM_LMSVDS: IALM with LMSVDS [(Liu et al. 2012)](http://epubs.siam.org/doi/abs/10.1137/120871328) 
 
-* * IALM_BLWS: IALM with BLWS (Lin and Wei 2010) 
+* * IALM_BLWS: IALM with BLWS [(Lin and Wei 2010)](http://arxiv.org/abs/1012.0365) 
 
-* * APG_PARTIAL: Partial Accelerated Proximal Gradient (Lin et al. 2009) 
+* * APG_PARTIAL: Partial Accelerated Proximal Gradient [(Lin et al. 2009)]((http://arxiv.org/abs/1009.5055)) 
 
-* * APG: Accelerated Proximal Gradient (Lin et al. 2009) 
+* * APG: Accelerated Proximal Gradient [(Lin et al. 2009)]((http://arxiv.org/abs/1009.5055)) 
 
-* * DUAL: Dual RPCA (Lin et al. 2009) 
+* * DUAL: Dual RPCA[(Lin et al. 2009)]((http://arxiv.org/abs/1009.5055)) 
 
-* * SVT: Singular Value Thresholding (Cai et al. 2008) 
+* * SVT: Singular Value Thresholding [(Cai et al. 2008)](http://arxiv.org/abs/0810.3286) 
 
-* * ADM: Alternating Direction Method (Yuan and Yang 2009) 
+* * ADM: Alternating Direction Method [(Yuan and Yang 2009)](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.400.8797) 
 
-* * LSADM: LSADM (Goldfarb et al. 2010) 
+* * LSADM: LSADM [(Goldfarb et al. 2010)](http://arxiv.org/abs/0912.4571) 
 
-* * L1F: L1 Filtering (Liu et al. 2011) 
+* * L1F: L1 Filtering [(Liu et al. 2011)](http://arxiv.org/abs/1108.5359) 
 
-* * DECOLOR: Contiguous Outliers in the Low-Rank Representation (Zhou et al. 2011) 
+* * DECOLOR: Contiguous Outliers in the Low-Rank Representation [(Zhou et al. 2011)](http://arxiv.org/abs/1109.0882) 
 
-* * NSA1: Non-Smooth Augmented Lagrangian v1 (Aybat et al. 2011) 
+* * NSA1: Non-Smooth Augmented Lagrangian v1 [(Aybat et al. 2011)](http://arxiv.org/abs/1105.2126) 
 
-* * NSA2: Non-Smooth Augmented Lagrangian v2 (Aybat et al. 2011) 
+* * NSA2: Non-Smooth Augmented Lagrangian v2 [(Aybat et al. 2011)](http://arxiv.org/abs/1105.2126) 
 
-* * PSPG: Partially Smooth Proximal Gradient (Aybat et al. 2012) 
+* * PSPG: Partially Smooth Proximal Gradient [(Aybat et al. 2012)](http://arxiv.org/abs/1309.6976) 
 
-* * BRPCA-MD: Bayesian Robust PCA with Markov Dependency (Ding et al. 2011) 
+* * BRPCA-MD: Bayesian Robust PCA with Markov Dependency [(Ding et al. 2011)](http://people.ee.duke.edu/~lcarin/LRS_09.pdf) [website](http://people.ee.duke.edu/~lcarin/BCS.html)
 
-* * BRPCA-MD-NSS: BRPCA-MD with Non-Stationary Noise (Ding et al. 2011) 
+* * BRPCA-MD-NSS: BRPCA-MD with Non-Stationary Noise [(Ding et al. 2011)](http://people.ee.duke.edu/~lcarin/LRS_09.pdf) [website](http://people.ee.duke.edu/~lcarin/BCS.html) 
 
-* * VBRPCA: Variational Bayesian RPCA (Babacan et al. 2011) 
+* * VBRPCA: Variational Bayesian RPCA [(Babacan et al. 2011)](http://arxiv.org/abs/1102.5288) 
 
-* * PRMF: Probabilistic Robust Matrix Factorization (Wang et al. 2012) 
+* * PRMF: Probabilistic Robust Matrix Factorization [(Wang et al. 2012)](http://winsty.net/papers/prmf.pdf) [website](http://winsty.net/prmf.html)
 
-* * OPRMF: Online PRMF (Wang et al. 2012) 
+* * OPRMF: Online PRMF [(Wang et al. 2012)](http://winsty.net/papers/prmf.pdf) [website](http://winsty.net/prmf.html)
 
-* * MBRMF: Markov BRMF (Wang and Yeung 2013) 
+* * MBRMF: Markov BRMF [(Wang and Yeung 2013)](http://winsty.net/papers/brmf.pdf) [website](http://winsty.net/brmf.html) 
 
-* * TFOCS-EC: TFOCS with equality constraints (Becker et al. 2011) 
+* * TFOCS-EC: TFOCS with equality constraints [(Becker et al. 2011)](https://github.com/cvxr/TFOCS/raw/gh-pages/TFOCS.pdf) [website](http://cvxr.com/tfocs/demos/rpca/)
 
-* * TFOCS-IC: TFOCS with inequality constraints (Becker et al. 2011) 
+* * TFOCS-IC: TFOCS with inequality constraints [(Becker et al. 2011)](https://github.com/cvxr/TFOCS/raw/gh-pages/TFOCS.pdf) [website](http://cvxr.com/tfocs/demos/rpca/)
 
-* * GoDec: Go Decomposition (Zhou and Tao 2011) 
+* * GoDec: Go Decomposition [(Zhou and Tao 2011)](http://www.icml-2011.org/papers/41_icmlpaper.pdf) [website](https://sites.google.com/site/godecomposition/home)
 
-* * SSGoDec: Semi-Soft GoDec (Zhou and Tao 2011) 
+* * SSGoDec: Semi-Soft GoDec [(Zhou and Tao 2011)](http://www.icml-2011.org/papers/41_icmlpaper.pdf) [website](https://sites.google.com/site/godecomposition/home)
 
 * LRR: Low Rank Recovery (5)
 * * EALM: Exact ALM (Lin et al. 2009) 
