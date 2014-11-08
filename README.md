@@ -221,6 +221,7 @@ show_results(M,results.L,results.S,results.O,p,m,n);
 
 %% Tensor-based algorithms
 %
+add_tensor_libs;
 T = tensor(V);
 % Non-Negative Tensor Factorization
 results = process_tensor('NTF', 'bcuNCP', T);
@@ -228,7 +229,9 @@ show_3dtensors(T,results.L,results.S,results.O);
 % Tensor Decomposition
 results = process_tensor('TD', 'Tucker-ALS', T);
 show_3dtensors(T,results.L,results.S,results.O);
+rem_tensor_libs;
 ```
+<p align="center"><img src="https://sites.google.com/site/andrewssobral/lrs_results.png?width=650" /></p>
 
 CPU time consumption
 --------------------
