@@ -54,21 +54,21 @@ List of the algorithms available in LRSLibrary
 
 * * ALM: Augmented Lagrange Multiplier [(Tang and Nehorai 2011)](http://dx.doi.org/10.1109/CISS.2011.5766144) 
 
-* * EALM: Exact ALM [(Lin et al. 2009)]((http://arxiv.org/abs/1009.5055)) 
+* * EALM: Exact ALM [(Lin et al. 2009)](http://arxiv.org/abs/1009.5055) [website](http://perception.csl.illinois.edu/matrix-rank/sample_code.html)
 
-* * IALM: Inexact ALM [(Lin et al. 2009)]((http://arxiv.org/abs/1009.5055)) 
+* * IALM: Inexact ALM [(Lin et al. 2009)](http://arxiv.org/abs/1009.5055)  [website](http://perception.csl.illinois.edu/matrix-rank/sample_code.html)
 
 * * IALM_LMSVDS: IALM with LMSVDS [(Liu et al. 2012)](http://epubs.siam.org/doi/abs/10.1137/120871328) 
 
 * * IALM_BLWS: IALM with BLWS [(Lin and Wei 2010)](http://arxiv.org/abs/1012.0365) 
 
-* * APG_PARTIAL: Partial Accelerated Proximal Gradient [(Lin et al. 2009)]((http://arxiv.org/abs/1009.5055)) 
+* * APG_PARTIAL: Partial Accelerated Proximal Gradient [(Lin et al. 2009)](http://arxiv.org/abs/1009.5055)  [website](http://perception.csl.illinois.edu/matrix-rank/sample_code.html)
 
-* * APG: Accelerated Proximal Gradient [(Lin et al. 2009)]((http://arxiv.org/abs/1009.5055)) 
+* * APG: Accelerated Proximal Gradient [(Lin et al. 2009)](http://arxiv.org/abs/1009.5055)  [website](http://perception.csl.illinois.edu/matrix-rank/sample_code.html)
 
-* * DUAL: Dual RPCA[(Lin et al. 2009)]((http://arxiv.org/abs/1009.5055)) 
+* * DUAL: Dual RPCA[(Lin et al. 2009)](http://arxiv.org/abs/1009.5055)  [website](http://perception.csl.illinois.edu/matrix-rank/sample_code.html)
 
-* * SVT: Singular Value Thresholding [(Cai et al. 2008)](http://arxiv.org/abs/0810.3286) 
+* * SVT: Singular Value Thresholding [(Cai et al. 2008)](http://arxiv.org/abs/0810.3286)  [website](http://perception.csl.illinois.edu/matrix-rank/sample_code.html)
 
 * * ADM: Alternating Direction Method [(Yuan and Yang 2009)](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.400.8797) 
 
