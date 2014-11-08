@@ -185,6 +185,9 @@ Usage example
 ----------------------------
 For complete details and examples, please see the **demo.m** file.
 ```Matlab
+
+%% Processing videos
+%
 % Robust PCA
 process_video('RPCA', 'FPCP', 'dataset/demo.avi', 'output/demo_FPCP.avi');
 % Low Rank Recovery
@@ -195,6 +198,36 @@ process_video('NMF', 'ManhNMF', 'dataset/demo.avi', 'output/demo_ManhNMF.avi');
 process_video('NTF', 'bcuNCP', 'dataset/demo.avi', 'output/demo_bcuNCP.avi');
 % Tensor Decomposition
 process_video('TD', 'Tucker-ALS', 'dataset/demo.avi', 'output/demo_Tucker-ALS.avi');
+
+%% Processing matrices and tensors
+%
+load('dataset/trafficdb/traffic_patches.mat');
+V = im2double(imgdb{100});
+show_3dvideo(V);
+
+%% Matrix-based algorithms
+%
+[M, m, n, p] = convert_video3d_to_2d(V);
+show_2dvideo(M,m,n);
+% Robust PCA
+results = process_matrix('RPCA', 'FPCP', M, []);
+show_results(M,results.L,results.S,results.O,p,m,n);
+% Low Rank Recovery
+results = process_matrix('LRR', 'FastLADMAP', M, []);
+show_results(M,results.L,results.S,results.O,p,m,n);
+% Non-Negative Matrix Factorization
+results = process_matrix('NMF', 'ManhNMF', M, []);
+show_results(M,results.L,results.S,results.O,p,m,n);
+
+%% Tensor-based algorithms
+%
+T = tensor(V);
+% Non-Negative Tensor Factorization
+results = process_tensor('NTF', 'bcuNCP', T);
+show_3dtensors(T,results.L,results.S,results.O);
+% Tensor Decomposition
+results = process_tensor('TD', 'Tucker-ALS', T);
+show_3dtensors(T,results.L,results.S,results.O);
 ```
 
 CPU time consumption
