@@ -1,4 +1,4 @@
-Last update: **08/11/2014**
+Last update: **10/11/2014**
 
 Library Version: **1.0.0**
 
@@ -7,6 +7,8 @@ LRSLibrary
 *Low-Rank and Sparse* tools for Background Modeling and Subtraction in Videos.
 
 The *LRSLibrary* provides a collection of **low-rank and sparse decomposition** algorithms in MATLAB for video motion segmentation. Currently the LRSLibrary contains a total of **64** *matrix-based* and *tensor-based* algorithms. The LRSLibrary was tested successfully in MATLAB R2013b both x86 and x64 versions.
+
+<p align="center"><img src="https://sites.google.com/site/andrewssobral/lrs_results.png?width=650" /></p>
 
 Citation
 ---------
@@ -240,11 +242,11 @@ The figure below shows the average CPU time consumption and the speed classifica
 
 About LRSLibrary
 ----------------
-The *LRSLibrary* has been developed by [Andrews Sobral](https://sites.google.com/site/andrewssobral) thanks especially to [Thierry Bouwmans](https://sites.google.com/site/thierrybouwmans). We are grateful to all authors who have contributed in some way to the success of the LRSLibrary.
+The *LRSLibrary* has been developed by [Andrews Sobral](https://sites.google.com/site/andrewssobral) thanks especially to [Thierry Bouwmans](https://sites.google.com/site/thierrybouwmans) for his continued support and for collaborating on this important initiative. I'm grateful to all authors who have contributed in some way to the success of the LRSLibrary.
 
 How to contribute with LRSLibrary project
 -----------------------------------------
-Everyone is invited to cooperate with the LRSLibrary project by sending any implementation of low-rank and sparse decomposition algorithms.
+Everyone is invited to cooperate with the LRSLibrary project by sending to us any implementation of low-rank and sparse decomposition algorithms.
 
 License
 -------
