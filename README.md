@@ -8,7 +8,7 @@ LRSLibrary
 
 The *LRSLibrary* provides a collection of **low-rank and sparse decomposition** algorithms in MATLAB for video motion segmentation. Currently the LRSLibrary contains a total of **64** *matrix-based* and *tensor-based* algorithms. The LRSLibrary was tested successfully in MATLAB R2013b both x86 and x64 versions.
 
-<p align="center"><img src="https://sites.google.com/site/andrewssobral/lrs_results.png?width=650" /></p>
+<p align="center"><img src="https://sites.google.com/site/andrewssobral/lrs_results2.png" /></p>
 
 Citation
 ---------
