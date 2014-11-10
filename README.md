@@ -10,6 +10,19 @@ The *LRSLibrary* provides a collection of **low-rank and sparse decomposition** 
 
 <p align="center"><img src="https://sites.google.com/site/andrewssobral/lrs_results2.png" /></p>
 
+```
+See also:
+
+Presentation about Matrix and Tensor Tools for Computer Vision 
+http://www.slideshare.net/andrewssobral/matrix-and-tensor-tools-for-computer-vision
+
+MTT: Matlab Tensor Tools for Computer Vision
+https://github.com/andrewssobral/mtt
+
+IMTSL: Incremental and Multi-feature Tensor Subspace Learning
+https://github.com/andrewssobral/imtsl
+```
+
 Citation
 ---------
 A paper about the LRSLibrary will be published in a journal, but if you use this code for your publications, please cite it currently as:
