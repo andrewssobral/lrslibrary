@@ -58,6 +58,9 @@ handles.output = hObject;
 guidata(hObject, handles);
 set(hObject,'Name','LRSLibrary','NumberTitle','off');
 
+% Close handle
+set(hObject,'DeleteFcn',@gui_close);
+
 clc;
 disp('Initializing app...');
 

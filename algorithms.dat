@@ -56,7 +56,7 @@ NMF | NeNMF    | NMF via Nesterov's Optimal Gradient Method (Guan et al. 2012) |
 NMF | LNMF     | Spatially Localized NMF (Li et al. 2001) | 1
 NMF | ENMF     | Exact NMF (Gillis and Glineur, 2012) | 2
 NMF | nmfLS2   | Non-negative Matrix Factorization with sparse matrix (Ji and Eisenstein, 2013) | 2
-NMF | Semi-NMF | Semi Non-negative Matrix Factorization (Trigeorgis et al. 2014) | 1
+NMF | Semi-NMF | Semi Non-negative Matrix Factorization | 1
 NMF | Deep-Semi-NMF | Deep Semi Non-negative Matrix Factorization (Trigeorgis et al. 2014) | 1
 ---
 --- NTF (Non-Negative Tensor Factorization) ---

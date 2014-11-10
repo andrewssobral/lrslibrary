@@ -39,7 +39,7 @@ show_3dvideo(V);
 show_2dvideo(M,m,n);
 % Robust PCA
 results = process_matrix('RPCA', 'FPCP', M, []);
-show_results(M,results.L,results.S,results.O,p,m,n);
+show_results(M,results.L,results.S,results.O,1,m,n);
 % Low Rank Recovery
 results = process_matrix('LRR', 'FastLADMAP', M, []);
 show_results(M,results.L,results.S,results.O,p,m,n);
@@ -48,6 +48,7 @@ results = process_matrix('NMF', 'ManhNMF', M, []);
 show_results(M,results.L,results.S,results.O,p,m,n);
 
 %%% Tensor-based algorithms
+add_tensor_libs;
 T = tensor(V);
 % Non-Negative Tensor Factorization
 results = process_tensor('NTF', 'bcuNCP', T);
@@ -55,6 +56,7 @@ show_3dtensors(T,results.L,results.S,results.O);
 % Tensor Decomposition
 results = process_tensor('TD', 'Tucker-ALS', T);
 show_3dtensors(T,results.L,results.S,results.O);
+rem_tensor_libs;
 
 %% DEMO 02
 
