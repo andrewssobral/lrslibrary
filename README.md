@@ -1,12 +1,12 @@
-Last update: **10/11/2014**
+Last update: **13/11/2014**
 
-Library Version: **1.0.0**
+Library Version: **1.0.1**
 
 LRSLibrary
 ----------
 *Low-Rank and Sparse* tools for Background Modeling and Subtraction in Videos.
 
-The *LRSLibrary* provides a collection of **low-rank and sparse decomposition** algorithms in MATLAB. The library was designed for motion segmentation in videos, but it can be also used or adapted for other computer vision problems, please see this [page](http://perception.csl.illinois.edu/matrix-rank/applications.html). Currently the LRSLibrary contains a total of **64** *matrix-based* and *tensor-based* algorithms. The LRSLibrary was tested successfully in MATLAB R2013b both x86 and x64 versions.
+The *LRSLibrary* provides a collection of **low-rank and sparse decomposition** algorithms in MATLAB. The library was designed for motion segmentation in videos, but it can be also used or adapted for other computer vision problems, please see this [page](http://perception.csl.illinois.edu/matrix-rank/applications.html). Currently the LRSLibrary contains a total of **65** *matrix-based* and *tensor-based* algorithms. The LRSLibrary was tested successfully in MATLAB R2013b both x86 and x64 versions.
 
 <p align="center"><img src="https://sites.google.com/site/andrewssobral/lrs_results2.png" /></p>
 
@@ -58,7 +58,7 @@ Each algorithm is classified by its cpu time consumption with the following icon
 
 List of the algorithms available in LRSLibrary
 ----------------------------------------------
-* RPCA: Robust PCA (30)
+* RPCA: Robust PCA (31)
 * * PCP: Principal Component Pursuit [(Candes et al. 2009)](http://arxiv.org/abs/0912.3599) 
 
 * * FPCP: Fast PCP [(Rodriguez and Wohlberg 2013)](http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=6738015) 
@@ -98,6 +98,8 @@ List of the algorithms available in LRSLibrary
 * * NSA2: Non-Smooth Augmented Lagrangian v2 [(Aybat et al. 2011)](http://arxiv.org/abs/1105.2126) 
 
 * * PSPG: Partially Smooth Proximal Gradient [(Aybat et al. 2012)](http://arxiv.org/abs/1309.6976) 
+
+* * SPGL1: A variational approach to SPCP [(Aravkin et al. 2014)](https://github.com/stephenbeckr/fastRPCA)
 
 * * BRPCA-MD: Bayesian Robust PCA with Markov Dependency [(Ding et al. 2011)](http://people.ee.duke.edu/~lcarin/LRS_09.pdf) [website](http://people.ee.duke.edu/~lcarin/BCS.html)
 
@@ -271,4 +273,6 @@ If you have any problems or questions, please contact the author: Andrews Sobral
 
 Release Notes:
 --------------
+* Version 1.0.1: Added RPCA-SPGL1 from Aravkin et al. (2014), thanks to Professor (Stephen Becker)[http://amath.colorado.edu/faculty/becker/]
+
 * Version 1.0.0: First version with 64 algorithms.

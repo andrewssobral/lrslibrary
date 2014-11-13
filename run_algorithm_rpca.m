@@ -528,6 +528,26 @@ function results = run_algorithm_rpca(algorithm_id, M, opts)
     rmpath('algorithms/rpca/TFOCS');
   end
   %
+  % SPGL1: A variational approach to SPCP (Aravkin et al. 2014)
+  % process_video('RPCA', 'SPGL1', 'dataset/demo.avi', 'output/demo_SPGL1.avi');
+  % process_video('RPCA', 'SPGL1', 'dataset/escalator.avi', 'output/escalator_SPGL1.avi');
+  if(strcmp(algorithm_id,'SPGL1')) 
+    addpath('algorithms/rpca/SPGL1');
+    nFrames     = size(M,2);
+    %lambda      = 2e-2;
+    lambda      = 1/sqrt(max(size(M,1),size(M,2)));
+    L0          = repmat(median(M,2), 1, nFrames);
+    S0          = M - L0;
+    epsilon     = 5e-3*norm(M,'fro'); % tolerance for fidelity to data
+    opts        = struct('sum',false,'L0',L0,'S0',S0,'max',true,...
+        'tau0',3e5,'SPGL1_tol',1e-1,'tol',1e-3);
+    timerVal = tic;
+    [L, S] = solver_RPCA_SPGL1(M,lambda,epsilon,[],opts); % imagesc(L); imagesc(S);
+    cputime = toc(timerVal);
+    clear nFrames lambda L0 S0 epsilon opts;
+    rmpath('algorithms/rpca/SPGL1');
+  end
+  %
   %
   results.L = L; % low-rank matrix
   results.S = S; % sparse matrix
