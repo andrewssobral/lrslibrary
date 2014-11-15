@@ -279,6 +279,6 @@ If you have any problems or questions, please contact the author: Andrews Sobral
 
 Release Notes:
 --------------
-* Version 1.0.1: Added RPCA-SPCP algorithms from Aravkin et al. (2014), thanks to Professor [Stephen Becker](http://amath.colorado.edu/faculty/becker/)
+* Version 1.0.1: Added RPCA-SPCP algorithms of Aravkin et al. (2014), thanks to Professor [Stephen Becker](http://amath.colorado.edu/faculty/becker/).
 
 * Version 1.0.0: First version with 64 algorithms.
