@@ -528,23 +528,52 @@ function results = run_algorithm_rpca(algorithm_id, M, opts)
     rmpath('algorithms/rpca/TFOCS');
   end
   %
-  % SPGL1: A variational approach to SPCP (Aravkin et al. 2014)
-  % process_video('RPCA', 'SPGL1', 'dataset/demo.avi', 'output/demo_SPGL1.avi');
-  % process_video('RPCA', 'SPGL1', 'dataset/escalator.avi', 'output/escalator_SPGL1.avi');
-  if(strcmp(algorithm_id,'SPGL1')) 
+  % A variational approach to SPCP (Aravkin et al. 2014)
+  %
+  % RPCA | SPCP-sum-SPG | Stable PCP-sum solved by Spectral Projected Gradient (Aravkin et al. 2014)
+  % RPCA | SPCP-max-QN  | Stable PCP-max solved by Quasi-Newton (Aravkin et al. 2014)
+  % RPCA | Lag-SPCP-SPG | Lagrangian SPCP solved by Spectral Projected Gradient (Aravkin et al. 2014)
+  % RPCA | Lag-SPCP-QN  | Lagrangian SPCP solved by Quasi-Newton (Aravkin et al. 2014)
+  %
+  % process_video('RPCA', 'flip-SPCP-sum-SPG', 'dataset/demo.avi', 'output/demo_flip-SPCP-sum-SPG.avi');
+  % process_video('RPCA', 'flip-SPCP-max-QN', 'dataset/demo.avi', 'output/demo_flip-SPCP-max-QN.avi');
+  % process_video('RPCA', 'Lag-SPCP-SPG', 'dataset/demo.avi', 'output/demo_Lag-SPCP-SPG.avi');
+  % process_video('RPCA', 'Lag-SPCP-QN', 'dataset/demo.avi', 'output/demo_Lag-SPCP-QN.avi');
+  if(strcmp(algorithm_id,'flip-SPCP-sum-SPG') ...
+  || strcmp(algorithm_id,'flip-SPCP-max-QN') ...
+  || strcmp(algorithm_id,'Lag-SPCP-SPG') ...
+  || strcmp(algorithm_id,'Lag-SPCP-QN')) 
     addpath('algorithms/rpca/SPGL1');
     nFrames     = size(M,2);
-    %lambda      = 2e-2;
     lambda      = 1/sqrt(max(size(M,1),size(M,2)));
     L0          = repmat(median(M,2), 1, nFrames);
     S0          = M - L0;
     epsilon     = 5e-3*norm(M,'fro'); % tolerance for fidelity to data
-    opts        = struct('sum',false,'L0',L0,'S0',S0,'max',true,...
-        'tau0',3e5,'SPGL1_tol',1e-1,'tol',1e-3);
+    
     timerVal = tic;
-    [L, S] = solver_RPCA_SPGL1(M,lambda,epsilon,[],opts); % imagesc(L); imagesc(S);
+    if(strcmp(algorithm_id,'flip-SPCP-sum-SPG')) % Flip-Flop version of SPCP-sum solved by Spectral Projected Gradient
+      opts = struct('sum',true,'L0',L0,'S0',S0,'max',false,...
+                    'tau0',3e5,'SPGL1_tol',1e-1,'tol',1e-3);
+      [L,S] = solver_RPCA_SPGL1(M,lambda,epsilon,[],opts);
+    end
+    if(strcmp(algorithm_id,'flip-SPCP-max-QN')) % Flip-Flop version pf SPCP-max solved by Quasi-Newton
+      opts = struct('sum',false,'L0',L0,'S0',S0,'max',true,...
+                    'tau0',3e5,'SPGL1_tol',1e-1,'tol',1e-3);
+      [L,S] = solver_RPCA_SPGL1(M,lambda,epsilon,[],opts);
+    end
+    if(strcmp(algorithm_id,'Lag-SPCP-SPG')) % Lagrangian SPCP solved by Spectral Projected Gradient
+      opts    = struct('sum',false,'L0',L0,'S0',S0,'max',false,'tol',1e-3);
+      lambdaL = 0.25; lambdaS = 0.01; % (Aravkin et al. 2014)
+      [L,S] = solver_RPCA_Lagrangian(M,lambdaL,lambdaS,[],opts);
+    end
+    if(strcmp(algorithm_id,'Lag-SPCP-QN')) % Lagrangian SPCP solved by Quasi-Newton
+      opts    = struct('sum',false,'L0',L0,'S0',S0,'max',false,'tol',1e-3,'quasiNewton',true);
+      lambdaL = 0.25; lambdaS = 0.01;
+      [L,S] = solver_RPCA_Lagrangian(M,lambdaL,lambdaS,[],opts);
+    end
     cputime = toc(timerVal);
-    clear nFrames lambda L0 S0 epsilon opts;
+    
+    clear nFrames lambda lambdaL lambdaS L0 S0 epsilon opts;
     rmpath('algorithms/rpca/SPGL1');
   end
   %

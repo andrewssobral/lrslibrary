@@ -21,7 +21,10 @@ RPCA | DECOLOR | Contiguous Outliers in the Low-Rank Representation (Zhou et al.
 RPCA | NSA1 | Non-Smooth Augmented Lagrangian v1 (Aybat et al. 2011) | 1
 RPCA | NSA2 | Non-Smooth Augmented Lagrangian v2 (Aybat et al. 2011) | 1
 RPCA | PSPG | Partially Smooth Proximal Gradient (Aybat et al. 2012) | 1
-RPCA | SPGL1 | A variational approach to SPCP (Aravkin et al. 2014) | 3
+RPCA | flip-SPCP-sum-SPG | Flip-Flop version of Stable PCP-sum solved by Spectral Projected Gradient (Aravkin et al. 2014) | 4
+RPCA | flip-SPCP-max-QN  | Flip-Flop version of Stable PCP-max solved by Quasi-Newton (Aravkin et al. 2014) | 4
+RPCA | Lag-SPCP-SPG | Lagrangian SPCP solved by Spectral Projected Gradient (Aravkin et al. 2014) | 2
+RPCA | Lag-SPCP-QN  | Lagrangian SPCP solved by Quasi-Newton (Aravkin et al. 2014) | 1
 ---
 --- Probabilistic/Bayesian RPCA
 RPCA | BRPCA-MD     | Bayesian Robust PCA with Markov Dependency (Ding et al. 2011) | 4
