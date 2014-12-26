@@ -1,0 +1,72 @@
+<!DOCTYPE group PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<group>
+
+<p>These instructions explain how to setup VLFeat in MATLAB (at least
+2009B) using the binary distribution (it is also possible
+to <a href="%pathto:compiling;">compile</a> the library and toolbox
+from source, including running on earlier MATLAB versions by disabling
+some features such as OpenMP support).</p>
+
+<h1>One-time setup</h1>
+
+<p><a href="%pathto:download;">Download</a> and unpack the latest
+VLFeat binary distribution in a directory of your choice
+(e.g. <code>~/src/vlfeat</code>). Let <code>VLFEATROOT</code> denote
+this directory. VLFeat must be added to MATLAB search path by running
+the <code>vl_setup</code> command found in
+the <code>VLFEATROOT/toolbox</code> directory. From MATLAB prompt
+enter</p>
+
+<precode type='matlabsession'>
+>> run('VLFEATROOT/toolbox/vl_setup')
+VLFeat 0.9.17 ready.
+</precode>
+
+<p>To check that VLFeat is sucessfully installed, try to run
+the <code>vl_version</code> command:</p>
+
+<precode type='matlabsession'>
+>> vl_version verbose
+VLFeat version 0.9.17
+    Static config: X64, little_endian, GNU C 40201 LP64, POSIX_threads, SSE2, OpenMP
+    4 CPU(s): GenuineIntel MMX SSE SSE2 SSE3 SSE41 SSE42
+    OpenMP: max threads: 4 (library: 4)
+    Debug: yes
+    SIMD enabled: yes
+</precode>
+
+<h1>Permanent setup</h1>
+
+<p>To permanently add VLFeat to your MATLAB environment, add this line
+to your
+<a href="http://www.google.com/search?q=site:www.mathworks.com+startup.m&amp;btnI=I"><code>startup.m</code>
+file</a>:</p>
+
+<precode type='matlab'>
+run('VLFEATROOT/toolbox/vl_setup')
+</precode>
+
+<p>When you restart MATLAB, you should see the VLFeat greeting
+message.</p>
+
+<h1>Getting started</h1>
+
+<p>All commands embed interface documentation that can be viewed with
+the
+builtin <a href="http://www.google.com/search?q=site:www.mathworks.com+help&amp;btnI=I"><code>help</code>
+command</a> (e.g. <code>help vl_sift</code>).</p>
+
+<p>VLFeat bundles a large number of demos. To use them, add the demo
+path with <code>vl_setup demo</code>. For example, a sift demo
+<code>vl_demo_sift_basic</code> can be run using the following:</p>
+
+<precode type='matlabsession'>
+>> vl_setup demo
+
+>> vl_demo_sift_basic
+</precode>
+
+<p>To see a list of demos TAB-complete <code>vl_demo</code> at MATLAB
+prompt, after running <code>vl_setup demo</code>.</p>
+
+</group>

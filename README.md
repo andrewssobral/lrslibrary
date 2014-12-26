@@ -1,12 +1,12 @@
-Last update: **16/11/2014**
+Last update: **26/12/2014**
 
-Library Version: **1.0.1**
+Library Version: **1.0.2**
 
 LRSLibrary
 ----------
 *Low-Rank and Sparse* tools for Background Modeling and Subtraction in Videos.
 
-The *LRSLibrary* provides a collection of **low-rank and sparse decomposition** algorithms in MATLAB. The library was designed for motion segmentation in videos, but it can be also used or adapted for other computer vision problems, please see this [page](http://perception.csl.illinois.edu/matrix-rank/applications.html). Currently the LRSLibrary contains a total of **68** *matrix-based* and *tensor-based* algorithms. The LRSLibrary was tested successfully in MATLAB R2013b both x86 and x64 versions.
+The *LRSLibrary* provides a collection of **low-rank and sparse decomposition** algorithms in MATLAB. The library was designed for motion segmentation in videos, but it can be also used or adapted for other computer vision problems, please see this [page](http://perception.csl.illinois.edu/matrix-rank/applications.html). Currently the LRSLibrary contains a total of **72** *matrix-based* and *tensor-based* algorithms. The LRSLibrary was tested successfully in MATLAB R2013b both x86 and x64 versions.
 
 <p align="center"><img src="https://sites.google.com/site/andrewssobral/lrs_results2.png" /></p>
 
@@ -91,7 +91,13 @@ List of the algorithms available in LRSLibrary
 
 * * L1F: L1 Filtering [(Liu et al. 2011)](http://arxiv.org/abs/1108.5359) 
 
-* * DECOLOR: Contiguous Outliers in the Low-Rank Representation [(Zhou et al. 2011)](http://arxiv.org/abs/1109.0882) 
+* * DECOLOR: Contiguous Outliers in the Low-Rank Representation [(Zhou et al. 2011)](http://arxiv.org/abs/1109.0882) [website1](https://sites.google.com/site/eeyangc/software/decolor) [website2](https://fling.seas.upenn.edu/~xiaowz/dynamic/wordpress/?p=144)
+
+* * GOSUS: Grassmannian Online Subspace Updates with Structured-sparsity [(Xu et al. 2013)](http://pages.cs.wisc.edu/~jiaxu/projects/gosus/gosus-iccv2013.pdf) [website](http://pages.cs.wisc.edu/~jiaxu/projects/gosus/)
+
+* * pROST: Robust PCA and subspace tracking from incomplete observations using L0-surrogates [(Hage and Kleinsteuber, 2013)](http://arxiv.org/abs/1210.0805) [website](http://www.gol.ei.tum.de/index.php?id=37&L=1)
+
+* * RegL1-ALM: Low-Rank Matrix Approximation under Robust L1-Norm [(Zheng et al. 2012)](https://sites.google.com/site/yinqiangzheng/home/zheng_CVPR12_robust%20L1-norm%20low-rank%20matrix%20factorization.pdf) [website](https://sites.google.com/site/yinqiangzheng/)
 
 * * NSA1: Non-Smooth Augmented Lagrangian v1 [(Aybat et al. 2011)](http://arxiv.org/abs/1105.2126) 
 
@@ -137,6 +143,8 @@ List of the algorithms available in LRSLibrary
 * * LADMAP: Linearized ADM with Adaptive Penalty [(Lin et al. 2011)](http://arxiv.org/abs/1109.0367)
 
 * * FastLADMAP: Fast LADMAP [(Lin et al. 2011)](http://arxiv.org/abs/1109.0367) 
+
+* * ROSL: Robust Orthonormal Subspace Learning [(Shu et al. 2014)](https://dl.dropboxusercontent.com/u/10893363/Homepage/CVPR2014_ROSL.pdf) [website](https://sites.google.com/site/xianbiaoshu/)
 
 * NMF: Non-Negative Matrix Factorization (12)
 * * NMF-MU: NMF solved by Multiplicative Updates 
@@ -279,6 +287,8 @@ If you have any problems or questions, please contact the author: Andrews Sobral
 
 Release Notes:
 --------------
+* Version 1.0.2: Added four new algorithms: GOSUS (Xu et al. 2013), pROST (Hage and Kleinsteuber, 2013), RegL1-ALM (Zheng et al. 2012) and ROSL (Shu et al. 2014).
+
 * Version 1.0.1: Added RPCA-SPCP algorithms of Aravkin et al. (2014), thanks to Professor [Stephen Becker](http://amath.colorado.edu/faculty/becker/).
 
 * Version 1.0.0: First version with 64 algorithms.

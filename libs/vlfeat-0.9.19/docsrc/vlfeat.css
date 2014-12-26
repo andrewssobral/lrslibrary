@@ -1,0 +1,461 @@
+/* div, p, ul, li, ol, img {border: 1px solid red ;} */
+html, body, div, img, dl {
+    margin: 0px ;
+    padding: 0px ;
+    border-style: none ; /* ie again */
+}
+html {
+}
+body {
+    font-size: 14px ;
+    line-height: 18px ;
+    font-family: Arial, 'Liberation Sans', 'DejaVu Sans', sans-serif ;
+    background-color: #f6f6f6 ;
+}
+table {
+    font: inherit ;
+    color: inherit ;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-weight: bold ;
+}
+a {
+    color: #004fdc;
+}
+a.plain {
+    text-decoration: inherit ! important ;
+    color: inherit ! important ;
+}
+b {
+    color: rgb(40,40,40) ;
+}
+pre, code {
+    font-family: 'Bitstream Vera Sans Mono', monospace ;
+}
+code {
+    color: #BA2121 ;
+}
+code a {
+    font-weight: bold ;
+    text-decoration: none ;
+    color: inherit ! important ;
+}
+.clear {
+    clear: both ;
+    margin: 0px ;
+    padding: 0px ;
+    font-size: 1px ;
+    line-height: 1px ;
+}
+.standout {
+    font-style: italic ;
+    color: red ! important ;
+}
+.clearfix {
+    display: inline-block ;
+    width: 100% ;
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/*                                                          Sidebar */
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+#sidebar {
+    width: 920px ;
+    padding: 0 30px ;
+    margin: 0 ;
+    margin-left: auto ;
+    margin-right: auto ;
+    color: white ;
+    font-weight: bold ;
+}
+#sidebar a {
+    color: inherit ! important ;
+    text-decoration: none ;
+}
+#sidebar ul {
+    margin: 0 ;
+    padding: 0 ;
+}
+/* t r b l */
+#sidebar ul li {
+    display: inline-block ;
+    color: white ;
+    position: relative ;
+    list-style-type: none ;
+    padding: 10px 15px 10px 15px ;
+    margin: 0px 11px 0px -15px ;
+    font-size: 14px ;
+    line-height: 14px ;
+}
+#sidebar ul li.active {
+    background-color: rgb(207,122,48) ;
+}
+#sidebar ul li ul {
+    position: absolute ;
+    width: 513px ;
+    top: 34px ;
+    left: -1px ;
+    visibility: hidden ;
+    font-size: 0px ;
+}
+#sidebar ul li ul li {
+    width: 225px ;
+    margin: 0 ;
+    margin-right: -1px ;
+    border: 1px solid white ;
+    border-bottom: none ;
+    background-color: #183a60 ;
+    font-size: 12px ;
+}
+#sidebar ul li ul li ul {
+    top: -1px ;
+    left: 223px ;
+    width: 225px ;
+}
+#sidebar li:hover > ul {
+    visibility: visible ;
+}
+#sidebar li:hover {
+    color: rgb(207,122,48) ;
+}
+#sidebar li.active:hover {
+    color: white ;
+}
+
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/*                                                           Header */
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+#header-section {
+    background-color: #183a60 ;
+}
+#header {
+    max-width: 920px ;
+    margin-left: auto ;
+    margin-right: auto ;
+    padding: 20px 30px ;
+}
+#header #cse-search-box {
+    float: right ;
+    margin-right: 1em ;
+    margin-top: auto ;
+    margin-bottom: auto ;
+}
+#header h1 {
+    margin: 0 ;
+    color: white ;
+    font-family: 'Trebuchet MS', Helvetica, sans-serif ;
+}
+#header h1 a {
+    text-decoration: none ;
+    color: white ;
+}
+#dotorg {
+    color: #AAA ;
+}
+#google {
+    float: right ;
+    width: 20em ;
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/*                                                      Head banner */
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+#headbanner-section {
+    border-bottom: 1px solid #DDD ;
+}
+#headbanner {
+    max-width: 920px ;
+    margin-left: auto ;
+    margin-right: auto ;
+    padding: 7px 30px ;
+    color: #5a5a5a ;
+    font-weight: bold ;
+    font-size: 14px ;
+}
+#headbanner a {
+    text-decoration: inherit ! important ;
+    color: inherit ! important ;
+}
+#headbanner span.page {
+}
+#headbanner span.separator {
+    padding-left: 10px ;
+    padding-right: 10px ;
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/*                                                          Content */
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+#content-section {
+    background-color: white ;
+}
+#content-wrapper {
+    max-width: 920px ;
+    margin-left: auto ;
+    margin-right: auto ;
+    padding: 0 30px ;
+}
+#content {
+    overflow: hidden ;
+}
+#content h1,
+#content h2,
+#content h3,
+#content h4,
+#content h5,
+#content h6 {
+    margin: 1em 0 ;
+    margin-top: 1.7em ;
+}
+#content h1 {font-size:1.4em; margin-bottom: 0.5em;}
+#content h2 {font-size:1.3em; margin-bottom: 0.5em;}
+#content h3 {font-size:1.2em; margin-bottom: 0.5em;}
+#content h4 {font-size:1.1em; margin-bottom: 0.5em;}
+#content h5 {font-size:1.0em; margin-bottom: 0.5em;}
+#content h6 {font-size:1.0em; margin-bottom: 0.5em;}
+#content p,
+#content blockquote,
+#content div.figure,
+#content div.p {
+    margin: 1em 0 ;
+}
+#content blockquote {
+    margin: 1em ;
+    font-style: italic ;
+}
+#content pre {
+    margin: 1em 0 ;
+    padding: 0 ;
+}
+#content div.highlight {
+    margin: 1em 0 ;
+    background-color: #f6f6f6 ;
+    border-top: 1px solid #DDD ;
+    border-bottom: 1px solid #DDD ;
+}
+#content div.highlight pre {
+    margin: 0px ;
+    padding: 0.5em ;
+    padding-left: 1em ;
+    margin-right: 5em ;
+}
+#content ul,
+#content ol {
+    margin-left: 0;
+    padding-left: 0 ;
+}
+#content li {
+    margin-left: 1.2em ;
+    padding-left: 0 ;
+}
+#content ol li {
+    margin-left: 2em ;
+}
+#content dt {
+    font-weight: bold ;
+    text-align: left ;
+}
+#content dd {
+    display: block ;
+    margin: 0.25em 0 ;
+    padding-left: 2em ;
+}
+#content dd p,
+#content dd ul {
+    margin-top: 0 ;
+}
+#content .centered {
+    display: block ;
+    margin-left: 2em ;
+}
+#content div.figure {
+    margin-top: 1em ;
+    margin-bottom: 1em ;
+    text-align: center ;
+}
+#content div.caption {
+    font-family: Lucida, Helvetica, sans-serif ;
+    font-style: italic ;
+}
+/* for buggy IE 6 */
+#content div.caption span.content {
+    display: inline ;
+    zoom: 1 ;
+}
+#content div.caption span.content {
+    display: inline-block ;
+    text-align: left ;
+    max-width: 40em ;
+}
+#content div.box {
+    background-color: #f6f6f6 ;
+    border: 1px solid #DDD ;
+    padding: 0.5em ;
+}
+#content table.onecol td {
+    width: 100% ;
+}
+#content table.twocols td {
+    width: 50% ;
+}
+#content table.threecols td {
+    width: 33% ;
+}
+#content table.boxes {
+    min-width: 100% ;
+    border-collapse: separate ;
+    border-spacing: 10px ;
+    margin: -10px ;
+    padding: 0em ;
+    box-sizing:border-box ; /* avoids exceeding 100% width */
+}
+#content table.boxes td {
+    vertical-align: top ;
+    background-color: #f6f6f6 ;
+    border: 1px solid #DDD ;
+    padding: 0.5em ;
+}
+#content .boxes h1 {
+    font-size: 1.2em ;
+    margin: 0px ;
+}
+#content .boxes ul {
+    margin-top: 0.25em ;
+    margin-bottom: 0.5em ;
+}
+#content .boxes p {
+    margin-top: 0.25em ;
+    margin-bottom: 0.5em ;
+    padding: 0px ;
+}
+#content img.image-right {
+    float: right ;
+}
+#content div.parbox {
+    border: 1px dotted #333 ;
+    padding: 0em 1em ;
+    margin-right: 10em ;
+}
+#content div.parbox p,
+#content div.parbox blockquote,
+#content div.pargox div.figure,
+#content dd blockquote
+{
+    padding-right: 0em ;
+}
+#content ul.text {
+    padding-right: 10em ;
+}
+#content ul.text li {
+    margin-top: 1em ;
+    margin-bottom: 1em ;
+}
+#pagebody {
+    background-color: #eee ;
+    display: inline-block;
+    width: 100%;
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/*                                                           Footer */
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+#footer-section {
+    clear: both ;
+    border-top: 1px solid #DDD ;
+}
+#footer {
+    text-align: center ;
+    padding: 0.5em ;
+    font-size: 0.9em ;
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/*                                                             Mdoc */
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+#content div.mdoc ul.breadcrumb  {
+    float: right ;
+    width: 100% ;
+    margin: 1em 0 ;
+    padding: 0 ;
+    border-bottom: 1px solid #aaa ;
+}
+#content div.mdoc ul.breadcrumb:after  {
+    content: "." ;
+    display: block ;
+    height: 0 ;
+    clear: right ;
+    visibility: hidden ;
+}
+#content div.mdoc ul.breadcrumb li {
+    display: block ;
+    float: left ;
+    width: 4em ;
+    margin: 0 0.5em ;
+    padding: .2em ;
+    font-size: .9em ;
+    font-weight: bold ;
+    border-top:   2px solid #aaa ;
+    border-left:  2px solid #aaa ;
+    border-right: 2px solid #aaa ;
+    text-align: center ;
+}
+#content div.mdoc ul.breadcrumb a {
+    text-decoration : none ;
+    color: black ;
+}
+#content div.mdoc span.defaults {
+    font-weight: normal ;
+    color: green ;
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+/*                                                              Toc */
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+#content  div.toc {
+  padding: 14px 25px;
+  background-color: #F4F6FA;
+  border: 1px solid #D8DFEE;
+  border-radius: 3px 3px 3px 3px;
+  float: right;
+  height: auto;
+  margin: 1em 0px 10px 10px;
+  width: 200px;
+}
+#content  div.toc li {
+  background: url("api/bdwn.png") no-repeat scroll 0 5px transparent;
+  font: 10px/1.2 Verdana, DejaVu Sans, Geneva, sans-serif;
+  margin-top: 5px;
+  padding-left: 10px;
+  padding-top: 2px;
+}
+#content  div.toc h3 {
+  font: bold 12px/1.2 Arial, FreeSans, sans-serif;
+  color: #4665A2;
+  border-bottom: 0 none;
+  margin: 0;
+}
+#content  div.toc ul {
+  list-style: none outside none;
+  border: medium none;
+  padding: 0px;
+}
+#content  div.toc li.level1 {
+  margin-left: 0px;
+}
+#content  div.toc li.level2 {
+  margin-left: 15px;
+}
+#content  div.toc li.level3 {
+  margin-left: 30px;
+}
+#content  div.toc li.level4 {
+  margin-left: 45px;
+}

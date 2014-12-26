@@ -2,7 +2,7 @@
 close all; clear all; clc;
 
 %% GUI
-run;
+run_gui;
 
 %% UTILS
 video2mat('dataset/demo.avi', 'dataset/demo.mat');

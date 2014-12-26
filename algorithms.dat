@@ -16,6 +16,9 @@ RPCA | ADM     | Alternating Direction Method (Yuan and Yang 2009) | 2
 RPCA | LSADM   | LSADM (Goldfarb et al. 2010) | 1
 RPCA | L1F     | L1 Filtering (Liu et al. 2011) | 1
 RPCA | DECOLOR | Contiguous Outliers in the Low-Rank Representation (Zhou et al. 2011) | 1
+RPCA | GOSUS | Grassmannian Online Subspace Updates with Structured-sparsity (Xu et al. 2013) | 2
+RPCA | pROST | Robust PCA and subspace tracking from incomplete observations using L0-surrogates (Hage and Kleinsteuber, 2013) | 3
+RPCA | RegL1-ALM | Low-Rank Matrix Approximation under Robust L1-Norm (Zheng et al. 2012) | 1
 ---
 --- RPCA-SPCP
 RPCA | NSA1 | Non-Smooth Augmented Lagrangian v1 (Aybat et al. 2011) | 1
@@ -48,6 +51,7 @@ LRR | IALM   | Inexact ALM (Lin et al. 2009) | 1
 LRR | ADM    | Alternating Direction Method (Lin et al. 2011) | 1
 LRR | LADMAP | Linearized ADM with Adaptive Penalty (Lin et al. 2011) | 1
 LRR | FastLADMAP | Fast LADMAP (Lin et al. 2011) | 1
+LRR | ROSL | Robust Orthonormal Subspace Learning (Shu et al. 2014) | 1
 ---
 --- NMF (Non-Negative Matrix Factorization) ---
 NMF | NMF-MU      | NMF solved by Multiplicative Updates | 1

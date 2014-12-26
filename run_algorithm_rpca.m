@@ -577,6 +577,58 @@ function results = run_algorithm_rpca(algorithm_id, M, opts)
     rmpath('algorithms/rpca/SPGL1');
   end
   %
+  % RPCA | GOSUS | Grassmannian Online Subspace Updates with Structured-sparsity (Xu et al. 2013)
+  % process_video('RPCA', 'GOSUS', 'dataset/demo.avi', 'output/demo_GOSUS.avi');
+  %
+  if(strcmp(algorithm_id,'GOSUS')) 
+    addpath('algorithms/rpca/GOSUS');
+    run(fullfile(pwd,'libs','vlfeat-0.9.19','toolbox','vl_setup'));
+    
+    timerVal = tic;
+    [L,S] = gosus(M,opts);
+    cputime = toc(timerVal);
+    
+    clear lambda;
+    rmpath('algorithms/rpca/GOSUS');
+    restoredefaultpath; % for vlfeat
+  end
+  %
+  % RPCA | pROST | Robust PCA and subspace tracking from incomplete observations using L0-surrogates (Hage and Kleinsteuber, 2013)
+  % process_video('RPCA', 'pROST', 'dataset/demo.avi', 'output/demo_pROST.avi');
+  %
+  if(strcmp(algorithm_id,'pROST')) 
+    addpath('algorithms/rpca/pROST');
+    
+    timerVal = tic;
+    L = robustpca_batch(M,2,'atansquare');
+    S = M - L;
+    cputime = toc(timerVal);
+    
+    rmpath('algorithms/rpca/pROST');
+  end
+  %
+  % RPCA | RegL1-ALM | Low-Rank Matrix Approximation under Robust L1-Norm (Zheng et al. 2012)
+  % process_video('RPCA', 'RegL1-ALM', 'dataset/demo.avi', 'output/demo_RegL1-ALM.avi');
+  %
+  if(strcmp(algorithm_id,'RegL1-ALM')) 
+    addpath('algorithms/rpca/RegL1-ALM');
+    
+    timerVal = tic;
+    W = ones(size(M));
+    r = 1;
+    lambda = 1e-3;
+    rho = 1.2;
+    maxIterIN = 1;
+    signM = 0;
+    %[M_est,U_est,V_est,L1_error] = ...
+    L = RobustApproximation_M_UV_TraceNormReg(M,W,r,lambda,rho,maxIterIN,signM);
+    S = M - L;
+    cputime = toc(timerVal);
+    clear W r lambda rho maxIterIN signM;
+    
+    rmpath('algorithms/rpca/RegL1-ALM');
+  end
+  %
   %
   results.L = L; % low-rank matrix
   results.S = S; % sparse matrix
