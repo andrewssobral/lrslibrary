@@ -48,7 +48,7 @@ A paper about the LRSLibrary will be published in a journal, but if you use this
 
 GUI
 ---
-The *LRSLibrary* provides an easy-to-use graphical user interface (GUI) for background modeling and subtraction in videos. Just execute **run.m** and enjoy it ;)
+The *LRSLibrary* provides an easy-to-use graphical user interface (GUI) for background modeling and subtraction in videos. Just execute **run_gui.m** and enjoy it ;)
 
 <p align="center"><img src="https://sites.google.com/site/andrewssobral/lrslibrary_gui2.png" /></p>
 
@@ -58,7 +58,7 @@ Each algorithm is classified by its cpu time consumption with the following icon
 
 List of the algorithms available in LRSLibrary
 ----------------------------------------------
-* RPCA: Robust PCA (34)
+* RPCA: Robust PCA (37)
 * * PCP: Principal Component Pursuit [(Candes et al. 2009)](http://arxiv.org/abs/0912.3599) 
 
 * * FPCP: Fast PCP [(Rodriguez and Wohlberg 2013)](http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=6738015) 
@@ -133,7 +133,7 @@ List of the algorithms available in LRSLibrary
 
 * * SSGoDec: Semi-Soft GoDec [(Zhou and Tao 2011)](http://www.icml-2011.org/papers/41_icmlpaper.pdf) [website](https://sites.google.com/site/godecomposition/home)
 
-* LRR: Low Rank Recovery (5)
+* LRR: Low Rank Recovery (6)
 * * EALM: Exact ALM [(Lin et al. 2009)](http://arxiv.org/abs/1009.5055) 
 
 * * IALM: Inexact ALM [(Lin et al. 2009)](http://arxiv.org/abs/1009.5055) 
