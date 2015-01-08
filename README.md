@@ -277,6 +277,10 @@ How to contribute with LRSLibrary project
 -----------------------------------------
 Everyone is invited to cooperate with the LRSLibrary project by sending to us any implementation of low-rank and sparse decomposition algorithms.
 
+Option 1: email it to me (andrewssobral at gmail.com).
+
+Option 2: fork the library on GitHub, push your changes, then send me a pull request.
+
 License
 -------
 The source code is available only for academic/research purposes (non-commercial).
