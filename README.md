@@ -1,6 +1,6 @@
-Last update: **26/12/2014**
+Last update: **18/02/2015**
 
-Library Version: **1.0.2**
+Library Version: **1.0.3**
 
 LRSLibrary
 ----------
