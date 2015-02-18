@@ -6,7 +6,7 @@ LRSLibrary
 ----------
 *Low-Rank and Sparse* tools for Background Modeling and Subtraction in Videos.
 
-The *LRSLibrary* provides a collection of **low-rank and sparse decomposition** algorithms in MATLAB. The library was designed for motion segmentation in videos, but it can be also used or adapted for other computer vision problems, please see this [page](http://perception.csl.illinois.edu/matrix-rank/applications.html). Currently the LRSLibrary contains a total of **72** *matrix-based* and *tensor-based* algorithms. The LRSLibrary was tested successfully in MATLAB R2013b both x86 and x64 versions.
+The *LRSLibrary* provides a collection of **low-rank and sparse decomposition** algorithms in MATLAB. The library was designed for motion segmentation in videos, but it can be also used or adapted for other computer vision problems, please see this [page](http://perception.csl.illinois.edu/matrix-rank/applications.html). Currently the LRSLibrary contains a total of **75** *matrix-based* and *tensor-based* algorithms. The LRSLibrary was tested successfully in MATLAB R2013b both x86 and x64 versions.
 
 <p align="center"><img src="https://sites.google.com/site/andrewssobral/lrs_results2.png" /></p>
 
@@ -113,6 +113,8 @@ List of the algorithms available in LRSLibrary
 
 * * Lag-SPCP-QN: Lagrangian SPCP solved by Quasi-Newton [(Aravkin et al. 2014)](https://github.com/stephenbeckr/fastRPCA)
 
+* * FW-T: SPCP solved by Frank-Wolfe method [(Mu et al. 2014)](http://arxiv.org/abs/1403.7588) [website](https://sites.google.com/site/mucun1988/publi)
+
 * * BRPCA-MD: Bayesian Robust PCA with Markov Dependency [(Ding et al. 2011)](http://people.ee.duke.edu/~lcarin/LRS_09.pdf) [website](http://people.ee.duke.edu/~lcarin/BCS.html)
 
 * * BRPCA-MD-NSS: BRPCA-MD with Non-Stationary Noise [(Ding et al. 2011)](http://people.ee.duke.edu/~lcarin/LRS_09.pdf) [website](http://people.ee.duke.edu/~lcarin/BCS.html) 
@@ -171,6 +173,10 @@ List of the algorithms available in LRSLibrary
 
 * * Deep-Semi-NMF: Deep Semi Non-negative Matrix Factorization [(Trigeorgis et al. 2014)](http://trigeorgis.com/uploads/downloads/file/1/cameraready.pdf) [website](http://trigeorgis.com/papers/deepseminmfmodel-2014) 
 
+* * iNMF: Incremental Subspace Learning via NMF [(Bucak and Gunsel, 2009)](http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=4298684) [website](http://www.cse.msu.edu/~bucakser/inmf_genel.html) 
+
+* * DRMF: Direct Robust Matrix Factorization [(Xiong et al. 2011)](http://ieeexplore.ieee.org/xpl/freeabs_all.jsp?arnumber=6137289) [website](http://www.autonlab.org/autonweb/20605.html) 
+
 * NTF: Non-Negative Tensor Factorization (6)
 * * betaNTF: Simple beta-NTF implementation [(Antoine Liutkus, 2012)](http://www.mathworks.com/matlabcentral/fileexchange/38109-nonnegative-matrix-and-tensor-factorization--nmf--ntf--with-any-beta-divergence) 
 
@@ -208,6 +214,8 @@ List of the algorithms available in LRSLibrary
 * * t-SVD: Tensor SVD in Fourrier Domain [(Zhang et al. 2013)](http://arxiv.org/abs/1307.0805) 
 
 * **Some remarks**:
+* * The FW-T algorithm of Mu et al. (2014) works only with [CVX library](http://cvxr.com/cvx/). Download and install it in: */lrslibrary/libs*.
+
 * * The ADM algorithm of Yuan and Yang (2009) works only on win32 platforms (mexsvd.mexw32).
 
 * * The DECOLOR algorithm of Zhou et al. (2011) don't works in MATLAB R2014a(x64), but works successfully in MATLAB R2013b(x64) and both R2014a(x86) and R2013b(x86).
@@ -291,6 +299,8 @@ If you have any problems or questions, please contact the author: Andrews Sobral
 
 Release Notes:
 --------------
+* Version 1.0.3: Added three new algorithms: FW-T (Mu et al. 2014), iNMF (Bucak and Gunsel, 2009) and DRMF (Xiong et al. 2011).
+
 * Version 1.0.2: Added four new algorithms: GOSUS (Xu et al. 2013), pROST (Hage and Kleinsteuber, 2013), RegL1-ALM (Zheng et al. 2012) and ROSL (Shu et al. 2014).
 
 * Version 1.0.1: Added RPCA-SPCP algorithms of Aravkin et al. (2014), thanks to Professor [Stephen Becker](http://amath.colorado.edu/faculty/becker/).

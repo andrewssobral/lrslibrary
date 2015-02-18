@@ -629,6 +629,59 @@ function results = run_algorithm_rpca(algorithm_id, M, opts)
     rmpath('algorithms/rpca/RegL1-ALM');
   end
   %
+  % FW-T: SPCP solved by Frank-Wolfe method (Mu et al. 2014)
+  % process_video('RPCA', 'FW-T', 'dataset/demo.avi', 'output/demo_FW-T.avi');
+  if(strcmp(algorithm_id,'FW-T')) 
+    addpath('algorithms/rpca/FW_SPCP');
+    addpath('libs/PROPACK');
+    addpath('libs/cvx');
+    cvx_setup;
+    
+    [m,n] = size(M); 
+    D = M/norm(M,'fro'); % imagesc(M); imagesc(D);
+
+    % parameter tuning
+    rho = 1; % rho = 0.5;  % sampling ratio
+    Omega = rand(m,n) <= rho; % support of observation imagesc(Omega);
+    obs = Omega.*D; % measurements imagesc(obs);
+
+    % this is parameter to control noise level
+    % the smaller the noise, the smaller is delta
+    delta = 0.01;
+
+    lambda_1 = delta*rho*norm(obs,'fro'); 
+    lambda_2 = delta*sqrt(rho)*norm(obs,'fro')/sqrt(max(m,n));
+
+    par.M = D; 
+    par.lambda_1 = lambda_1;
+    par.lambda_2 = lambda_2;
+    par.iter = 1000;
+    par.display = 1;
+    par.rho = rho;
+    par.epsilon = 10^-3; % stopping criterion
+    par.method = 'exact'; % 'exact' or 'power'
+    par.Omega = Omega; % ones(m,n)
+    par.compare = 0; % make comparison or not
+
+    timerVal = tic;
+    output = FW_T(par); % main function
+    %output = fista(par); % fista function
+    %output = ista(par); % ista function
+    cputime = toc(timerVal);
+
+    L = output.L;
+    S = output.S;
+    % show_2dvideo(M,video.height,video.width);
+    % show_2dvideo(D,video.height,video.width);
+    % show_2dvideo(obs,video.height,video.width);
+    % show_2dvideo(L,video.height,video.width);
+    % show_2dvideo(S,video.height,video.width);
+    
+    rmpath('libs/cvx');
+    rmpath('libs/PROPACK');
+    rmpath('algorithms/rpca/FW_SPCP');
+  end
+  %
   %
   results.L = L; % low-rank matrix
   results.S = S; % sparse matrix

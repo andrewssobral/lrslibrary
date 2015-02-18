@@ -39,7 +39,7 @@ show_3dvideo(V);
 show_2dvideo(M,m,n);
 % Robust PCA
 results = process_matrix('RPCA', 'FPCP', M, []);
-show_results(M,results.L,results.S,results.O,1,m,n);
+show_results(M,results.L,results.S,results.O,p,m,n);
 % Low Rank Recovery
 results = process_matrix('LRR', 'FastLADMAP', M, []);
 show_results(M,results.L,results.S,results.O,p,m,n);
@@ -85,13 +85,17 @@ nframes = 250; % video.nrFramesTotal;
 for i = 1 : nframes
   %disp(['#frame ' num2str(i)]);
   frame = video.frames(i).cdata;
+  if(size(frame,3) == 3)
+    frame = rgb2gray(frame);
+  end
   I = reshape(frame,[],1);
   M(:,k) = I;
   if(k == k_max || i == nframes)
     disp(['#last frame ' num2str(i)]);
     M = im2double(M);
     tic;
-    results = process_matrix('RPCA', 'IALM', M, []);
+    results = process_matrix('RPCA', 'GoDec', M, []);
+    %results = process_matrix('RPCA', 'IALM', M, []);
     %results = process_matrix('RPCA', 'FPCP', M, []);
     %results = process_matrix('LRR', 'FastLADMAP', M, []);
     %results = process_matrix('NMF', 'NMF-MU', M, []);

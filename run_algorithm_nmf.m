@@ -153,6 +153,59 @@ function results = run_algorithm_nmf(algorithm_id, M, opts)
     rmpath('algorithms/nmf/Deep-Semi-NMF');
   end
   %
+  % iNMF: Incremental Subspace Learning via NMF (Bucak and Gunsel, 2009)
+  % process_video('NMF', 'iNMF', 'dataset/demo.avi', 'output/demo_iNMF.avi');
+  if(strcmp(algorithm_id,'iNMF')) 
+    addpath('algorithms/nmf/iNMF');
+    timerVal = tic;
+    % Execute NMF for the first n samples
+    n = 10; % first 10 samples
+    rdim = 1; % rank-1
+    maxiter = 150;
+    [W, H] = nmf(M(:,1:n), rdim, 0, maxiter);
+    L = W*H;
+    % Now we can execute iNMF on each new samples
+    maxiter = 50;
+    A = M(:,1:n)*H';
+    B = H*H';
+    h = H(:,end); % Warm start for h
+    for i = n+1:size(M,2)
+      disp(i);
+      M_new = M(:,i);
+      [W_new, h, A, B] = inmf(M_new, W, h, A, B, rdim, 0.9, 0.1, maxiter);
+      % H_store(:,i-n) = h; % Just for demonstration
+      L(:,end+1) = W_new*h;
+    end
+    S = M - L;
+    % clf; imagesc(L); imagesc(S);
+    cputime = toc(timerVal);
+    clear n rdim maxiter W H A B h i M_new;
+    rmpath('algorithms/nmf/iNMF');
+  end
+  %
+  % DRMF: Direct Robust Matrix Factorization (Xiong et al. 2011)
+  % process_video('NMF', 'DRMF', 'dataset/demo.avi', 'output/demo_DRMF.avi');
+  if(strcmp(algorithm_id,'DRMF')) 
+    addpath('algorithms/nmf/DRMF');
+    addpath('libs/PROPACK');
+    timerVal = tic;
+    %%% initialization
+    lambda = 1/sqrt(max(size(M)));
+    L_rpca = inexact_alm_rpca(M, lambda, 1e-5, 10);
+    sv = svdex(L_rpca);
+    rk = EffRank(sv, 0.999);
+    %%% run
+    options.init = L_rpca;
+    [L,S] = DRMF(M, rk, 0.1, options);
+    S = full(S);
+    %%% end
+    cputime = toc(timerVal);
+    % imagesc(L); imagesc(S);
+    clear lambda L_rpca sv rk options;
+    rmpath('libs/PROPACK');
+    rmpath('algorithms/nmf/DRMF');
+  end
+  %
   %
   %
   results.L = L; % low-rank matrix

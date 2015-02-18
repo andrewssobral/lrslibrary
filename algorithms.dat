@@ -28,6 +28,7 @@ RPCA | flip-SPCP-sum-SPG | Flip-Flop version of Stable PCP-sum solved by Spectra
 RPCA | flip-SPCP-max-QN  | Flip-Flop version of Stable PCP-max solved by Quasi-Newton (Aravkin et al. 2014) | 4
 RPCA | Lag-SPCP-SPG | Lagrangian SPCP solved by Spectral Projected Gradient (Aravkin et al. 2014) | 2
 RPCA | Lag-SPCP-QN  | Lagrangian SPCP solved by Quasi-Newton (Aravkin et al. 2014) | 1
+RPCA | FW-T | SPCP solved by Frank-Wolfe method (Mu et al. 2014) | 1
 ---
 --- Probabilistic/Bayesian RPCA
 RPCA | BRPCA-MD     | Bayesian Robust PCA with Markov Dependency (Ding et al. 2011) | 4
@@ -66,6 +67,8 @@ NMF | ENMF     | Exact NMF (Gillis and Glineur, 2012) | 2
 NMF | nmfLS2   | Non-negative Matrix Factorization with sparse matrix (Ji and Eisenstein, 2013) | 2
 NMF | Semi-NMF | Semi Non-negative Matrix Factorization | 1
 NMF | Deep-Semi-NMF | Deep Semi Non-negative Matrix Factorization (Trigeorgis et al. 2014) | 1
+NMF | iNMF | Incremental Subspace Learning via NMF (Bucak and Gunsel, 2009) | 1
+NMF | DRMF | Direct Robust Matrix Factorization (Xiong et al. 2011) | 1
 ---
 --- NTF (Non-Negative Tensor Factorization) ---
 NTF | betaNTF  | Simple beta-NTF implementation (Antoine Liutkus, 2012) | 2
