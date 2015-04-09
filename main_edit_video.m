@@ -62,8 +62,14 @@ guidata(hObject, handles);
 % uiwait(handles.figure1);
 
 clc;
+load_lrslibrary_conf;
+
 set(hObject,'Name','Video editor','NumberTitle','off');
-img = imread('figs/no-available-image.png');
+
+set(handles.edit_input_video,'string',fullfile(lrs_conf.lrs_dir,'dataset','demo.avi'));
+set(handles.edit_output_video,'string',fullfile(lrs_conf.lrs_dir,'output','demo_out.avi'));
+
+img = imread(fullfile(lrs_conf.lrs_dir,'figs','no-available-image.png'));
 imshow(img,'parent',handles.axes_input);
 
 
@@ -129,7 +135,8 @@ function pushbutton_select_input_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton_select_input (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-[filename, pathname] = uigetfile({'*.avi';'*.mpg';'*.mp4';'*.*'},'File Selector','./dataset/');
+load_lrslibrary_conf;
+[filename, pathname] = uigetfile({'*.avi';'*.mpg';'*.mp4';'*.*'},'File Selector',fullfile(lrs_conf.lrs_dir,'dataset'));
 if(~isequal(filename,0) && ~isequal(pathname,0))
   inputVideoHandle = handles.edit_input_video;
   fullpath = fullfile(pathname, filename);

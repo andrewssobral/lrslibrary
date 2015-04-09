@@ -1,0 +1,96 @@
+Restricted Software License Agreement
+
+Sandia Corporation ("SANDIA"), under its Contract
+No. DE-AC04-94AL85000 with the United States Department of Energy for
+the management and operation of the Sandia National Laboratories,
+Albuquerque, New Mexico and Livermore, California, has developed the
+MATLAB Poblano Toolbox, herein called "POBLANO TOOLBOX". By
+downloading this software, the licensee ("YOU") agree to the following
+terms:
+
+   1. Grants
+         1. Subject to the terms and conditions of this Agreement,
+            including Attachment A, YOU are granted a nontransferable,
+            nonexclusive right and license, without the right to
+            sublicense, to: use, modify, and/or make derivative works or
+            compilations of the POBLANO TOOLBOX for research and
+            evaluation purposes only.
+         2. YOU agree that this restricted license does not allow YOU to
+            make any proprietary or commercial use of the POBLANO TOOLBOX
+            such as but not limited to the copying, distribution,
+            displaying, performing, manufacturing, selling, or offering
+            for sale of any product or service using the POBLANO TOOLBOX.
+         3. YOU agree to give credit to the original authors (Daniel M.  
+            Dunlavy, Tamara G. Kolda, and Evrim Acar) at SANDIA in any 
+            work that results from using the POBLANO TOOLBOX.
+         4. If YOU intend to sell or offer for sale any portion of
+            POBLANO TOOLBOX or any modifications, derivative works,
+            compilations, products or services of the POBLANO TOOLBOX,
+            then YOU must obtain the appropriate license from SANDIA by
+            contacting Sandia Software Licensing Manager, Craig A. Smith
+            at +1 (925) 294-3358. 
+   2. Reproduction and Distribution
+         1. YOU agree not to use the POBLANO TOOLBOX except as authorized
+            herein, and that YOU will not make, have made, or permit to
+            be made, any copies of the POBLANO TOOLBOX, except to be used
+            within your own facilities for research and evaluation
+            purposes.
+         2. YOU agree to have other users download the POBLANO TOOLBOX
+            from its distribution web site, currently
+            http://software.sandia.gov/poblano.
+   3. Disclaimer
+         1. NEITHER SANDIA, THE UNITED STATES NOR THE UNITED STATES
+            DEPARTMENT OF ENERGY, NOR ANY OF THEIR EMPLOYEES MAKES ANY
+            WARRANTY, EXPRESS OR IMPLIED, INCLUDING ANY WARRANTY OF
+            MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE, OR
+            ASSUMES ANY LEGAL LIABILITY OR RESPONSIBILITY FOR THE
+            ACCURACY, COMPLETENESS, OR USEFULNESS OF ANY INFORMATION,
+            APPARATUS, PRODUCT, OR PROCESS OR REPRESENTS THAT ITS USE
+            WOULD NOT INFRINGE PRIVATELY OWNED RIGHTS, OR ASSUMES ANY
+            LIABILITY FOR INCIDENTAL OR CONSEQUENTIAL DAMAGES RESULTING
+            FROM ITS USE BY ANYONE.
+         2. The U.S. Government has a paid-up, nonexclusive, irrevocable
+            worldwide license in the POBLANO TOOLBOX to reproduce,
+            prepare derivative works, and perform publicly and display
+            publicly by or on behalf of the U.S. Government.
+         3. The U.S. Government is neither a party to nor assumes
+            any liability for activities of the Contractor (SANDIA) in
+            connection with this License Agreement. 
+   4. Indemnity
+         1. Except for negligent acts or omissions of SANDIA, if YOU,
+            your assignees or licensees, makes, uses or sells a product,
+            process or service that includes the POBLANO TOOLBOX, then
+            YOU shall indemnify SANDIA and the U.S. Government for all
+            damages, costs, and expenses, including attorneys' fees,
+            arising from personal injury or property damage occurring as
+            a result of making, using or selling the product or process.
+         2. SANDIA warrants that the POBLANO TOOLBOX is an original work
+            of authorship owned or controlled by SANDIA.
+         3. SANDIA warrants that it has the right to license copyrights
+            in the POBLANO TOOLBOX.
+   5. Export Control Notice
+         1. The export of articles and information from the U.S. may
+            require a government license; violators subject to criminal
+            penalties.
+   6. No Waivers
+         1. The failure of SANDIA, at any time, to exercise any right or
+            remedy of this Agreement shall not be construed to be a
+            waiver of such right or remedy nor preclude SANDIA from
+            exercising such right and remedy thereafter.
+   7. Controlling Law
+         1. This Agreement shall be construed according to the laws of
+            the State of California and the United States of America.
+
+
+      Attachment A
+
+   1. Poblano Toolbox
+      POBLANO TOOLBOX is a Sandia Corporation copyrighted software, 
+      SCR #1255.0, that provides a collection of MATLAB classes for 
+      solving optimization problems that can be used for fast algorithm 
+      prototyping.
+   2. License Fees:
+      POBLANO TOOLBOX is being offered at no cost under this agreement.
+      Commercial distribution licenses for POBLANO TOOLBOX are available
+      from Sandia at reasonable rates.
+

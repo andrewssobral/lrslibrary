@@ -64,6 +64,8 @@ set(hObject,'DeleteFcn',@gui_close);
 clc;
 disp('Initializing app...');
 
+load_lrslibrary_conf;
+
 global method_id;
 global algorithm_id;
 global stopFlag;
@@ -76,12 +78,15 @@ runningFlag = false;
 %img_lrs = imread('figs/lrs2.png','BackgroundColor',[0.94 0.94 0.94]);
 %imshow(img_lrs,'parent',handles.axes_lrs);
 
-imshow(imread('figs/mixed.png'),'parent',handles.axes_input);
-imshow(imread('figs/outliers.png'),'parent',handles.axes_output);
-imshow(imread('figs/low-rank.png'),'parent',handles.axes_lowrank);
-imshow(imread('figs/sparse.png'),'parent',handles.axes_sparse);
+imshow(imread(fullfile(lrs_conf.lrs_dir,'figs','mixed.png')),'parent',handles.axes_input);
+imshow(imread(fullfile(lrs_conf.lrs_dir,'figs','outliers.png')),'parent',handles.axes_output);
+imshow(imread(fullfile(lrs_conf.lrs_dir,'figs','low-rank.png')),'parent',handles.axes_lowrank);
+imshow(imread(fullfile(lrs_conf.lrs_dir,'figs','sparse.png')),'parent',handles.axes_sparse);
 
 gui_display_cputime(0,handles.axes_cputime);
+
+set(handles.edit_input_video,'string',fullfile(lrs_conf.lrs_dir,'dataset','demo.avi'));
+set(handles.edit_output_video,'string',fullfile(lrs_conf.lrs_dir,'output','output.avi'));
 
 [list] = get_method_list();
 set(handles.popupmenu_method,'string',cellstr(list));
@@ -345,7 +350,8 @@ function pushbutton_select_input_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton_select_input (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-[filename, pathname] = uigetfile({'*.avi';'*.mpg';'*.mp4';'*.*'},'File Selector','dataset/');
+load_lrslibrary_conf;
+[filename, pathname] = uigetfile({'*.avi';'*.mpg';'*.mp4';'*.*'},'File Selector',fullfile(lrs_conf.lrs_dir,'dataset'));
 if(~isequal(filename,0) && ~isequal(pathname,0))
   inputVideoHandle = handles.edit_input_video;
   fullpath = fullfile(pathname, filename);
@@ -359,7 +365,8 @@ function pushbutton_show_results_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 clc;
-img = imread('figs/no-available-image.png');
+load_lrslibrary_conf;
+img = imread(fullfile(lrs_conf.lrs_dir,'figs','no-available-image.png'));
 imshow(img,'parent',handles.axes_input);
 imshow(img,'parent',handles.axes_output);
 imshow(img,'parent',handles.axes_lowrank);
@@ -421,8 +428,6 @@ function Close_Callback(hObject, eventdata, handles)
 % hObject    handle to Close (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-rem_tensor_libs;
-restoredefaultpath;
 close;
 
 

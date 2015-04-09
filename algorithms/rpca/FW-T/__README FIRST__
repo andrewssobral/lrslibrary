@@ -1,0 +1,9 @@
+First download:
+
+CVX: Matlab Software for Disciplined Convex Programming
+http://cvxr.com/cvx/download/
+
+and install it in:
+lrslibrary/libs/cvx
+
+enjoy!

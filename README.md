@@ -1,12 +1,12 @@
-Last update: **18/02/2015**
+Last update: **09/04/2015**
 
-Library Version: **1.0.3**
+Library Version: **1.0.4**
 
 LRSLibrary
 ----------
 *Low-Rank and Sparse* tools for Background Modeling and Subtraction in Videos.
 
-The *LRSLibrary* provides a collection of **low-rank and sparse decomposition** algorithms in MATLAB. The library was designed for motion segmentation in videos, but it can be also used or adapted for other computer vision problems, please see this [page](http://perception.csl.illinois.edu/matrix-rank/applications.html). Currently the LRSLibrary contains a total of **75** *matrix-based* and *tensor-based* algorithms. The LRSLibrary was tested successfully in MATLAB R2013b both x86 and x64 versions.
+The *LRSLibrary* provides a collection of **low-rank and sparse decomposition** algorithms in MATLAB. The library was designed for motion segmentation in videos, but it can be also used or adapted for other computer vision problems (for more information, please see this [page](http://perception.csl.illinois.edu/matrix-rank/applications.html)). Currently the LRSLibrary contains a total of **75** *matrix-based* and *tensor-based* algorithms. The LRSLibrary was tested successfully in MATLAB R2013b, and R2014 both x86 and x64 versions.
 
 <p align="center"><img src="https://sites.google.com/site/andrewssobral/lrs_results2.png" /></p>
 
@@ -48,7 +48,7 @@ A paper about the LRSLibrary will be published in a journal, but if you use this
 
 GUI
 ---
-The *LRSLibrary* provides an easy-to-use graphical user interface (GUI) for background modeling and subtraction in videos. Just execute **run_gui.m** and enjoy it ;)
+The *LRSLibrary* provides an easy-to-use graphical user interface (GUI) for background modeling and subtraction in videos. First, run the setup script **lrs_setup** (or **run('C:/lrslibrary/lrs_setup')**), then run **lrs_gui**, and enjoy it!
 
 <p align="center"><img src="https://sites.google.com/site/andrewssobral/lrslibrary_gui2.png" /></p>
 
@@ -225,6 +225,9 @@ Usage example
 For complete details and examples, please see the **demo.m** file.
 ```Matlab
 
+%% First run the setup script
+lrs_setup; % or run('C:/lrslibrary/lrs_setup')
+
 %% Processing videos
 %
 % Robust PCA
@@ -285,7 +288,7 @@ How to contribute with LRSLibrary project
 -----------------------------------------
 Everyone is invited to cooperate with the LRSLibrary project by sending to us any implementation of low-rank and sparse decomposition algorithms.
 
-Option 1: email it to me (andrewssobral at gmail.com).
+Option 1: email it to me (andrewssobral **at** gmail **dot** com).
 
 Option 2: fork the library on GitHub, push your changes, then send me a pull request.
 
@@ -295,10 +298,12 @@ The source code is available only for academic/research purposes (non-commercial
 
 Problems or Questions
 ---------------------
-If you have any problems or questions, please contact the author: Andrews Sobral (andrewssobral@gmail.com)
+If you have any problems or questions, please contact the author: Andrews Sobral (andrewssobral **at** gmail **dot** com)
 
 Release Notes:
 --------------
+* Version 1.0.4: Added a setup script, and configuration file. Also fixed some errors.
+
 * Version 1.0.3: Added three new algorithms: FW-T (Mu et al. 2014), iNMF (Bucak and Gunsel, 2009) and DRMF (Xiong et al. 2011).
 
 * Version 1.0.2: Added four new algorithms: GOSUS (Xu et al. 2013), pROST (Hage and Kleinsteuber, 2013), RegL1-ALM (Zheng et al. 2012) and ROSL (Shu et al. 2014).

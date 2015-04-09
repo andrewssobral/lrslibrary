@@ -1,8 +1,11 @@
 %% LRSLibrary: A <Low-Rank and Sparse tools> Library for Background Modeling and Subtraction in Videos
-close all; clear all; clc;
+close, clear, clc;
+
+%% First run the setup script
+lrs_setup; % or run('C:/GitHub/lrslibrary/lrs_setup')
 
 %% GUI
-run_gui;
+lrs_gui;
 
 %% UTILS
 video2mat('dataset/demo.avi', 'dataset/demo.mat');
@@ -18,10 +21,8 @@ video3d = im2double(convert_video_to_3d(video));
 show_3dvideo(video3d);
 
 %%% 3D tensor demo
-add_tensor_libs;
 T = convert_video_to_3dtensor(video);
 slice3(double(T)), colormap('gray');
-rem_tensor_libs;
 
 %%% 4D demo
 video4d = convert_video_to_4d(video);
@@ -35,7 +36,7 @@ V = im2double(imgdb{100});
 show_3dvideo(V);
 
 %%% Matrix-based algorithms
-[M, m, n, p] = convert_video3d_to_2d(V);
+[M,m,n,p] = convert_video3d_to_2d(V);
 show_2dvideo(M,m,n);
 % Robust PCA
 results = process_matrix('RPCA', 'FPCP', M, []);
@@ -48,7 +49,6 @@ results = process_matrix('NMF', 'ManhNMF', M, []);
 show_results(M,results.L,results.S,results.O,p,m,n);
 
 %%% Tensor-based algorithms
-add_tensor_libs;
 T = tensor(V);
 % Non-Negative Tensor Factorization
 results = process_tensor('NTF', 'bcuNCP', T);
@@ -56,7 +56,6 @@ show_3dtensors(T,results.L,results.S,results.O);
 % Tensor Decomposition
 results = process_tensor('TD', 'Tucker-ALS', T);
 show_3dtensors(T,results.L,results.S,results.O);
-rem_tensor_libs;
 
 %% DEMO 02
 
@@ -72,10 +71,9 @@ process_video('NTF', 'bcuNCP', 'dataset/demo.avi', 'output/demo_bcuNCP.avi');
 process_video('TD', 'Tucker-ALS', 'dataset/demo.avi', 'output/demo_Tucker-ALS.avi');
 
 %% DEMO 03 - For Large Videos (block by block)
-close all; clear all; clc;
 video = load_video_file('dataset/highway.avi');
+% show_video(video);
 
-%% show_video(video);
 M_total = [];
 L_total = [];
 S_total = [];

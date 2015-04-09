@@ -23,7 +23,6 @@ function results = process_matrix(method_id, algorithm_id, M, opts)
     results = run_algorithm_nmf(algorithm_id, M, opts);
   end
   
-  
   %%% Apply hard thresholding
   results.O = hard_threshold(results.S); % imagesc(results.O);
   

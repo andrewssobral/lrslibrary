@@ -38,13 +38,10 @@ end
 %%% Tensor-based methods
 % i.e: process_video('TD', 'HOSVD', 'dataset/demo.avi', 'output/demo_HOSVD.avi');
 if(strcmp(method_id,'TD') || strcmp(method_id,'NTF'))
-  add_tensor_libs;
   A = im2double(convert_video_to_3d(video));
   T = tensor(A);
   results = process_tensor(method_id, algorithm_id, T);
   movobj = convert_3dresults2mov([],results.L,results.S,results.O,size(T,3));
-  %rmpath('libs/tensor_toolbox_2.5');
-  %rmpath('libs/mtt');
 end
 
 displog('Saving results...');

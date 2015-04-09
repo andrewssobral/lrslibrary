@@ -1,0 +1,1 @@
+load('lrs_conf.mat');

@@ -1,0 +1,24 @@
+Poblano Toolbox version 1.1
+by Daniel M. Dunlavy, Tamara G. Kolda, and Evrim Acar.
+Copyright 2009-2012, Sandia Corporation.
+Released January 30, 2012.
+
+============================================
+Changes from Version 1.0 (March 17, 2010.)
+============================================
+New features:
+    - ExitDescription output parameter: contains text description of
+      ExitFlag output parameter.
+    - DisplayIters input parameter: determines how many iterations are
+      performed before printing output when Display input parameter is
+      set to 'iter'. Iteration 0 and final iteration are also printed.
+New default parameters:
+    - MaxIters = 1000 (was 100)
+    - MaxFuncEvals = 10000 (was 100)
+Bug fixes:
+    - Fixed two-loop recursion bug in lbfgs.m (#19).
+    - Documented initial step for linsearch in poblano_linesearch.m
+      (#2, #18).
+Other changes:
+    - Updated documentation for input and output parameters.
+    - Updated URL for Poblano Toolbox.

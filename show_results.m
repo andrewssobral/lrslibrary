@@ -9,6 +9,7 @@
 %
 function show_results(I,L,S,O,nFrame,vidHeight,vidWidth)
   warning('off','all');
+  clf;
   for i = 1:nFrame
     Input = reshape(I(:,i),vidHeight,vidWidth);
     %Input = uint8(Input);
