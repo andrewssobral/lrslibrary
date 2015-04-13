@@ -1,0 +1,15 @@
+The GRASTA Matlab / C++ library is provided without any warranty
+of fitness for any purpose. You can redistribute the library
+and/or modify it under the terms of the GNU Lesser General
+Public License (LGPL) as published by the Free Software
+Foundation, either version 3 of the License or (at your option)
+any later version.
+
+Note that the LGPL v3 is formulated as an extension/modification 
+of the GPL v3 license, providing additional permissions.
+For example, programs that use GRASTA can be distributed under 
+a different license, provided some conditions are met.
+
+A copy of the LGPL and GPL licenses is provided in this package.
+
+More info: http://www.opensource.org/licenses

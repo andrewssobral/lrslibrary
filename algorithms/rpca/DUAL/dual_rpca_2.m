@@ -20,35 +20,18 @@ function [A_dual, E_dual, Y, iter] = dual_rpca_2(D, lambda, tol, maxIter, LineSe
 % Copyright: Perception and Decision Laboratory, University of Illinois, Urbana-Champaign
 %            Microsoft Research Asia, Beijing
 
+[m,n] = size(D);
 
-
-[m, n] = size(D);
-
-if nargin < 2
-    lambda = 1 / sqrt(m);
+if(nargin < 2) lambda = 1 / sqrt(m); end
+if(nargin < 3) tol = 2e-5 * norm( D, 'fro' ); 
+elseif(tol == -1) tol = 2e-5 * norm( D, 'fro' );
 end
 
-if nargin < 3
-    tol = 2e-5 * norm( D, 'fro' );
-elseif tol == -1
-    tol = 2e-5 * norm( D, 'fro' );
+if(nargin < 4) maxIter = 1000; elseif(maxIter == -1) maxIter = 1000; end
+if(nargin < 5) LineSearchFlag = 0; elseif LineSearchFlag == -1 LineSearchFlag = 0;
 end
 
-if nargin < 4
-    maxIter = 1000;
-elseif maxIter == -1
-    maxIter = 1000;
-end
-
-if nargin < 5
-    LineSearchFlag = 0;
-elseif LineSearchFlag == -1
-    LineSearchFlag = 0;
-end
-
-if nargin > 5
-    fid = fopen(outputFile,'a+t') ;
-end
+if(nargin > 5) fid = fopen(outputFile,'a+t'); end
 
 % initialize
 Y = sign(D);
@@ -92,7 +75,8 @@ while ~converged
         %if choosvd( n, t) == 1
         %    [u s v] = lansvd( Y, t, 'L');
         %else
-            [u s v] = svd( Y, 'econ');
+            %[u s v] = svd( Y, 'econ');
+            [u,s,v] = svdecon(Y); % fastest
         %end
         ds = diag(s);
         t = max( find( ds >= ds(1) * (1 - 1e-2) ) );
@@ -115,7 +99,7 @@ while ~converged
                 Z = D - A_dual;
                 Z = max( Z .* (Y > threshold), 0) + min( Z .* (Y < -threshold), 0);
                 D_bar = u(:, 1:t)' * ( D - Z) * v(:, 1:t);
-                [S J] = eig(( D_bar + D_bar') / 2);
+                [S,J] = eig(( D_bar + D_bar') / 2);
                 temp = S * max( J, 0) * S';
                 X = u(:, 1:t) * temp * v(:, 1:t)';
     

@@ -79,7 +79,9 @@ while iter < maxIter
         
         %update J
         temp = temp_Z + W/mu;
-        [U S V] = svd(temp, 'econ');
+        
+        [U,S,V] = svd(temp, 'econ'); % stable 
+        %[U,S,V] = svdecon(temp); % fastest, but EIG must not contain NaN or Inf.
        
         diagS = diag(S);
         svp = length(find(diagS > 1/mu));

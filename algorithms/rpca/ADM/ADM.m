@@ -56,8 +56,8 @@ for iter = 1:maxit
     %% B - subprolbme
     Y = X - A;
     dB = B;
-    [U,D,VT] = mexsvd(Y,2);
-    %[U,D,VT] = svd(Y);
+    %[U,D,VT] = mexsvd(Y,2);
+    [U,D,VT] = svd(Y);
     D = diag(D);
     ind = find(D > 1/beta);
     D = diag(D(ind) - 1/beta);

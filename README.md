@@ -1,12 +1,12 @@
-Last update: **09/04/2015**
+Last update: **14/04/2015**
 
-Library Version: **1.0.4**
+Library Version: **1.0.5**
 
 LRSLibrary
 ----------
 *Low-Rank and Sparse* tools for Background Modeling and Subtraction in Videos.
 
-The *LRSLibrary* provides a collection of **low-rank and sparse decomposition** algorithms in MATLAB. The library was designed for motion segmentation in videos, but it can be also used or adapted for other computer vision problems (for more information, please see this [page](http://perception.csl.illinois.edu/matrix-rank/applications.html)). Currently the LRSLibrary contains a total of **75** *matrix-based* and *tensor-based* algorithms. The LRSLibrary was tested successfully in MATLAB R2013b, and R2014 both x86 and x64 versions.
+The *LRSLibrary* provides a collection of **low-rank and sparse decomposition** algorithms in MATLAB. The library was designed for motion segmentation in videos, but it can be also used or adapted for other computer vision problems (for more information, please see this [page](http://perception.csl.illinois.edu/matrix-rank/applications.html)). Currently the LRSLibrary contains a total of **90** *matrix-based* and *tensor-based* algorithms. The LRSLibrary was tested successfully in MATLAB R2013 and R2014 both x86 and x64 versions.
 
 <p align="center"><img src="https://sites.google.com/site/andrewssobral/lrs_results2.png" /></p>
 
@@ -58,14 +58,16 @@ Each algorithm is classified by its cpu time consumption with the following icon
 
 List of the algorithms available in LRSLibrary
 ----------------------------------------------
-* RPCA: Robust PCA (37)
+* RPCA: Robust PCA (41)
+* * RPCA: Robust Principal Component Analysis [(De la Torre and Black, 2001)](http://users.salleurl.edu/~ftorre/papers/rpca/rpca.pdf) [website](http://users.salleurl.edu/~ftorre/papers/rpca2.html)
+
 * * PCP: Principal Component Pursuit [(Candes et al. 2009)](http://arxiv.org/abs/0912.3599) 
 
 * * FPCP: Fast PCP [(Rodriguez and Wohlberg 2013)](http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=6738015) 
 
-* * AS-RPCA: Active Subspace: Towards Scalable Low-Rank Learning [(Liu and Yan, 2012)](http://dl.acm.org/citation.cfm?id=2421487)
-
 * * R2PCP: Riemannian Robust Principal Component Pursuit [(Hintermüller and Wu, 2014)](http://link.springer.com/article/10.1007/s10851-014-0527-y) 
+
+* * AS-RPCA: Active Subspace: Towards Scalable Low-Rank Learning [(Liu and Yan, 2012)](http://dl.acm.org/citation.cfm?id=2421487)
 
 * * ALM: Augmented Lagrange Multiplier [(Tang and Nehorai 2011)](http://dx.doi.org/10.1109/CISS.2011.5766144) 
 
@@ -93,11 +95,13 @@ List of the algorithms available in LRSLibrary
 
 * * DECOLOR: Contiguous Outliers in the Low-Rank Representation [(Zhou et al. 2011)](http://arxiv.org/abs/1109.0882) [website1](https://sites.google.com/site/eeyangc/software/decolor) [website2](https://fling.seas.upenn.edu/~xiaowz/dynamic/wordpress/?p=144)
 
-* * GOSUS: Grassmannian Online Subspace Updates with Structured-sparsity [(Xu et al. 2013)](http://pages.cs.wisc.edu/~jiaxu/projects/gosus/gosus-iccv2013.pdf) [website](http://pages.cs.wisc.edu/~jiaxu/projects/gosus/)
-
-* * pROST: Robust PCA and subspace tracking from incomplete observations using L0-surrogates [(Hage and Kleinsteuber, 2013)](http://arxiv.org/abs/1210.0805) [website](http://www.gol.ei.tum.de/index.php?id=37&L=1)
-
 * * RegL1-ALM: Low-Rank Matrix Approximation under Robust L1-Norm [(Zheng et al. 2012)](https://sites.google.com/site/yinqiangzheng/home/zheng_CVPR12_robust%20L1-norm%20low-rank%20matrix%20factorization.pdf) [website](https://sites.google.com/site/yinqiangzheng/)
+
+* * GA: Grassmann Average [(Hauberg et al. 2014)](http://files.is.tue.mpg.de/black/papers/RGA2014.pdf) [website](http://ps.is.tuebingen.mpg.de/project/Robust_PCA)
+
+* * GM: Grassmann Median [(Hauberg et al. 2014)](http://files.is.tue.mpg.de/black/papers/RGA2014.pdf) [website](http://ps.is.tuebingen.mpg.de/project/Robust_PCA)
+
+* * TGA: Trimmed Grassmann Average [(Hauberg et al. 2014)](http://files.is.tue.mpg.de/black/papers/RGA2014.pdf) [website](http://ps.is.tuebingen.mpg.de/project/Robust_PCA)
 
 * * NSA1: Non-Smooth Augmented Lagrangian v1 [(Aybat et al. 2011)](http://arxiv.org/abs/1105.2126) 
 
@@ -135,6 +139,24 @@ List of the algorithms available in LRSLibrary
 
 * * SSGoDec: Semi-Soft GoDec [(Zhou and Tao 2011)](http://www.icml-2011.org/papers/41_icmlpaper.pdf) [website](https://sites.google.com/site/godecomposition/home)
 
+* ST: Subspace Tracking (3)
+* * GRASTA: Grassmannian Robust Adaptive Subspace Tracking Algorithm [(He et al. 2012)](http://www.citeulike.org/user/lambertch/article/12543964) [website](https://sites.google.com/site/hejunzz/grasta)
+
+* * GOSUS: Grassmannian Online Subspace Updates with Structured-sparsity [(Xu et al. 2013)](http://pages.cs.wisc.edu/~jiaxu/projects/gosus/gosus-iccv2013.pdf) [website](http://pages.cs.wisc.edu/~jiaxu/projects/gosus/)
+
+* * pROST: Robust PCA and subspace tracking from incomplete observations using L0-surrogates [(Hage and Kleinsteuber, 2013)](http://arxiv.org/abs/1210.0805) [website](http://www.gol.ei.tum.de/index.php?id=37&L=1)
+
+* MC: Matrix Completion (5)
+* * LRGeomCG: Low-rank matrix completion by Riemannian optimization [(Bart Vandereycken, 2013)](http://web.math.princeton.edu/~bartv/papers/84576.pdf) [website1](http://web.math.princeton.edu/~bartv/matrix_completion.html) [website2](http://www.manopt.org/reference/examples/low_rank_matrix_completion.html) 
+
+* * GROUSE: Grassmannian Rank-One Update Subspace Estimation [(Balzano et al. 2010)](http://arxiv.org/pdf/1006.4046.pdf) [website](http://sunbeam.ece.wisc.edu/grouse/) 
+
+* * OptSpace: Matrix Completion from Noisy Entries  [(Keshavan et al. 2009)](http://arxiv.org/pdf/0906.2027v1.pdf) [website](http://web.engr.illinois.edu/~swoh/software/optspace/code.html) 
+
+* * FPC: Fixed point and Bregman iterative methods for matrix rank minimization [(Ma et al. 2008)](http://arxiv.org/pdf/0905.1643.pdf) [website](http://www1.se.cuhk.edu.hk/~sqma/FPCA.html) 
+
+* * SVT: A singular value thresholding algorithm for matrix completion [(Cai et al. 2008)](http://arxiv.org/pdf/0810.3286.pdf) [website](http://svt.stanford.edu/)
+
 * LRR: Low Rank Recovery (6)
 * * EALM: Exact ALM [(Lin et al. 2009)](http://arxiv.org/abs/1009.5055) 
 
@@ -148,7 +170,16 @@ List of the algorithms available in LRSLibrary
 
 * * ROSL: Robust Orthonormal Subspace Learning [(Shu et al. 2014)](https://dl.dropboxusercontent.com/u/10893363/Homepage/CVPR2014_ROSL.pdf) [website](https://sites.google.com/site/xianbiaoshu/)
 
-* NMF: Non-Negative Matrix Factorization (12)
+* TTD: Three-Term Decomposition (4)
+* * 3WD: 3-Way-Decomposition [(Oreifej et al. 2012)](http://www.cs.ucf.edu/~oreifej/papers/3-Way-Decomposition.pdf) [website](http://vision.eecs.ucf.edu/projects/Turbulence/)
+
+* * MAMR: Motion-Assisted Matrix Restoration [(Ye et al. 2015)](http://projects.medialab-tju.org/bf_separation/download/2015_TCSVT.pdf) [website](http://projects.medialab-tju.org/bf_separation/)
+
+* * RMAMR: Robust Motion-Assisted Matrix Restoration [(Ye et al. 2015)](http://projects.medialab-tju.org/bf_separation/download/2015_TCSVT.pdf) [website](http://projects.medialab-tju.org/bf_separation/)
+
+* * ADMM: Alternating Direction Method of Multipliers [(Parikh and Boyd, 2014)](http://projects.medialab-tju.org/bf_separation/download/2015_TCSVT.pdf) [website1](http://stanford.edu/~boyd/admm.html) [website2](http://web.stanford.edu/~boyd/papers/prox_algs.html)
+
+* NMF: Non-Negative Matrix Factorization (14)
 * * NMF-MU: NMF solved by Multiplicative Updates 
 
 * * NMF-PG: NMF solved by Projected Gradient 
@@ -214,9 +245,7 @@ List of the algorithms available in LRSLibrary
 * * t-SVD: Tensor SVD in Fourrier Domain [(Zhang et al. 2013)](http://arxiv.org/abs/1307.0805) 
 
 * **Some remarks**:
-* * The FW-T algorithm of Mu et al. (2014) works only with [CVX library](http://cvxr.com/cvx/). Download and install it in: */lrslibrary/libs*.
-
-* * The ADM algorithm of Yuan and Yang (2009) works only on win32 platforms (mexsvd.mexw32).
+* * The FW-T algorithm of Mu et al. (2014) works only with [CVX library](http://cvxr.com/cvx/). Download and install it in: *lrslibrary/libs/cvx/*.
 
 * * The DECOLOR algorithm of Zhou et al. (2011) don't works in MATLAB R2014a(x64), but works successfully in MATLAB R2013b(x64) and both R2014a(x86) and R2013b(x86).
 
@@ -228,18 +257,31 @@ For complete details and examples, please see the **demo.m** file.
 %% First run the setup script
 lrs_setup; % or run('C:/lrslibrary/lrs_setup')
 
+%% Load configuration
+lrs_load_conf;
+
+%% Load video
+input_avi = fullfile(lrs_conf.lrs_dir,'dataset','demo.avi');
+output_avi = fullfile(lrs_conf.lrs_dir,'output','output.avi');
+
 %% Processing videos
 %
 % Robust PCA
-process_video('RPCA', 'FPCP', 'dataset/demo.avi', 'output/demo_FPCP.avi');
+process_video('RPCA', 'FPCP', input_avi, output_avi);
+% Subspace Tracking
+process_video('ST', 'GRASTA', input_avi, output_avi);
+% Matrix Completion
+process_video('MC', 'GROUSE', input_avi, output_avi);
 % Low Rank Recovery
-process_video('LRR', 'FastLADMAP', 'dataset/demo.avi', 'output/demo_LRR-FastLADMAP.avi');
+process_video('LRR', 'FastLADMAP', input_avi, output_avi);
+% Three-Term Decomposition
+process_video('TTD', '3WD', input_avi, output_avi);
 % Non-Negative Matrix Factorization
-process_video('NMF', 'ManhNMF', 'dataset/demo.avi', 'output/demo_ManhNMF.avi');
+process_video('NMF', 'ManhNMF', input_avi, output_avi);
 % Non-Negative Tensor Factorization
-process_video('NTF', 'bcuNCP', 'dataset/demo.avi', 'output/demo_bcuNCP.avi');
+process_video('NTF', 'bcuNCP', input_avi, output_avi);
 % Tensor Decomposition
-process_video('TD', 'Tucker-ALS', 'dataset/demo.avi', 'output/demo_Tucker-ALS.avi');
+process_video('TD', 'Tucker-ALS', input_avi, output_avi);
 
 %% Processing matrices and tensors
 %
@@ -249,29 +291,35 @@ show_3dvideo(V);
 
 %% Matrix-based algorithms
 %
-[M, m, n, p] = convert_video3d_to_2d(V);
+[M,m,n,p] = convert_video3d_to_2d(V);
 show_2dvideo(M,m,n);
+
 % Robust PCA
-results = process_matrix('RPCA', 'FPCP', M, []);
-show_results(M,results.L,results.S,results.O,p,m,n);
+out = process_matrix('RPCA', 'FPCP', M, []);
+% Subspace Tracking
+out = process_matrix('ST', 'GRASTA', M, []);
+% Matrix Completion
+out = process_matrix('MC', 'GROUSE', M, []);
 % Low Rank Recovery
-results = process_matrix('LRR', 'FastLADMAP', M, []);
-show_results(M,results.L,results.S,results.O,p,m,n);
+out = process_matrix('LRR', 'FastLADMAP', M, []);
+% Three-Term Decomposition
+out = process_matrix('TTD', '3WD', M, []);
 % Non-Negative Matrix Factorization
-results = process_matrix('NMF', 'ManhNMF', M, []);
-show_results(M,results.L,results.S,results.O,p,m,n);
+out = process_matrix('NMF', 'ManhNMF', M, []);
+
+% Show results
+show_results(M,out.L,out.S,out.O,p,m,n);
 
 %% Tensor-based algorithms
-%
-add_tensor_libs;
 T = tensor(V);
+
 % Non-Negative Tensor Factorization
-results = process_tensor('NTF', 'bcuNCP', T);
-show_3dtensors(T,results.L,results.S,results.O);
+out = process_tensor('NTF', 'bcuNCP', T);
 % Tensor Decomposition
-results = process_tensor('TD', 'Tucker-ALS', T);
-show_3dtensors(T,results.L,results.S,results.O);
-rem_tensor_libs;
+out = process_tensor('TD', 'Tucker-ALS', T);
+
+% Show results
+show_3dtensors(T,out.L,out.S,out.O);
 ```
 <p align="center"><img src="https://sites.google.com/site/andrewssobral/lrs_results.png?width=650" /></p>
 
@@ -302,6 +350,8 @@ If you have any problems or questions, please contact the author: Andrews Sobral
 
 Release Notes:
 --------------
+* Version 1.0.5: Added three new method categories ST (Subspace Tracking), MC (Matrix Completion), and  TTD (Three-Term Decomposition). Added fifteen new algorithms: 3WD - 3-Way-Decomposition of Oreifej et al. (2012), MAMR and Robust MAMR - Motion-Assisted Matrix Restoration of Ye et al. (2015), ADMM - Alternating Direction Method of Multipliers of Parikh and Boyd (2014), GreGoDec - Greedy Semi-Soft GoDec Algotithm of Zhou and Tao (2013), GRASTA (Grassmannian Robust Adaptive Subspace Tracking Algorithm) of He et al. (2012), GOSUS (Grassmannian Rank-One Update Subspace Estimation) of Balzano et al. (2010), OptSpace - A Matrix Completion Algorithm of Keshavan et al. (2009), FPC - Fixed point and Bregman iterative methods for matrix rank minimization of Ma et al. (2008), SVT - A singular value thresholding algorithm for matrix completion of Cai et al. (2008), LRGeomCG - Low-rank matrix completion by Riemannian optimization of Bart Vandereycken (2013), RPCA - Robust Principal Component Analysis of De la Torre and Black (2001), GA - Grassmann Average, GM - Grassmann Median, and TGA - Trimmed Grassmann Average of Hauberg et al. (2014). Also fixed some errors.
+
 * Version 1.0.4: Added a setup script, and configuration file. Also fixed some errors.
 
 * Version 1.0.3: Added three new algorithms: FW-T (Mu et al. 2014), iNMF (Bucak and Gunsel, 2009) and DRMF (Xiong et al. 2011).

@@ -1,6 +1,7 @@
-figs/bkp
+tmp/
+figs/tmp
 libs/cvx-w32
 libs/cvx-w64
-output/bkp
+output/tmp
 *.asv
 __TODO__.txt

@@ -47,7 +47,9 @@ for iter = 1:maxit
     Y = X - S;
     dL = L;
  
-    [U,D,V] = svd(Y,'econ'); % use 'econ' is more efficient especially when Y is large
+    %[U,D,V] = svd(Y,'econ'); % use 'econ' is more efficient especially when Y is large
+    [U,D,V] = svdecon(Y); % fastest
+    
     VT=V';
     D = diag(D);
     ind = find(D > 1/beta);

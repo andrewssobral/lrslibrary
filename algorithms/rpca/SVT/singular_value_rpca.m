@@ -60,12 +60,12 @@ while ~converged
     
     switch lower(svdMethod)
         case 'svdlibc'
-            [U diagS V] = svdlibc(Y, rankA+1);
+            [U,diagS,V] = svdlibc(Y, rankA+1);
         case 'propack'
             [U,S,V] = lansvd(Y,rankA+1,'L');
             diagS = diag(S);
         case 'svds'
-            [U, S, V] = svds(Y, rankA+1, 'L');
+            [U,S,V] = svds(Y, rankA+1, 'L');
             diagS = diag(S);
         otherwise            
             [U,S,V] = svd(Y,0);            

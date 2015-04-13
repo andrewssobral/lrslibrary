@@ -13,7 +13,6 @@ rho = 1.1;
 alpha = 1;
 beta = .2;
 
-
 Y = zeros(size(D));
 E = zeros(size(D));
 A = D;
@@ -31,7 +30,7 @@ sv = 10;
 tol_iter = 0;
 
 while iter_out < MaxIter_out && err_out > tol_out
-    iter_out = iter_out + 1;
+    iter_out = iter_out + 1; disp(iter_out);
 
     Ak = A; Ek = E;
     iter_inner1 = 0;
@@ -44,17 +43,19 @@ while iter_out < MaxIter_out && err_out > tol_out
         Akk = G;
         Ahk = zeros(size(Akk));
 
-
         err_inner2 = 1;
         iter_inner2 = 0;
 
         while iter_inner2 < MaxIter_inner2 && err_inner2 > tol_inner2
             iter_inner2 = iter_inner2 + 1;
-            if choosvd(n, sv) == 1
-                [U Si V] = lansvd(Akk, sv, 'L');
-            else
-                [U Si V] = svd(Akk, 'econ');
-            end
+            
+            %if choosvd(n, sv) == 1
+            %    [U,Si,V] = lansvd(Akk, sv, 'L');
+            %else
+                %[U,Si,V] = svd(Akk, 'econ');
+                [U,Si,V] = svdecon(Akk); % fastest
+            %end
+            
             diagS = diag(Si);
             diagS = diagS(1:sv);
             svn = length(find(diagS > beta));
@@ -70,9 +71,7 @@ while iter_out < MaxIter_out && err_out > tol_out
                 sv = min(svp + 10, n);
             end
 
-
             Ahk = U(:, 1:svp) * diag(diagS(1:svp) - beta) * V(:, 1:svp)';
-
 
             B = 2*Ahk - Akk + mu*beta*G;
             %ns = norms(B);
@@ -82,10 +81,7 @@ while iter_out < MaxIter_out && err_out > tol_out
             err_inner2 = alpha*norm(B-Ahk,'fro');
 
             tol_iter = tol_iter + 1;
-
         end
-
-
 
         G = D - Ahk + Y/mu;
         %ns = norms(G);
@@ -95,16 +91,12 @@ while iter_out < MaxIter_out && err_out > tol_out
         err_inner1 = max(norm(Ek-Ep,'fro'),norm(Ak-Ahk,'fro'));
         Ek = Ep;
         Ak = Ahk;
-
     end
 
     A = Ak; E = Ek;
     err_out = norm(D-A-E,'fro')/norm(D,'fro');
 
-
     Y = Y + mu*(D - A - E);
     mu = rho*mu;
-
-
 end
 

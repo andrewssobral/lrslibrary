@@ -1,0 +1,23 @@
+The Manopt project is led by these people:
+
+* Nicolas Boumal
+* Bamdev Mishra
+* Pierre-Antoine Absil
+* Rodolphe Sepulchre
+
+
+The following people have written code specifically for Manopt:
+
+* Nicolas Boumal
+* Bamdev Mishra
+* Pierre Borckmans
+
+
+Furthermore, code written by the following people can be found in Manopt:
+
+* Chris Baker
+* Pierre-Antoine Absil
+* Kyle Gallivan
+* Paolo de Leva
+* Wynton Moore
+* Michael Kleder

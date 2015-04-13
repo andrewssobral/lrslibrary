@@ -16,9 +16,9 @@ function [sigma,bnd] = bdsqr(alpha,beta)
 
 % Below is a very slow replacement for the BDSQR MEX-file.
 
-% warning('PROPACK:NotUsingMex','Using slow matlab code for bdsqr.')
+warning('PROPACK:NotUsingMex','Using slow matlab code for bdsqr.')
 k = length(alpha);
-if min(size(alpha)') ~= 1  | min(size(beta)') ~= 1
+if min(size(alpha)') ~= 1  || min(size(beta)') ~= 1
   error('alpha and beta must be vectors')
 elseif length(beta) ~= k
   error('alpha and beta must have the same lenght')

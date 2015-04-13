@@ -21,13 +21,13 @@ end
 switch strategy
   case 0
     I0 = find(abs(mu(1:j))>=delta);    
-    if length(I0)==0
+    if isempty(I0)
       [mm,I0] = max(abs(mu(1:j)));
     end    
     int = zeros(j,1);
     for i = 1:length(I0)
       for r=I0(i):-1:1
-	if abs(mu(r))<eta | int(r)==1 
+	if abs(mu(r))<eta || int(r)==1 
 	  break;
 	else
 	  int(r) = 1;
@@ -35,7 +35,7 @@ switch strategy
       end
       int(max(1,r-extra+1):r) = 1;
       for s=I0(i)+1:j
-	if abs(mu(s))<eta | int(s)==1  
+	if abs(mu(s))<eta || int(s)==1  
 	  break;
 	else
 	  int(s) = 1;

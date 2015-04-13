@@ -34,21 +34,59 @@
 -------------------------------------------------------------------------
   */
 
+/* Modifications by Stephen Becker, srbecker@caltech.edu
+ * Update, 3/7/09
+ * Re-wrote reorth.f to reorth.c (in C) so that it's easier to compile
+ * on Windows (since windows fortran compilers are not that common).
+ *
+ * When install on Windows, define the pre-processor definition "WINDOWS"
+ * Then it will call the appropriate functions
+ *
+ * 11/9/09
+ * Fixed bugs in reorth.c; it is now preferable to use this, as opposed
+ * to reorth.f.  Should work with 64-bit systems.
+ * */
+
 #include <string.h>
 #include "mex.h"
 
-/* Template for reorth: */
+/* keep this defined; no longer use fortran version */
+#define REORTH_IN_C
 
+/* I use the "WINDOWS" symbol to change between underscores and no underscores
+ * _WIN32 *should* be automatically defined on WINDOWS machines, for most compilers */
+#if defined(_WIN32)
+    #define WINDOWS
+#endif
+
+/* Template for reorth: */
+#ifdef WINDOWS
+void reorth(int *n, int *k, double *V, int *ldv, double *vnew,
+	    double *normvnew, double *index, double *alpha, double *work,
+	    int *iflag, int *nre);
+#else
+  #ifdef REORTH_IN_C
+void reorth(int *n, int *k, double *V, int *ldv, double *vnew,
+	    double *normvnew, double *index, double *alpha, double *work,
+	    int *iflag, int *nre);
+  #else
+/* if reorth.f is compiled, then use "reorth_", but if
+ *  reorth.c is compiled, then use "reorth" */
 void reorth_(int *n, int *k, double *V, int *ldv, double *vnew,
 	    double *normvnew, double *index, double *alpha, double *work,
 	    int *iflag, int *nre);
+  #endif
+#endif
 
 /* Here comes the gateway function to be called by Matlab: */
 void mexFunction(int nlhs, mxArray *plhs[], 
 		 int nrhs, const mxArray *prhs[])
 {
-  int n, k1, k, imethod, inre;
+  int n, k1, k, imethod, inre, i;
   double *work;
+  double *columnIndex;
+  int LDV;
+  int DEFAULT_INDEX = 0;
 
   if (nrhs != 6)
      mexErrMsgTxt("reorth requires 6 input arguments");
@@ -56,8 +94,18 @@ void mexFunction(int nlhs, mxArray *plhs[],
      mexErrMsgTxt("reorth requires at least 2 output arguments");
 
   n = mxGetM(prhs[0]); /* get the dimensions of the input */
-  k1 = mxGetN(prhs[0]);
-  k = mxGetM(prhs[3]) * mxGetN(prhs[3]);
+  k1 = mxGetN(prhs[0]); /* SRB: total possible number of columns */
+  k = mxGetM(prhs[3]) * mxGetN(prhs[3]);  /* SRB: this is index */
+  /* SRB, Nov 9 2009, adding support for the empty matrix input */
+  if ( ( k == 0 ) || mxIsEmpty( prhs[3] ) ) {
+      columnIndex = (double *)mxCalloc(k1,sizeof(double));
+      k = k1;
+      DEFAULT_INDEX = 1;
+      for ( i=0; i < k1 ; i++ )
+          columnIndex[i] = i + 1;  /* MATLAB is 1-based */
+  } else {
+      columnIndex = mxGetPr( prhs[3] );
+  }
     
   /* Create/allocate return argument, a 1x1 real-valued Matrix */
   plhs[0]=mxCreateDoubleMatrix(n,1,mxREAL); 
@@ -70,14 +118,32 @@ void mexFunction(int nlhs, mxArray *plhs[],
   memcpy(mxGetPr(plhs[0]),mxGetPr(prhs[1]), n*sizeof(double));
   memcpy(mxGetPr(plhs[1]),mxGetPr(prhs[2]), sizeof(double));
   imethod = (int) mxGetScalar(prhs[5]);
+   
+  LDV = n;
+  inre = 0;
 
-  reorth_(&n, &k, mxGetPr(prhs[0]), &n, mxGetPr(plhs[0]), 
-	  mxGetPr(plhs[1]), mxGetPr(prhs[3]), mxGetPr(prhs[4]), 
+#ifdef WINDOWS
+  reorth(&n, &k, mxGetPr(prhs[0]), &LDV, mxGetPr(plhs[0]), 
+	  mxGetPr(plhs[1]), columnIndex, mxGetPr(prhs[4]), 
 	  work,&imethod,&inre);
+#else
+  #ifdef REORTH_IN_C
+  reorth(&n, &k, mxGetPr(prhs[0]), &LDV, mxGetPr(plhs[0]), 
+	  mxGetPr(plhs[1]), columnIndex, mxGetPr(prhs[4]), 
+	  work,&imethod,&inre);
+  #else
+  reorth_(&n, &k, mxGetPr(prhs[0]), &LDV, mxGetPr(plhs[0]), 
+	  mxGetPr(plhs[1]), columnIndex, mxGetPr(prhs[4]), 
+	  work,&imethod,&inre);
+  #endif
+#endif
   if (nlhs>2) 
     *(mxGetPr(plhs[2])) = (double) inre*k;
 
   mxFree(work);
+  if ( DEFAULT_INDEX )
+      mxFree( columnIndex );
+
 }
 
 

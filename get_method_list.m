@@ -2,7 +2,7 @@
 %
 function [list] = get_method_list()
   L = load_method_list();
-  [m n] = size(L{1,1});
+  [m,n] = size(L{1,1});
   list = {};
   k = 1;
   for i = 1 : m

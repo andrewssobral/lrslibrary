@@ -23,12 +23,13 @@
 function [stats] = process_video(method_id, algorithm_id, inFile, outFile)
 timerVal = tic;
 displog(['Loading ' inFile]);
-video = load_video_file(inFile); % show_video(video);
+video = load_video_file(inFile);
 
 %%% Matrix-based methods
 % i.e: process_video('RPCA', 'FPCP', 'dataset/demo.avi', 'output/demo_FPCP.avi');
-if(strcmp(method_id,'RPCA') || strcmp(method_id,'LRR') || strcmp(method_id,'NMF'))
-  M = im2double(convert_video_to_2d(video)); % imagesc(M); colormap('gray');
+if(strcmp(method_id,'RPCA') || strcmp(method_id,'ST') || strcmp(method_id,'MC') ...
+|| strcmp(method_id,'LRR') || strcmp(method_id,'TTD') || strcmp(method_id,'NMF'))
+  M = im2double(convert_video_to_2d(video));
   opts.rows = video.height;
   opts.cols = video.width;
   results = process_matrix(method_id, algorithm_id, M, opts);

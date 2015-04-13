@@ -28,23 +28,11 @@ function [A_hat, E_hat, iter] = exact_alm_rpca(D, lambda, tol, maxIter)
 % Copyright: Perception and Decision Laboratory, University of Illinois, Urbana-Champaign
 %            Microsoft Research Asia, Beijing
 
-[m, n] = size(D);
+[m,n] = size(D);
 
-if nargin < 2
-    lambda = 1 / sqrt(m);
-end
-
-if nargin < 3
-    tol = 1e-7;
-elseif tol == -1
-    tol = 1e-7;
-end
-
-if nargin < 4
-    maxIter = 1000;
-elseif maxIter == -1
-    maxIter = 1000;
-end
+if(nargin < 2) lambda = 1 / sqrt(m); end
+if(nargin < 3) tol = 1e-7; elseif(tol == -1) tol = 1e-7; end
+if(nargin < 4) maxIter = 1000; elseif(maxIter == -1) maxIter = 1000; end
 
 % initialize
 Y = sign(D);
@@ -68,21 +56,21 @@ sv = 5;
 svp = sv;
 while ~converged       
     iter = iter + 1;
-    
     % solve the primal problem by alternative projection
     primal_converged = false;
     primal_iter = 0;
     sv = sv + round(n * 0.1);
     while primal_converged == false
-        
         temp_T = D - A_hat + (1/mu)*Y;
         temp_E = max( temp_T - lambda/mu,0) + min( temp_T + lambda/mu,0); 
         
         %if choosvd(n, sv) == 1
         %    [U S V] = lansvd(D - temp_E + (1/mu)*Y, sv, 'L');
         %else
-            [U S V] = svd(D - temp_E + (1/mu)*Y, 'econ');
+            %[U,S,V] = svd(D - temp_E + (1/mu)*Y, 'econ');
+            [U,S,V] = svdecon(D - temp_E + (1/mu)*Y); % fastest
         %end
+        
         diagS = diag(S);
         svp = length(find(diagS > 1/mu));
         if svp < sv
@@ -99,7 +87,6 @@ while ~converged
         E_hat = temp_E;
         primal_iter = primal_iter + 1;
         total_svd = total_svd + 1;
-               
     end
         
     Z = D - A_hat - E_hat;        
@@ -112,9 +99,9 @@ while ~converged
         converged = true;
     end    
     
-    %disp(['Iteration' num2str(iter) ' #svd ' num2str(total_svd) ' r(A) ' num2str(svp)...
-    %    ' |E|_0 ' num2str(length(find(abs(E_hat)>0)))...
-    %    ' stopCriterion ' num2str(stopCriterion)]);
+    disp(['Iteration' num2str(iter) ' #svd ' num2str(total_svd) ' r(A) ' num2str(svp)...
+        ' |E|_0 ' num2str(length(find(abs(E_hat)>0)))...
+        ' stopCriterion ' num2str(stopCriterion)]);
     
     if ~converged && iter >= maxIter
         disp('Maximum iterations reached') ;

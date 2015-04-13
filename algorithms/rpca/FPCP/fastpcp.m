@@ -1,6 +1,5 @@
 function [L1, S1, statsPCP] = fastpcp(V, lambda, loops, rank0, rankThreshold, lambdaFactor )
 
-
 if( nargin < 6 )
   lambdaFactor = 1.0;           
   if( nargin < 5 )
@@ -22,59 +21,48 @@ if isempty(lambdaFactor)
 	lambdaFactor = 1.0;
 end
 
-
-
 % Data size
-[Nrows Ncols] = size(V);
+%[Nrows,Ncols] = size(V);
 
 % Set flag (increments the rank plus one at each iteration)
 inc_rank = 1;
-
 
 % ---------------------------------
 % >>>  measure time performance <<<
 % ---------------------------------
 %t = tic;
 
-
-
 % ------------------------
 % --- First outer loop ---
-
   rank = rank0;                     % current rank
   statsPCP.rank(1) = rank;          % save current rank
 
   % Partial SVD
   %[Ulan Slan Vlan] = lansvd(V, rank, 'L');
-  [Ulan Slan Vlan] = svds(V, rank);
+  %[Ulan,Slan,Vlan] = svds(V, rank);
+  [Ulan,Slan,Vlan] = svdsecon(V, rank); % fastest
 
   % Current low-rank approximation
   L1 = Ulan*Slan*Vlan';
 
   % Shrinkage
   S1 = shrink(V-L1, lambda);
-
-
   
-
 % ------------------------
 % ---    Outer loops   ---
 
 for k = 2:loops,
-
-
+  
   if(inc_rank == 1)
-
      lambda = lambda * lambdaFactor;         % modify Lambda at each iteration
      rank = rank + 1;                        % increase rank
   end
 
-
   % low rank (partial SVD)
   %[Ulan Slan Vlan] = lansvd(V-S1, rank, 'L');
-  [Ulan Slan Vlan] = svds(V-S1, rank);
+  %[Ulan,Slan,Vlan] = svds(V-S1, rank);
+  [Ulan,Slan,Vlan] = svdsecon(V-S1, rank); % fastest
 
-    
   currentEvals = diag(Slan);                                    % extract current evals
   statsPCP.rank(k) = length( currentEvals );                    % save current rank
   statsPCP.rho(k) = currentEvals(end) / sum( currentEvals(1:end-1) );       % relative contribution of the last evec
@@ -91,25 +79,16 @@ for k = 2:loops,
   
   % Shrinkage
   S1 = shrink(V-L1, lambda);
-
-
 end
-
 
 % ---------------------------------
 % >>>  measure time performance <<<
 % ---------------------------------
 %statsPCP.time = toc(t);
 
-
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function u = shrink(v, lambda)
-    
   u = sign(v).*max(0, abs(v) - lambda);
-  
 return 
-

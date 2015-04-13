@@ -1,0 +1,28 @@
+Manopt, a Matlab toolbox for optimization on manifolds, is copyright (C) 2013 by Nicolas Boumal and is distributed under the terms of the GNU General Public License (GPL) version 3 (or later). See accompanying file <COPYING.txt> or <http://www.gnu.org/licenses/gpl.html>.
+
+In short, this means that everyone is free to use Manopt, to modify it and to redistribute it on a free basis. Manopt is not in the public domain; it is copyrighted and there are restrictions on its distribution (see the license). For example, you cannot integrate this version of Manopt (in full or in parts) in any closed-source software you plan to distribute (commercially or not). Please contact us for more information.
+
+Contact:
+  http://www.manopt.org
+  manopttoolbox@gmail.com
+
+The documentation of Manopt (the website) is copyright © 2014 by Nicolas Boumal, all rights reserved.
+
+
+
+THIRD-PARTY CODE
+
+The following files contain third-party code or extensively rely on third-party code, and their specific license should be considered before modifying and/or redistributing them. The license information can be found either in the comments in the code or in a separate text file in the same directory as the Matlab files.
+
+/manopt/solvers/trustregions/trustregions.m
+/manopt/solvers/trustregions/tCG.m
+/manopt/tools/multitransp.m
+/manopt/tools/multiprod.m
+/manopt/tools/diagsum.m
+/manopt/privatetools/hashmd5.m
+
+
+
+CONTRIBUTIONS
+
+Contributions are licensed to the owners of Manopt under the Contributor License Agreement, see accompanying file <CLA.txt>. Be sure to check the header comments of Matlab files and look for the "original author" tag.

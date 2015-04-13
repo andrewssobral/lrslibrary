@@ -1,0 +1,24 @@
+This is LMaFit SMS version 1.0.
+Copyright(c) 2009-2010 Yin Zhang
+
+The Matlab code is distributed under the terms of the 
+GNU General Public License. For more information, see:
+      http://www.gnu.org/copyleft/gpl.html
+-----------------------------------------------------
+
+This directory contains the Matlab code lmafit_sms_v1.m 
+along with demo files.  To run the demos, simply invoke 
+the Matlab script demo_all.m.
+
+This code is for Sparse Matrix Separation (SMS) problem: 
+   Given a matrix D = Lr + S where Lr is low-rank
+   and S is sparse, find Lr and S.  
+
+The code solves the model:  min ||S||_1 s.t. XY + S = D
+which is suitable for problems where the sparse matrix 
+S does not dominate the low-rank matrix Lr in magnitude.
+
+For your convenience, the Matlab code inexact_alm_rpca.m
+is included which was downloaded from the website:
+http://perception.csl.uiuc.edu/matrix-rank/sample_code.html
+Please check the above site for possible updates.

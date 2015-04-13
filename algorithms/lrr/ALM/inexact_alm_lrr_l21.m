@@ -38,8 +38,11 @@ while iter<maxIter
     iter = iter + 1;
     %update J
     temp = Z + Y2/mu;
-    [U,sigma,V] = svd(temp,'econ');
-    sigma = diag(sigma);
+    
+    [U,S,V] = svd(temp, 'econ'); % stable 
+    %[U,S,V] = svdecon(temp); % fastest, but EIG must not contain NaN or Inf.
+    
+    sigma = diag(S);
     svp = length(find(sigma>1/mu));
     if svp>=1
         sigma = sigma(1:svp)-1/mu;

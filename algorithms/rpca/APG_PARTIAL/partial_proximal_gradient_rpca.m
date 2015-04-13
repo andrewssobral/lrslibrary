@@ -144,11 +144,13 @@ while ~converged
 %         svp = length(find(diagS > mu_k / tau_k));
 %         X_kp1_A = U * diag(pos(diagS-mu_k/tau_k)) * V';
         
-        if choosvd(n, sv) == 1
-            [U S V] = lansvd(X_km1_A, sv, 'L');
-        else
-            [U S V] = svd(X_km1_A, 'econ');
-        end
+        %if choosvd(n, sv) == 1
+        %    [U,S,V] = lansvd(X_km1_A, sv, 'L');
+        %else
+            %[U,S,V] = svd(X_km1_A, 'econ');
+            [U,S,V] = svdecon(X_km1_A); % fastest
+        %end
+        
         diagS = diag(S);
         svp = length(find(diagS > mu_k/tau_k));
         if svp < sv
@@ -181,7 +183,9 @@ while ~converged
             G_A = Y_k_A - temp ;
             G_E = Y_k_E - temp ;
             
-            [U,S,V] = svd(G_A,'econ') ;
+            %[U,S,V] = svd(G_A,'econ');
+            [U,S,V] = svdecon(G_A); % fastest
+            
             diagS = diag(S) ;
             SG_A = U * diag(pos(diagS-mu_k/tau_hat)) * V';
             SG_E = sign(G_E) .* pos( abs(G_E) - lambda*mu_k/tau_hat );

@@ -30,38 +30,40 @@ function [r,normr,nre,s] = reorth(Q,r,normr,index,alpha,method)
 
 %  Rasmus Munk Larsen, DAIMI, 1998.
 
+% Some updates, Stephen Becker Nov 2009
+
 % Check input arguments.
-% warning('PROPACK:NotUsingMex','Using slow matlab code for reorth.')
+warning('PROPACK:NotUsingMex','Using slow matlab code for reorth.')
 if nargin<2
   error('Not enough input arguments.')
 end
 [n k1] = size(Q);
-if nargin<3 | isempty(normr)
+if nargin<3 || isempty(normr)
 %  normr = norm(r);
   normr = sqrt(r'*r);
 end
-if nargin<4 | isempty(index)
+if nargin<4 || isempty(index)
   k=k1;
-  index = [1:k]';
+  index = (1:k)';
   simple = 1;
 else
   k = length(index);
-  if k==k1 & index(:)==[1:k]'
+  if k==k1 && all(index(:)==(1:k)')
     simple = 1;
   else
     simple = 0;
   end
 end
-if nargin<5 | isempty(alpha)
+if nargin<5 || isempty(alpha)
   alpha=0.5; % This choice garanties that 
              % || Q^T*r_new - e_{k+1} ||_2 <= 2*eps*||r_new||_2,
              % cf. Kahans ``twice is enough'' statement proved in 
              % Parletts book.
 end
-if nargin<6 | isempty(method)
+if nargin<6 || isempty(method)
    method = 0;
 end
-if k==0 | n==0
+if k==0 || n==0
   return
 end
 if nargout>3
@@ -71,7 +73,7 @@ end
 
 normr_old = 0;
 nre = 0;
-while normr < alpha*normr_old | nre==0
+while normr < alpha*normr_old || nre==0
   if method==1
     if simple
       t = Q'*r;

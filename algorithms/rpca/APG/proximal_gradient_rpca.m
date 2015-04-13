@@ -148,8 +148,10 @@ while ~converged
         G_k_A = Y_k_A - (1/tau_k)*(Y_k_A+Y_k_E-D) ;
         G_k_E = Y_k_E - (1/tau_k)*(Y_k_A+Y_k_E-D) ;
         
-        [U,S,V] = svd(G_k_A,'econ') ;
-        diagS = diag(S) ;
+        %[U,S,V] = svd(G_k_A,'econ');
+        [U,S,V] = svdecon(G_k_A); % fastest
+        
+        diagS = diag(S);
         
         X_kp1_A = U * diag(pos(diagS-mu_k/tau_k)) * V';
         X_kp1_E = sign(G_k_E) .* pos( abs(G_k_E) - lambda*mu_k/tau_k );
@@ -170,7 +172,9 @@ while ~converged
             G_A = Y_k_A - temp ;
             G_E = Y_k_E - temp ;
             
-            [U,S,V] = svd(G_A,'econ') ;
+            %[U,S,V] = svd(G_A,'econ');
+            [U,S,V] = svdecon(G_A); % fastest
+            
             diagS = diag(S) ;
             SG_A = U * diag(pos(diagS-mu_k/tau_hat)) * V';
             SG_E = sign(G_E) .* pos( abs(G_E) - lambda*mu_k/tau_hat );

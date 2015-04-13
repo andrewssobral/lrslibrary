@@ -74,8 +74,8 @@ while ~converged
     E_hat = max(temp_T - lambda/mu, 0);
     E_hat = E_hat+min(temp_T + lambda/mu, 0);
 
-
-        [U S V] = svd(D - E_hat + (1/mu)*Y, 'econ');
+    %[U,S,V] = svd(D - E_hat + (1/mu)*Y, 'econ');
+    [U,S,V] = svdecon(D - E_hat + (1/mu)*Y); % fastest
     
     diagS = diag(S);
     svp = length(find(diagS > 1/mu));

@@ -28,25 +28,11 @@ function [A_hat, E_hat, Y, mu, iter] = inexact_alm_rpca(D, lambda, tol, maxIter)
 % Copyright: Perception and Decision Laboratory, University of Illinois, Urbana-Champaign
 %            Microsoft Research Asia, Beijing
 
+[m,n] = size(D);
 
-
-[m, n] = size(D);
-
-if nargin < 2
-    lambda = 1 / sqrt(m);
-end
-
-if nargin < 3
-    tol = 1e-7;
-elseif tol == -1
-    tol = 1e-7;
-end
-
-if nargin < 4
-    maxIter = 1000;
-elseif maxIter == -1
-    maxIter = 1000;
-end
+if(nargin < 2) lambda = 1 / sqrt(m); end
+if(nargin < 3) tol = 1e-7; elseif(tol == -1) tol = 1e-7; end
+if(nargin < 4) maxIter = 1000; elseif(maxIter == -1) maxIter = 1000; end
 
 % initialize
 Y = D;
@@ -74,8 +60,8 @@ while ~converged
     E_hat = max(temp_T - lambda/mu, 0);
     E_hat = E_hat+min(temp_T + lambda/mu, 0);
 
-
-        [U S V] = svd(D - E_hat + (1/mu)*Y, 'econ');
+    %[U,S,V] = svd(D - E_hat + (1/mu)*Y, 'econ');
+    [U,S,V] = svdecon(D - E_hat + (1/mu)*Y); % fastest
     
     diagS = diag(S);
     svp = length(find(diagS > 1/mu));
@@ -100,12 +86,12 @@ while ~converged
         converged = true;
     end    
     
-%     if mod( total_svd, 10) == 0
-%         disp(['#svd ' num2str(total_svd) ' r(A) ' num2str(rank(A_hat))...
-%             ' |E|_0 ' num2str(length(find(abs(E_hat)>0)))...
-%             ' stopCriterion ' num2str(stopCriterion)]);
-%     end    
-%     
+    if mod( total_svd, 10) == 0
+        disp(['#svd ' num2str(total_svd) ' r(A) ' num2str(rank(A_hat))...
+            ' |E|_0 ' num2str(length(find(abs(E_hat)>0)))...
+            ' stopCriterion ' num2str(stopCriterion)]);
+    end
+    
     if ~converged && iter >= maxIter
         disp('Maximum iterations reached') ;
         converged = 1 ;       

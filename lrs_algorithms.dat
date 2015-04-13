@@ -1,8 +1,9 @@
 -
+RPCA | RPCA | Robust Principal Component Analysis (De la Torre and Black, 2001) | 3 
 RPCA | PCP  | Principal Component Pursuit (Candes et al. 2009) | 2
 RPCA | FPCP | Fast PCP (Rodriguez and Wohlberg 2013) | 1
-RPCA | AS-RPCA | Active Subspace: Towards Scalable Low-Rank Learning (Liu and Yan, 2012) | 1
 RPCA | R2PCP | Riemannian Robust Principal Component Pursuit (Hintermüller and Wu, 2014) | 1
+RPCA | AS-RPCA | Active Subspace: Towards Scalable Low-Rank Learning (Liu and Yan, 2012) | 1
 RPCA | ALM   | Augmented Lagrange Multiplier (Tang and Nehorai 2011) | 3
 RPCA | EALM  | Exact ALM (Lin et al. 2009) | 2
 RPCA | IALM  | Inexact ALM (Lin et al. 2009) | 1
@@ -16,9 +17,10 @@ RPCA | ADM     | Alternating Direction Method (Yuan and Yang 2009) | 2
 RPCA | LSADM   | LSADM (Goldfarb et al. 2010) | 1
 RPCA | L1F     | L1 Filtering (Liu et al. 2011) | 1
 RPCA | DECOLOR | Contiguous Outliers in the Low-Rank Representation (Zhou et al. 2011) | 1
-RPCA | GOSUS | Grassmannian Online Subspace Updates with Structured-sparsity (Xu et al. 2013) | 2
-RPCA | pROST | Robust PCA and subspace tracking from incomplete observations using L0-surrogates (Hage and Kleinsteuber, 2013) | 3
 RPCA | RegL1-ALM | Low-Rank Matrix Approximation under Robust L1-Norm (Zheng et al. 2012) | 1
+RPCA | GA | Grassmann Average (Hauberg et al. 2014) | 1
+RPCA | GM | Grassmann Median (Hauberg et al. 2014) | 1
+RPCA | TGA | Trimmed Grassmann Average (Hauberg et al. 2014) | 1
 ---
 --- RPCA-SPCP
 RPCA | NSA1 | Non-Smooth Augmented Lagrangian v1 (Aybat et al. 2011) | 1
@@ -36,15 +38,28 @@ RPCA | BRPCA-MD-NSS | BRPCA-MD with Non-Stationary Noise (Ding et al. 2011) | 4
 RPCA | VBRPCA       | Variational Bayesian RPCA (Babacan et al. 2011) | 2
 RPCA | PRMF         | Probabilistic Robust Matrix Factorization (Wang et al. 2012) | 2
 RPCA | OPRMF        | Online PRMF (Wang et al. 2012) | 4
-RPCA | MBRMF        | Markov BRMF (Wang and Yeung 2013) | 4
+RPCA | MBRMF        | Markov BRMF (Wang and Yeung, 2013) | 4
 ---
 --- RPCA-QPCP
 RPCA | TFOCS-EC | TFOCS with equality constraints (Becker et al. 2011) | 2
 RPCA | TFOCS-IC | TFOCS with inequality constraints (Becker et al. 2011) | 2
 ---
 --- Approximated RPCA ---
-RPCA | GoDec   | Go Decomposition (Zhou and Tao 2011) | 1
-RPCA | SSGoDec | Semi-Soft GoDec (Zhou and Tao 2011) | 1
+RPCA | GoDec    | Go Decomposition (Zhou and Tao, 2011) | 1
+RPCA | SSGoDec  | Semi-Soft GoDec (Zhou and Tao, 2011) | 1
+RPCA | GreGoDec | Greedy Semi-Soft GoDec Algotithm (Zhou and Tao, 2013) | 1
+---
+--- ST (Subspace Tracking) ---
+ST | GRASTA  | Grassmannian Robust Adaptive Subspace Tracking Algorithm (He et al. 2012) | 1
+ST | GOSUS   | Grassmannian Online Subspace Updates with Structured-sparsity (Xu et al. 2013) | 2
+ST | pROST   | Robust PCA and subspace tracking from incomplete observations using L0-surrogates (Hage and Kleinsteuber, 2013) | 3
+---
+--- MC (Matrix Completion) ---
+MC | LRGeomCG | Low-rank matrix completion by Riemannian optimization (Bart Vandereycken, 2013) | 1
+MC | GROUSE   | Grassmannian Rank-One Update Subspace Estimation (Balzano et al. 2010) | 1
+MC | OptSpace | Matrix Completion from Noisy Entries (Keshavan et al. 2009) | 2
+MC | FPC | Fixed point and Bregman iterative methods for matrix rank minimization (Ma et al. 2008) | 3
+MC | SVT | A singular value thresholding algorithm for matrix completion (Cai et al. 2008) | 3
 ---
 --- LRR (Low Rank Recovery) ---
 LRR | EALM   | Exact ALM (Lin et al. 2009) | 2
@@ -53,6 +68,12 @@ LRR | ADM    | Alternating Direction Method (Lin et al. 2011) | 1
 LRR | LADMAP | Linearized ADM with Adaptive Penalty (Lin et al. 2011) | 1
 LRR | FastLADMAP | Fast LADMAP (Lin et al. 2011) | 1
 LRR | ROSL | Robust Orthonormal Subspace Learning (Shu et al. 2014) | 1
+---
+--- TTD (Three-Term Decomposition) ---
+TTD | 3WD   | 3-Way-Decomposition (Oreifej et al. 2012) | 1
+TTD | MAMR  | Motion-Assisted Matrix Restoration (Ye et al. 2015) | 1
+TTD | RMAMR | Robust Motion-Assisted Matrix Restoration (Ye et al. 2015) | 1
+TTD | ADMM  | Alternating Direction Method of Multipliers (Parikh and Boyd, 2014) | 1
 ---
 --- NMF (Non-Negative Matrix Factorization) ---
 NMF | NMF-MU      | NMF solved by Multiplicative Updates | 1

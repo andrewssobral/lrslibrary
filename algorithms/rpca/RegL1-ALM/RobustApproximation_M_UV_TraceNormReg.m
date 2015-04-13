@@ -60,12 +60,18 @@ while iter_OUT < maxIterOUT
     while itr_IN < maxIterIN 
         %update U
         temp = (E + Y/mu)*V';
-        [Us,sigma,Ud] = svd(temp,'econ');
+        
+        [Us,sigma,Ud] = svd(temp,'econ'); % stable
+        %[Us,sigma,Ud] = svdecon(temp); % fastest
+        
         U = Us*Ud';
 
         %update V
         temp = U'*(E + Y/mu);
-        [Vs,sigma,Vd] = svd(temp,'econ');
+        
+        [Vs,sigma,Vd] = svd(temp,'econ'); % stable
+        %[Vs,sigma,Vd] = svdecon(temp); % fastest
+        
         sigma = diag(sigma);
         svp = length(find(sigma > lambda/mu));
         if svp >= 1

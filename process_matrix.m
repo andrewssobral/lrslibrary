@@ -11,10 +11,28 @@ function results = process_matrix(method_id, algorithm_id, M, opts)
     results = run_algorithm_rpca(algorithm_id, M, opts);
   end
   
+  %%% ST methods
+  % i.e: results = process_matrix('ST', 'GRASTA', M, []);
+  if(strcmp(method_id,'ST'))
+    results = run_algorithm_st(algorithm_id, M, opts);
+  end
+  
+  %%% MC methods
+  % i.e: results = process_matrix('MC', 'GROUSE', M, []);
+  if(strcmp(method_id,'MC'))
+    results = run_algorithm_mc(algorithm_id, M, opts);
+  end
+  
   %%% LRR methods
   % i.e: results = process_matrix('LRR', 'FastLADMAP', M, []);
   if(strcmp(method_id,'LRR'))
     results = run_algorithm_lrr(algorithm_id, M, opts);
+  end
+  
+  %%% TTD methods
+  % i.e: results = process_matrix('TTD', '3WD', M, []);
+  if(strcmp(method_id,'TTD'))
+    results = run_algorithm_ttd(algorithm_id, M, opts);
   end
   
   %%% NMF methods

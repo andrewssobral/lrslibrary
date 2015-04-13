@@ -40,3 +40,6 @@ initialization;
 slv_lrs_ams;
 L = A;
 S = B;
+
+%figure(2), imagesc(L);
+%figure(3), imagesc(S);

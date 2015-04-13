@@ -1,6 +1,9 @@
 -
 RPCA | Robust PCA
+ST   | Subspace Tracking
+MC   | Matrix Completion
 LRR  | Low Rank Recovery
+TTD  | Three-Term Decomposition
 NMF  | Non-Negative Matrix Factorization
 NTF  | Non-Negative Tensor Factorization
 TD   | Tensor Decomposition

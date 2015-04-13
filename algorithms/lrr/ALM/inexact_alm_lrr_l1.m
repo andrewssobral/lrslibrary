@@ -13,7 +13,7 @@ end
 
 tol = 1e-8;
 maxIter = 1e6;
-[d n] = size(X);
+[d,n] = size(X);
 m = size(A,2);
 rho = 1.1;
 max_mu = 1e10;
@@ -37,8 +37,11 @@ while iter<maxIter
     iter = iter + 1;
     %update J
     temp = Z + Y2/mu;
-    [U,sigma,V] = svd(temp,'econ');
-    sigma = diag(sigma);
+    
+    [U,S,V] = svd(temp, 'econ'); % stable 
+    %[U,S,V] = svdecon(temp); % fastest, but EIG must not contain NaN or Inf.
+    
+    sigma = diag(S);
     svp = length(find(sigma>1/mu));
     if svp>=1
         sigma = sigma(1:svp)-1/mu;
