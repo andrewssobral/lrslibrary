@@ -1,19 +1,19 @@
 -
 RPCA | RPCA | Robust Principal Component Analysis (De la Torre and Black, 2001) | 3 
 RPCA | PCP  | Principal Component Pursuit (Candes et al. 2009) | 2
-RPCA | FPCP | Fast PCP (Rodriguez and Wohlberg 2013) | 1
+RPCA | FPCP | Fast PCP (Rodriguez and Wohlberg, 2013) | 1
 RPCA | R2PCP | Riemannian Robust Principal Component Pursuit (Hintermüller and Wu, 2014) | 1
 RPCA | AS-RPCA | Active Subspace: Towards Scalable Low-Rank Learning (Liu and Yan, 2012) | 1
-RPCA | ALM   | Augmented Lagrange Multiplier (Tang and Nehorai 2011) | 3
+RPCA | ALM   | Augmented Lagrange Multiplier (Tang and Nehorai, 2011) | 3
 RPCA | EALM  | Exact ALM (Lin et al. 2009) | 2
 RPCA | IALM  | Inexact ALM (Lin et al. 2009) | 1
 RPCA | IALM_LMSVDS | IALM with LMSVDS (Liu et al. 2012) | 1
-RPCA | IALM_BLWS   | IALM with BLWS (Lin and Wei 2010) | 2
+RPCA | IALM_BLWS   | IALM with BLWS (Lin and Wei, 2010) | 2
 RPCA | APG_PARTIAL | Partial Accelerated Proximal Gradient (Lin et al. 2009) | 1
 RPCA | APG     | Accelerated Proximal Gradient (Lin et al. 2009) | 2
 RPCA | DUAL    | Dual RPCA (Lin et al. 2009) | 4
 RPCA | SVT     | Singular Value Thresholding (Cai et al. 2008) | 5
-RPCA | ADM     | Alternating Direction Method (Yuan and Yang 2009) | 2
+RPCA | ADM     | Alternating Direction Method (Yuan and Yang, 2009) | 2
 RPCA | LSADM   | LSADM (Goldfarb et al. 2010) | 1
 RPCA | L1F     | L1 Filtering (Liu et al. 2011) | 1
 RPCA | DECOLOR | Contiguous Outliers in the Low-Rank Representation (Zhou et al. 2011) | 1

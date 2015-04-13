@@ -50,7 +50,11 @@ GUI
 ---
 The *LRSLibrary* provides an easy-to-use graphical user interface (GUI) for background modeling and subtraction in videos. First, run the setup script **lrs_setup** (or **run('C:/lrslibrary/lrs_setup')**), then run **lrs_gui**, and enjoy it!
 
-<p align="center"><img src="https://sites.google.com/site/andrewssobral/lrslibrary_gui2.png" /></p>
+<p align="center">
+<a href="https://www.youtube.com/watch?v=zziJ7-WnvV8" target="_blank">
+<img src="https://sites.google.com/site/andrewssobral/lrslibrary_gui2.png" border="0" />
+</a>
+</p>
 
 Each algorithm is classified by its cpu time consumption with the following icons:
 <p align="center"><img src="https://sites.google.com/site/andrewssobral/time_legend.png?width=300" /></p>
@@ -63,7 +67,7 @@ List of the algorithms available in LRSLibrary
 
 * * PCP: Principal Component Pursuit [(Candes et al. 2009)](http://arxiv.org/abs/0912.3599) 
 
-* * FPCP: Fast PCP [(Rodriguez and Wohlberg 2013)](http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=6738015) 
+* * FPCP: Fast PCP [(Rodriguez and Wohlberg, 2013)](http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=6738015) 
 
 * * R2PCP: Riemannian Robust Principal Component Pursuit [(Hintermüller and Wu, 2014)](http://link.springer.com/article/10.1007/s10851-014-0527-y) 
 
@@ -77,7 +81,7 @@ List of the algorithms available in LRSLibrary
 
 * * IALM_LMSVDS: IALM with LMSVDS [(Liu et al. 2012)](http://epubs.siam.org/doi/abs/10.1137/120871328) 
 
-* * IALM_BLWS: IALM with BLWS [(Lin and Wei 2010)](http://arxiv.org/abs/1012.0365) 
+* * IALM_BLWS: IALM with BLWS [(Lin and Wei, 2010)](http://arxiv.org/abs/1012.0365) 
 
 * * APG_PARTIAL: Partial Accelerated Proximal Gradient [(Lin et al. 2009)](http://arxiv.org/abs/1009.5055)  [website](http://perception.csl.illinois.edu/matrix-rank/sample_code.html)
 
@@ -87,7 +91,7 @@ List of the algorithms available in LRSLibrary
 
 * * SVT: Singular Value Thresholding [(Cai et al. 2008)](http://arxiv.org/abs/0810.3286)  [website](http://perception.csl.illinois.edu/matrix-rank/sample_code.html)
 
-* * ADM: Alternating Direction Method [(Yuan and Yang 2009)](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.400.8797) 
+* * ADM: Alternating Direction Method [(Yuan and Yang, 2009)](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.400.8797) 
 
 * * LSADM: LSADM [(Goldfarb et al. 2010)](http://arxiv.org/abs/0912.4571) 
 
@@ -129,15 +133,17 @@ List of the algorithms available in LRSLibrary
 
 * * OPRMF: Online PRMF [(Wang et al. 2012)](http://winsty.net/papers/prmf.pdf) [website](http://winsty.net/prmf.html)
 
-* * MBRMF: Markov BRMF [(Wang and Yeung 2013)](http://winsty.net/papers/brmf.pdf) [website](http://winsty.net/brmf.html) 
+* * MBRMF: Markov BRMF [(Wang and Yeung, 2013)](http://winsty.net/papers/brmf.pdf) [website](http://winsty.net/brmf.html) 
 
 * * TFOCS-EC: TFOCS with equality constraints [(Becker et al. 2011)](https://github.com/cvxr/TFOCS/raw/gh-pages/TFOCS.pdf) [website](http://cvxr.com/tfocs/demos/rpca/)
 
 * * TFOCS-IC: TFOCS with inequality constraints [(Becker et al. 2011)](https://github.com/cvxr/TFOCS/raw/gh-pages/TFOCS.pdf) [website](http://cvxr.com/tfocs/demos/rpca/)
 
-* * GoDec: Go Decomposition [(Zhou and Tao 2011)](http://www.icml-2011.org/papers/41_icmlpaper.pdf) [website](https://sites.google.com/site/godecomposition/home)
+* * GoDec: Go Decomposition [(Zhou and Tao, 2011)](http://www.icml-2011.org/papers/41_icmlpaper.pdf) [website](https://sites.google.com/site/godecomposition/home)
 
-* * SSGoDec: Semi-Soft GoDec [(Zhou and Tao 2011)](http://www.icml-2011.org/papers/41_icmlpaper.pdf) [website](https://sites.google.com/site/godecomposition/home)
+* * SSGoDec: Semi-Soft GoDec [(Zhou and Tao, 2011)](http://www.icml-2011.org/papers/41_icmlpaper.pdf) [website](https://sites.google.com/site/godecomposition/home)
+
+* * GreGoDec: Greedy Semi-Soft GoDec Algotithm [(Zhou and Tao, 2013)](http://jmlr.org/proceedings/papers/v31/zhou13b.pdf) [website](https://sites.google.com/site/godecomposition/home)
 
 * ST: Subspace Tracking (3)
 * * GRASTA: Grassmannian Robust Adaptive Subspace Tracking Algorithm [(He et al. 2012)](http://www.citeulike.org/user/lambertch/article/12543964) [website](https://sites.google.com/site/hejunzz/grasta)
@@ -240,7 +246,7 @@ List of the algorithms available in LRSLibrary
 
 * * CP2: PARAFAC2 decomposition solved by ALS [(Bro et al. 1999)](http://www.mathworks.com/matlabcentral/fileexchange/1089-parafac2) 
 
-* * RSTD: Rank Sparsity Tensor Decomposition [(Yin Li 2010)](www.pami.sjtu.edu.cn/demo/RSTD.pdf) [website](http://yinli.cvpr.net/) 
+* * RSTD: Rank Sparsity Tensor Decomposition [(Yin Li, 2010)](www.pami.sjtu.edu.cn/demo/RSTD.pdf) [website](http://yinli.cvpr.net/) 
 
 * * t-SVD: Tensor SVD in Fourrier Domain [(Zhang et al. 2013)](http://arxiv.org/abs/1307.0805) 
 
