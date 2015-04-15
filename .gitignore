@@ -5,3 +5,8 @@ libs/cvx-w64
 output/tmp
 *.asv
 __TODO__.txt
+demo_bmc.m
+demo_bmc2.m
+demo_bmc_eval.m
+demo_bmc_eval2.m
+dataset/BMC2012

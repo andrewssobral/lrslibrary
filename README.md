@@ -1,12 +1,12 @@
-Last update: **14/04/2015**
+Last update: **15/04/2015**
 
-Library Version: **1.0.5**
+Library Version: **1.0.6**
 
 LRSLibrary
 ----------
 *Low-Rank and Sparse* tools for Background Modeling and Subtraction in Videos.
 
-The *LRSLibrary* provides a collection of **low-rank and sparse decomposition** algorithms in MATLAB. The library was designed for motion segmentation in videos, but it can be also used or adapted for other computer vision problems (for more information, please see this [page](http://perception.csl.illinois.edu/matrix-rank/applications.html)). Currently the LRSLibrary contains a total of **90** *matrix-based* and *tensor-based* algorithms. The LRSLibrary was tested successfully in MATLAB R2013 and R2014 both x86 and x64 versions.
+The *LRSLibrary* provides a collection of **low-rank and sparse decomposition** algorithms in MATLAB. The library was designed for motion segmentation in videos, but it can be also used or adapted for other computer vision problems (for more information, please see this [page](http://perception.csl.illinois.edu/matrix-rank/applications.html)). Currently the LRSLibrary contains a total of **93** *matrix-based* and *tensor-based* algorithms. The LRSLibrary was tested successfully in MATLAB R2013 and R2014 both x86 and x64 versions.
 
 <p align="center"><img src="https://sites.google.com/site/andrewssobral/lrs_results2.png" /></p>
 
@@ -51,6 +51,7 @@ GUI
 The *LRSLibrary* provides an easy-to-use graphical user interface (GUI) for background modeling and subtraction in videos. First, run the setup script **lrs_setup** (or **run('C:/lrslibrary/lrs_setup')**), then run **lrs_gui**, and enjoy it!
 
 <p align="center">
+<p align="center">(Click in the image to see the video)</p>
 <a href="https://www.youtube.com/watch?v=zziJ7-WnvV8" target="_blank">
 <img src="https://sites.google.com/site/andrewssobral/lrslibrary_gui2.png" border="0" />
 </a>
@@ -59,10 +60,11 @@ The *LRSLibrary* provides an easy-to-use graphical user interface (GUI) for back
 Each algorithm is classified by its cpu time consumption with the following icons:
 <p align="center"><img src="https://sites.google.com/site/andrewssobral/time_legend.png?width=300" /></p>
 
+The algorithms were grouped in eight categories: **RPCA** for Robust PCA, **ST** for Subspace Tracking, **MC** for Matrix Completion, **TTD** for Three-Term Decomposition, **LRR** for Low-Rank Representation, **NMF** for Non-negative Matrix Factorization, **NTF** for Non-negative Tensor Factorization, or **TD** for standard Tensor Decomposition.
 
 List of the algorithms available in LRSLibrary
 ----------------------------------------------
-* RPCA: Robust PCA (41)
+* RPCA: Robust PCA (44)
 * * RPCA: Robust Principal Component Analysis [(De la Torre and Black, 2001)](http://users.salleurl.edu/~ftorre/papers/rpca/rpca.pdf) [website](http://users.salleurl.edu/~ftorre/papers/rpca2.html)
 
 * * PCP: Principal Component Pursuit [(Candes et al. 2009)](http://arxiv.org/abs/0912.3599) 
@@ -106,6 +108,12 @@ List of the algorithms available in LRSLibrary
 * * GM: Grassmann Median [(Hauberg et al. 2014)](http://files.is.tue.mpg.de/black/papers/RGA2014.pdf) [website](http://ps.is.tuebingen.mpg.de/project/Robust_PCA)
 
 * * TGA: Trimmed Grassmann Average [(Hauberg et al. 2014)](http://files.is.tue.mpg.de/black/papers/RGA2014.pdf) [website](http://ps.is.tuebingen.mpg.de/project/Robust_PCA)
+
+* * STOC-RPCA: Online Robust PCA via Stochastic Optimization [(Feng et al. 2013)](http://guppy.mpe.nus.edu.sg/~mpexuh/papers/Stochastic_online_pca.pdf) [website](https://sites.google.com/site/jshfeng/)
+
+* * MoG-RPCA: Mixture of Gaussians RPCA [(Zhao et al. 2014)](http://jmlr.org/proceedings/papers/v32/zhao14.pdf) [website](http://www.cs.cmu.edu/~deyum/index.htm)
+
+* * OP-RPCA: Robust PCA via Outlier Pursuit [(Xu et al. 2012)](http://guppy.mpe.nus.edu.sg/~mpexuh/papers/OutlierPursuit-TIT.pdf) [website](http://guppy.mpe.nus.edu.sg/~mpexuh/publication.html)
 
 * * NSA1: Non-Smooth Augmented Lagrangian v1 [(Aybat et al. 2011)](http://arxiv.org/abs/1105.2126) 
 
@@ -356,6 +364,8 @@ If you have any problems or questions, please contact the author: Andrews Sobral
 
 Release Notes:
 --------------
+* Version 1.0.6: Added three new algorithms: STOC-RPCA: Online Robust PCA via Stochastic Optimization of Feng et al. (2013), MoG-RPCA: Mixture of Gaussians RPCA of Zhao et al. (2014), and OP-RPCA: Robust PCA via Outlier Pursuit of Xu et al. (2012).
+
 * Version 1.0.5: Added three new method categories ST (Subspace Tracking), MC (Matrix Completion), and  TTD (Three-Term Decomposition). Added fifteen new algorithms: 3WD - 3-Way-Decomposition of Oreifej et al. (2012), MAMR and Robust MAMR - Motion-Assisted Matrix Restoration of Ye et al. (2015), ADMM - Alternating Direction Method of Multipliers of Parikh and Boyd (2014), GreGoDec - Greedy Semi-Soft GoDec Algotithm of Zhou and Tao (2013), GRASTA (Grassmannian Robust Adaptive Subspace Tracking Algorithm) of He et al. (2012), GOSUS (Grassmannian Rank-One Update Subspace Estimation) of Balzano et al. (2010), OptSpace - A Matrix Completion Algorithm of Keshavan et al. (2009), FPC - Fixed point and Bregman iterative methods for matrix rank minimization of Ma et al. (2008), SVT - A singular value thresholding algorithm for matrix completion of Cai et al. (2008), LRGeomCG - Low-rank matrix completion by Riemannian optimization of Bart Vandereycken (2013), RPCA - Robust Principal Component Analysis of De la Torre and Black (2001), GA - Grassmann Average, GM - Grassmann Median, and TGA - Trimmed Grassmann Average of Hauberg et al. (2014). Also fixed some errors.
 
 * Version 1.0.4: Added a setup script, and configuration file. Also fixed some errors.

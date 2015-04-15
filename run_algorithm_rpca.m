@@ -444,6 +444,30 @@ function results = run_algorithm_rpca(algorithm_id, M, opts)
       % show_2dvideo(L,m,n);
       % show_2dvideo(S,m,n);
     end
+    %
+    % RPCA | STOC-RPCA | Online Robust PCA via Stochastic Optimization (Feng et al. 2013)
+    % process_video('RPCA', 'STOC-RPCA', 'dataset/demo.avi', 'output/demo_STOC-RPCA.avi');
+    %
+    if(strcmp(algorithm_id,'STOC-RPCA')) 
+      lambda1 = 1/sqrt(max(size(M)));
+      lambda2 = lambda1;
+      nrank = size(M,2);
+      [L,S] = stoc_rpca(M, lambda1, lambda2, nrank);
+    end
+    %
+    % RPCA | MoG-RPCA | Mixture of Gaussians RPCA (Zhao et al. 2014)
+    % process_video('RPCA', 'MoG-RPCA', 'dataset/demo.avi', 'output/demo_MoG-RPCA.avi');
+    %
+    if(strcmp(algorithm_id,'MoG-RPCA')) 
+      run_MoG_RPCA;
+    end
+    %
+    % RPCA | OP-RPCA | Robust PCA via Outlier Pursuit (Xu et al. 2012)
+    % process_video('RPCA', 'OP-RPCA', 'dataset/demo.avi', 'output/demo_OP-RPCA.avi');
+    %
+    if(strcmp(algorithm_id,'OP-RPCA')) 
+      run_OP_RPCA;
+    end
   catch ex
     warning(ex.message);
   end

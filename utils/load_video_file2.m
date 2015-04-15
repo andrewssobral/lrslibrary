@@ -7,11 +7,11 @@ function [V,obj] = load_video_file2(filename,params)
   debug = 0;
   shape = 'S';
   
-  if(isfield(p,'color')) color = params.color; end
-  if(isfield(p,'nFrames')) nFrames = params.nFrames; end
-  if(isfield(p,'format')) format = params.format; end
-  if(isfield(p,'debug')) debug = params.debug; end
-  if(isfield(p,'shape')) shape = params.shape; end
+  if(isfield(params,'color')) color = params.color; end
+  if(isfield(params,'nFrames')) nFrames = params.nFrames; end
+  if(isfield(params,'format')) format = params.format; end
+  if(isfield(params,'debug')) debug = params.debug; end
+  if(isfield(params,'shape')) shape = params.shape; end
   
   obj = VideoReader(filename);
   
@@ -22,7 +22,7 @@ function [V,obj] = load_video_file2(filename,params)
   for i = 1:nFrames
     frame = read(obj, i);
     
-    if(isfield(p,'rs')) frame = imresize(frame,params.rs); end
+    if(isfield(params,'rs')) frame = imresize(frame,params.rs); end
     
     if(strcmp(color,'gray')) frame = rgb2gray(frame); end
     if(strcmp(color,'hsv')) frame = rgb2hsv(frame); end
