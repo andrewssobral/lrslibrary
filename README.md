@@ -1,6 +1,6 @@
-Last update: **15/04/2015**
+Last Page Update: **14/06/2015**
 
-Library Version: **1.0.6**
+Latest Library Version: **1.0.6** (see Release Notes for more info)
 
 LRSLibrary
 ----------
@@ -356,7 +356,9 @@ Option 2: fork the library on GitHub, push your changes, then send me a pull req
 
 License
 -------
-The source code is available only for academic/research purposes (non-commercial).
+The LRSLibrary is free and open source for academic/research purposes (non-commercial)¹.
+
+***¹ Some algorithms of the LRSLibrary are free for commercial purposes and others not. First you need to contact the authors of your desired algorithm and check with them the appropriate license.***
 
 Problems or Questions
 ---------------------
