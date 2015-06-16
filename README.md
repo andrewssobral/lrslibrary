@@ -340,6 +340,9 @@ show_3dtensors(T,out.L,out.S,out.O);
 CPU time consumption
 --------------------
 The figure below shows the average CPU time consumption and the speed classification of each algorithm to decompose a *2304x51* matrix or *48x48x51* tensor data. Both matrix and tensor data were built from *dataset/demo.avi* file. The experiments were performed in a Intel Core i7-3740QM CPU 2.70GHz with 16Gb of RAM running MATLAB R2013b and Windows 7 Professional SP1 64 bits.
+
+***A complete review evaluating the algorithms in many specific criterias will be published in a paper journal soon***
+
 <p align="center"><img src="https://sites.google.com/site/andrewssobral/algorithms_by_speed.png" /></p>
 
 About LRSLibrary
