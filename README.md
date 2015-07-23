@@ -1,4 +1,4 @@
-Last Page Update: **14/06/2015**
+Last Page Update: **23/07/2015**
 
 Latest Library Version: **1.0.6** (see Release Notes for more info)
 
@@ -25,24 +25,14 @@ https://github.com/andrewssobral/imtsl
 
 Citation
 ---------
-A paper about the LRSLibrary will be published in a journal, but if you use this code for your publications, please cite it currently as:
+If you use this library for your publications, please cite it as:
 ```
-@inproceedings{asobral2014,
-    author       = "Sobral, A. and Baker, C. G. and Bouwmans, T. and Zahzah, E.",
-    title        = "Incremental and Multi-feature Tensor Subspace Learning applied for Background Modeling and Subtraction",
-    booktitle    = "International Conference on Image Analysis and Recognition (ICIAR'14)",
-    year         = "2014",
-    month        = "October",
-    publisher    = "Lecture Notes in Computer Science (Springer LNCS)",
-    url          = "https://github.com/andrewssobral/imtsl"
-}
-@article{bouwmans2014,
-  author         = "Thierry Bouwmans and El Hadi Zahzah",
-  title          = "Robust \{PCA\} via Principal Component Pursuit: A review for a comparative evaluation in video surveillance",
-  journal        = "Computer Vision and Image Understanding (CVIU)",
-  volume         = "122",
-  pages          = "22--34",
-  year           = "2014"
+@incollection{lrslibrary2015,
+author    = {Sobral, Andrews and Bouwmans, Thierry and Zahzah, El-hadi},
+title     = {LRSLibrary: Low-Rank and Sparse tools for Background Modeling and Subtraction in Videos},
+booktitle = {Robust Low-Rank and Sparse Matrix Decomposition: Applications in Image and Video Processing},
+publisher = {CRC Press, Taylor and Francis Group.}
+year      = {2015},
 }
 ```
 
