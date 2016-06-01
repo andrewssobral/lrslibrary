@@ -46,7 +46,7 @@ while 1
     end
     newobj = ((sum(sum((V_new-W_new*h).^2)))/(vdim));
     
-    if (iter>1 & (oldobj-newobj)/newobj<1e-4)
+    if (iter>1 && (oldobj-newobj)/newobj<1e-4)
         break;
     end
    

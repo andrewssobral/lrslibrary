@@ -6,7 +6,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
-#include <limits>
 #include <algorithm>
 
 // will leave this one just for the laughs :)
@@ -15,18 +14,26 @@
 // Choose reasonably high-precision timer (sub-millisec resolution if possible).
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
+#define VC_EXTRALEAN
+#define NOMINMAX
 #include <windows.h>
-static gcoclock_t CLOCKS_PER_SEC = 0;
-gcoclock_t gcoclock()
+
+extern "C" gcoclock_t GCO_CLOCKS_PER_SEC = 0;
+
+extern "C" inline gcoclock_t gcoclock() // TODO: not thread safe; separate begin/end so that end doesn't have to check for query frequency
 {
 	gcoclock_t result = 0;
-	if (CLOCKS_PER_SEC == 0)
-		QueryPerformanceFrequency((LARGE_INTEGER*)&CLOCKS_PER_SEC);
+	if (GCO_CLOCKS_PER_SEC == 0)
+		QueryPerformanceFrequency((LARGE_INTEGER*)&GCO_CLOCKS_PER_SEC);
 	QueryPerformanceCounter((LARGE_INTEGER*)&result);
 	return result;
 }
+
 #else
-gcoclock_t gcoclock() { return clock(); }
+extern "C" {
+gcoclock_t GCO_CLOCKS_PER_SEC = CLOCKS_PER_SEC;
+}
+extern "C" gcoclock_t gcoclock() { return clock(); }
 #endif
 
 #ifdef MATLAB_MEX_FILE
@@ -36,7 +43,7 @@ static void flushnow()
 	// Don't flush to frequently, for overall speed.
 	static gcoclock_t prevclock = 0;
 	gcoclock_t now = gcoclock();
-	if (now - prevclock > CLOCKS_PER_SEC/5) {
+	if (now - prevclock > GCO_CLOCKS_PER_SEC/5) {
 		prevclock = now;
 		mexEvalString("drawnow;");
 	}
@@ -169,7 +176,7 @@ GCoptimization::SiteID GCoptimization::queryActiveSitesExpansion<GCoptimization:
 //-------------------------------------------------------------------
 
 template <>
-void GCoptimization::setupDataCostsExpansion<GCoptimization::DataCostFnSparse>(SiteID size,LabelID alpha_label,Energy *e,SiteID *activeSites)
+void GCoptimization::setupDataCostsExpansion<GCoptimization::DataCostFnSparse>(SiteID size,LabelID alpha_label,EnergyT *e,SiteID *activeSites)
 {
 	DataCostFnSparse* dc = (DataCostFnSparse*)m_datacostFn;
 	DataCostFnSparse::iterator dciter = dc->begin(alpha_label);
@@ -185,7 +192,7 @@ void GCoptimization::setupDataCostsExpansion<GCoptimization::DataCostFnSparse>(S
 //-------------------------------------------------------------------
 
 template <>
-void GCoptimization::applyNewLabeling<GCoptimization::DataCostFnSparse>(Energy *e,SiteID *activeSites,SiteID size,LabelID alpha_label)
+void GCoptimization::applyNewLabeling<GCoptimization::DataCostFnSparse>(EnergyT *e,SiteID *activeSites,SiteID size,LabelID alpha_label)
 {
 	DataCostFnSparse* dc = (DataCostFnSparse*)m_datacostFn;
 	DataCostFnSparse::iterator dciter = dc->begin(alpha_label);
@@ -269,7 +276,7 @@ GCoptimization::EnergyType GCoptimization::giveSmoothEnergyInternal()
 
 //-------------------------------------------------------------------
 
-OLGA_INLINE void GCoptimization::addterm1_checked(Energy* e, VarID i, EnergyTermType e0, EnergyTermType e1)
+OLGA_INLINE void GCoptimization::addterm1_checked(EnergyT* e, VarID i, EnergyTermType e0, EnergyTermType e1)
 {
 	if ( e0 > GCO_MAX_ENERGYTERM || e1 > GCO_MAX_ENERGYTERM )
 		handleError("Data cost term was larger than GCO_MAX_ENERGYTERM; danger of integer overflow.");
@@ -277,7 +284,7 @@ OLGA_INLINE void GCoptimization::addterm1_checked(Energy* e, VarID i, EnergyTerm
 	e->add_term1(i,e0,e1);
 }
 
-OLGA_INLINE void GCoptimization::addterm1_checked(Energy* e, VarID i, EnergyTermType e0, EnergyTermType e1, EnergyTermType w)
+OLGA_INLINE void GCoptimization::addterm1_checked(EnergyT* e, VarID i, EnergyTermType e0, EnergyTermType e1, EnergyTermType w)
 {
 	if ( e0 > GCO_MAX_ENERGYTERM || e1 > GCO_MAX_ENERGYTERM )
 		handleError("Smooth cost term was larger than GCO_MAX_ENERGYTERM; danger of integer overflow.");
@@ -287,7 +294,7 @@ OLGA_INLINE void GCoptimization::addterm1_checked(Energy* e, VarID i, EnergyTerm
 	e->add_term1(i,e0*w,e1*w);
 }
 
-OLGA_INLINE void GCoptimization::addterm2_checked(Energy* e, VarID i, VarID j, EnergyTermType e00, EnergyTermType e01, EnergyTermType e10, EnergyTermType e11, EnergyTermType w)
+OLGA_INLINE void GCoptimization::addterm2_checked(EnergyT* e, VarID i, VarID j, EnergyTermType e00, EnergyTermType e01, EnergyTermType e10, EnergyTermType e11, EnergyTermType w)
 {
 	if ( e00 > GCO_MAX_ENERGYTERM || e11 > GCO_MAX_ENERGYTERM || e01 > GCO_MAX_ENERGYTERM || e10 > GCO_MAX_ENERGYTERM )
 		handleError("Smooth cost term was larger than GCO_MAX_ENERGYTERM; danger of integer overflow.");
@@ -316,7 +323,7 @@ GCoptimization::SiteID GCoptimization::queryActiveSitesExpansion(LabelID alpha_l
 //-------------------------------------------------------------------
 
 template <typename DataCostT>
-void GCoptimization::setupDataCostsExpansion(SiteID size,LabelID alpha_label,Energy *e,SiteID *activeSites)
+void GCoptimization::setupDataCostsExpansion(SiteID size,LabelID alpha_label,EnergyT *e,SiteID *activeSites)
 {
 	DataCostT* dc = (DataCostT*)m_datacostFn;
 	for ( SiteID i = 0; i < size; ++i )
@@ -326,7 +333,7 @@ void GCoptimization::setupDataCostsExpansion(SiteID size,LabelID alpha_label,Ene
 //-------------------------------------------------------------------
 
 template <typename SmoothCostT>
-void GCoptimization::setupSmoothCostsExpansion(SiteID size,LabelID alpha_label,Energy *e,SiteID *activeSites)
+void GCoptimization::setupSmoothCostsExpansion(SiteID size,LabelID alpha_label,EnergyT *e,SiteID *activeSites)
 {
 	SiteID i,nSite,site,n,nNum,*nPointer;
 	EnergyTermType *weights;
@@ -358,7 +365,7 @@ void GCoptimization::setupSmoothCostsExpansion(SiteID size,LabelID alpha_label,E
 
 template <typename DataCostT>
 void GCoptimization::setupDataCostsSwap(SiteID size, LabelID alpha_label, LabelID beta_label,
-										 Energy *e,SiteID *activeSites )
+										 EnergyT *e,SiteID *activeSites )
 {
 	DataCostT* dc = (DataCostT*)m_datacostFn;
 	for ( SiteID i = 0; i < size; i++ )
@@ -372,7 +379,7 @@ void GCoptimization::setupDataCostsSwap(SiteID size, LabelID alpha_label, LabelI
 
 template <typename SmoothCostT>
 void GCoptimization::setupSmoothCostsSwap(SiteID size, LabelID alpha_label,LabelID beta_label,
-										 Energy *e,SiteID *activeSites )
+										 EnergyT *e,SiteID *activeSites )
 {
 	SiteID i,nSite,site,n,nNum,*nPointer;
 	EnergyTermType *weights;
@@ -403,7 +410,7 @@ void GCoptimization::setupSmoothCostsSwap(SiteID size, LabelID alpha_label,Label
 //-----------------------------------------------------------------------------------
 
 template <typename DataCostT>
-void GCoptimization::applyNewLabeling(Energy *e,SiteID *activeSites,SiteID size,LabelID alpha_label)
+void GCoptimization::applyNewLabeling(EnergyT *e,SiteID *activeSites,SiteID size,LabelID alpha_label)
 {
 	DataCostT* dc = (DataCostT*)m_datacostFn;
 	for ( SiteID i = 0; i < size; i++ )
@@ -520,8 +527,16 @@ public:
 	{
 		m_label = labels;
 		m_labelend = labels + labelCount;
-		m_site = m_dc.begin(*labels);
-		m_siteend = m_dc.end(*labels);
+		if (labelCount > 0) {
+			m_site = m_dc.begin(*labels);
+			m_siteend = m_dc.end(*labels);
+			while (m_site == m_siteend) {
+				if (++m_label == m_labelend)
+					break;
+				m_site     = m_dc.begin(*m_label);
+				m_siteend  = m_dc.end(*m_label);
+			}
+		}
 	}
 	OLGA_INLINE SiteID site()  const { return m_site.site(); }
 	OLGA_INLINE SiteID label() const { return *m_label; }
@@ -531,9 +546,11 @@ public:
 		// The inner loop is over sites, not labels, because sparse data costs 
 		// are stored as consecutive [sparse] SiteIDs with respect to each label.
 		if (++m_site == m_siteend) {
-			if (++m_label < m_labelend) {
+			while (++m_label < m_labelend) {
 				m_site     = m_dc.begin(*m_label);
 				m_siteend  = m_dc.end(*m_label);
+				if (m_site != m_siteend)
+					break;
 			}
 		}
 		return *this;
@@ -749,6 +766,7 @@ void GCoptimization::setDataCostFunctor(DataCostFunctor* f) {
 	m_setupDataCostsSwap        = &GCoptimization::setupDataCostsSwap<DataCostFunctor>;
 	m_applyNewLabeling          = &GCoptimization::applyNewLabeling<DataCostFunctor>;
 	m_updateLabelingDataCosts   = &GCoptimization::updateLabelingDataCosts<DataCostFunctor>;
+	m_solveSpecialCases         = &GCoptimization::solveSpecialCases<DataCostFunctor>;
 	m_labelingInfoDirty = true;
 }
 
@@ -996,6 +1014,7 @@ GCoptimization::EnergyType GCoptimization::expansion(int max_num_iterations)
 				
 				printStatus1(cycle++,false,ticks0);
 			} while ( !queueSizes.empty() );
+			new_energy = compute_energy();
 		}
 		else
 		{
@@ -1067,7 +1086,7 @@ void GCoptimization::checkInterrupt()
 //                  METHODS for EXPANSION MOVES                      //  
 //-------------------------------------------------------------------//
 
-GCoptimization::EnergyType GCoptimization::setupLabelCostsExpansion(SiteID size,LabelID alpha_label,Energy *e,SiteID *activeSites)
+GCoptimization::EnergyType GCoptimization::setupLabelCostsExpansion(SiteID size,LabelID alpha_label,EnergyT *e,SiteID *activeSites)
 {
 	EnergyType alphaCostCorrection = 0;
 	if ( !m_labelcostsAll )
@@ -1177,6 +1196,9 @@ void GCoptimization::updateLabelingInfo(bool updateCounts, bool updateActive, bo
 //
 bool GCoptimization::alpha_expansion(LabelID alpha_label)
 {
+	if (alpha_label < 0)
+		return false; // label was disabled due to setLabelOrder on subset of labels
+
 	finalizeNeighbors();
 	gcoclock_t ticks0 = gcoclock();
 
@@ -1207,9 +1229,9 @@ bool GCoptimization::alpha_expansion(LabelID alpha_label)
 
 		// Create binary variables for each remaining site, add the data costs,
 		// and compute the smooth costs between variables.
-		Energy e(size+m_labelcostCount, // poor guess at number of pairwise terms needed :(
+		EnergyT e(size+m_labelcostCount, // poor guess at number of pairwise terms needed :(
 				 m_numNeighborsTotal+(m_labelcostCount?size+m_labelcostCount : 0),
-				 (void(*)(char*))handleError);
+				 handleError);
 		e.add_variable(size);
 		m_beforeExpansionEnergy = 0;
 		if ( m_setupDataCostsExpansion   ) (this->*m_setupDataCostsExpansion  )(size,alpha_label,&e,activeSites);
@@ -1266,7 +1288,7 @@ GCoptimization::EnergyType GCoptimization::swap(int max_num_iterations)
 	printStatus1("starting alpha/beta-swap");
 
 	if ( max_num_iterations == -1 )
-		max_num_iterations = INT_MAX;
+		max_num_iterations = 10000000;
 	int curr_cycle = 1;
 	m_stepsThisCycleTotal = (m_num_labels*(m_num_labels-1))/2;
 	try
@@ -1283,6 +1305,7 @@ GCoptimization::EnergyType GCoptimization::swap(int max_num_iterations)
 	catch (...)
 	{
 		m_stepsThisCycle = m_stepsThisCycleTotal = 0;
+		throw;
 	}
 	m_stepsThisCycle = m_stepsThisCycleTotal = 0;
 
@@ -1342,7 +1365,7 @@ void GCoptimization::alpha_beta_swap(LabelID alpha_label, LabelID beta_label)
 
 		// Create binary variables for each remaining site, add the data costs,
 		// and compute the smooth costs between variables.
-		Energy e(size,m_numNeighborsTotal,(void(*)(char*))handleError);
+		EnergyT e(size,m_numNeighborsTotal,handleError);
 		e.add_variable(size);
 		if ( m_setupDataCostsSwap   ) (this->*m_setupDataCostsSwap  )(size,alpha_label,beta_label,&e,activeSites);
 		if ( m_setupSmoothCostsSwap ) (this->*m_setupSmoothCostsSwap)(size,alpha_label,beta_label,&e,activeSites);
@@ -1651,6 +1674,8 @@ void GCoptimizationGeneralGraph::setAllNeighbors(SiteID *numNeighbors,SiteID **n
 	if ( m_numNeighborsTotal > 0 )
 		handleError("Already set up neighborhood system.");
 	m_numNeighbors     = numNeighbors;
+	m_numNeighborsTotal = 0;
+	for (int site = 0; site < m_num_sites; site++ ) m_numNeighborsTotal += m_numNeighbors[site];
 	m_neighborsIndexes = neighborsIndexes;
 	m_neighborsWeights = neighborsWeights;
 }
@@ -1684,7 +1709,7 @@ void GCoptimization::printStatus1(int cycle, bool isSwap, gcoclock_t ticks0)
 	{
 		// Don't print time if time is already printed at finer scale, since printing
 		// itself takes time (esp in MATLAB) and makes time useless at this level
-		int ms = (int)(1000*(ticks1 - ticks0) / CLOCKS_PER_SEC);
+		int ms = (int)(1000*(ticks1 - ticks0) / GCO_CLOCKS_PER_SEC);
 		printf(" \t%d ms",ms);
 	}
 	printf("\n");
@@ -1695,7 +1720,7 @@ void GCoptimization::printStatus2(int alpha, int beta, int numVars, gcoclock_t t
 {
 	if ( m_verbosity < 2 )
 		return;
-	int microsec = (int)(1000000*(gcoclock() - ticks0) / CLOCKS_PER_SEC);
+	int microsec = (int)(1000000*(gcoclock() - ticks0) / GCO_CLOCKS_PER_SEC);
 	if ( beta >= 0 )
 		printf("gco>>   after swap(%d,%d):",alpha+INDEX0,beta+INDEX0);
 	else
@@ -1833,7 +1858,7 @@ OLGA_INLINE GCoptimization::EnergyTermType GCoptimization::DataCostFnSparse::com
 			return GCO_MAX_ENERGYTERM;
 	}
 	if ( (size_t)b.end - (size_t)b.begin == cSitesPerBucket*sizeof(SparseDataCost) )
-		return b.begin[s & ~cDataCostPtrMask].cost; // special case: this particular bucket is actually dense!
+		return b.begin[s-b.begin->site].cost; // special case: this particular bucket is actually dense!
 
 	return search(b,s);
 }

@@ -17,11 +17,14 @@ NumLabels = gco_matlab('gco_getnumlabels',Handle);
 if (length(LabelCost) ~= 1 && length(LabelCost) ~= NumLabels)
     error('LabelCost must be scalar or of length NumLabels');
 end
-if ~isa(LabelCost,'int32')
-    if (length(LabelCost) > 50 || any(any(floor(LabelCost) ~= LabelCost)))
-        warning('GCO:int32','LabelCost converted to int32');
+EnergyTermClass = gco_matlab('gco_get_energyterm_class');
+LabelCostClass = class(LabelCost);
+if (~strcmp(LabelCostClass,EnergyTermClass))
+    OldLabelCost = LabelCost;
+    LabelCost = cast(OldLabelCost,EnergyTermClass);
+    if (length(LabelCost) > 50 || any(any(cast(LabelCost, LabelCostClass) ~= OldLabelCost)))
+        warning('GCO:type',['LabelCost converted to ' EnergyTermClass]);
     end
-    LabelCost = int32(LabelCost);
 end
 if (nargin < 3) 
     gco_matlab('gco_setlabelcost',Handle,LabelCost);

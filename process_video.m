@@ -30,9 +30,9 @@ video = load_video_file(inFile);
 if(strcmp(method_id,'RPCA') || strcmp(method_id,'ST') || strcmp(method_id,'MC') ...
 || strcmp(method_id,'LRR') || strcmp(method_id,'TTD') || strcmp(method_id,'NMF'))
   M = im2double(convert_video_to_2d(video));
-  opts.rows = video.height;
-  opts.cols = video.width;
-  results = process_matrix(method_id, algorithm_id, M, opts);
+  params.rows = video.height;
+  params.cols = video.width;
+	results = run_algorithm(method_id, algorithm_id, M, params);
   movobj = convert_2dresults2mov([],results.L,results.S,results.O,video);
 end
 
@@ -41,7 +41,7 @@ end
 if(strcmp(method_id,'TD') || strcmp(method_id,'NTF'))
   A = im2double(convert_video_to_3d(video));
   T = tensor(A);
-  results = process_tensor(method_id, algorithm_id, T);
+	results = run_algorithm(method_id, algorithm_id, T, []);
   movobj = convert_3dresults2mov([],results.L,results.S,results.O,size(T,3));
 end
 

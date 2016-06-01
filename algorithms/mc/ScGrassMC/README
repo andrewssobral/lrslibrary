@@ -1,0 +1,2 @@
+Run compile_mex.m first to compile some mex routines
+Run test.m to compare ScGrassMC and GROUSE

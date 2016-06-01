@@ -23,7 +23,7 @@ RPCA | GM | Grassmann Median (Hauberg et al. 2014) | 1
 RPCA | TGA | Trimmed Grassmann Average (Hauberg et al. 2014) | 1
 RPCA | STOC-RPCA | Online Robust PCA via Stochastic Optimization (Feng et al. 2013) | 1
 RPCA | MoG-RPCA | Mixture of Gaussians RPCA (Zhao et al. 2014) | 2
-RPCA | OP-RPCA | Robust PCA via Outlier Pursuit (Xu et al. 2012) | 4
+RPCA | noncvxRPCA | Robust PCA via Nonconvex Rank Approximation (Kang et al. 2015) | 1
 ---
 --- RPCA-SPCP
 RPCA | NSA1 | Non-Smooth Augmented Lagrangian v1 (Aybat et al. 2011) | 1
@@ -58,10 +58,19 @@ ST | GOSUS   | Grassmannian Online Subspace Updates with Structured-sparsity (Xu
 ST | pROST   | Robust PCA and subspace tracking from incomplete observations using L0-surrogates (Hage and Kleinsteuber, 2013) | 3
 ---
 --- MC (Matrix Completion) ---
-MC | LRGeomCG | Low-rank matrix completion by Riemannian optimization (Bart Vandereycken, 2013) | 1
-MC | GROUSE   | Grassmannian Rank-One Update Subspace Estimation (Balzano et al. 2010) | 1
-MC | OptSpace | Matrix Completion from Noisy Entries (Keshavan et al. 2009) | 2
 MC | FPC | Fixed point and Bregman iterative methods for matrix rank minimization (Ma et al. 2008) | 3
+MC | GROUSE   | Grassmannian Rank-One Update Subspace Estimation (Balzano et al. 2010) | 1
+MC | IALM-MC | Inexact ALM for Matrix Completion (Lin et al. 2009) | 2
+MC | LMaFit | Low-Rank Matrix Fitting (Wen et al. 2012) | 2
+MC | LRGeomCG | Low-rank matrix completion by Riemannian optimization (Bart Vandereycken, 2013) | 1
+MC | MC_logdet | Top-N Recommender System via Matrix Completion (Kang et al. 2016) | 1
+MC | MC-NMF | Nonnegative Matrix Completion (Xu et al. 2011) | 2
+MC | OP-RPCA | Robust PCA via Outlier Pursuit (Xu et al. 2012) | 4
+MC | OptSpace | Matrix Completion from Noisy Entries (Keshavan et al. 2009) | 2
+MC | OR1MP | Orthogonal rank-one matrix pursuit for low rank matrix completion (Wang et al. 2015) | 2
+MC | RPCA-GD | Robust PCA via Gradient Descent (Yi et al. 2016) | 1
+MC | ScGrassMC | Scaled Gradients on Grassmann Manifolds for Matrix Completion (Ngo and Saad, 2012) | 2
+MC | SVP | Guaranteed Rank Minimization via Singular Value Projection (Meka et al. 2009) | 2
 MC | SVT | A singular value thresholding algorithm for matrix completion (Cai et al. 2008) | 3
 ---
 --- LRR (Low Rank Recovery) ---
@@ -114,3 +123,4 @@ TD | CP-APR       | PARAFAC/CP decomposition solved by Alternating Poisson Regre
 TD | CP2          | PARAFAC2 decomposition solved by ALS (Bro et al. 1999) | 4
 TD | RSTD         | Rank Sparsity Tensor Decomposition (Yin Li 2010) | 2
 TD | t-SVD        | Tensor SVD in Fourrier Domain (Zhang et al. 2013) | 1
+TD | OSTD         | Online Stochastic Tensor Decomposition (Sobral et al. 2015) | 1

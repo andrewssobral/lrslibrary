@@ -50,17 +50,17 @@ show_3dvideo(V);
 show_2dvideo(M,m,n);
 
 % Robust PCA
-out = process_matrix('RPCA', 'FPCP', M, []);
+out = run_algorithm('RPCA', 'FPCP', M, []);
 % Subspace Tracking
-out = process_matrix('ST', 'GRASTA', M, []);
+out = run_algorithm('ST', 'GRASTA', M, []);
 % Matrix Completion
-out = process_matrix('MC', 'GROUSE', M, []);
+out = run_algorithm('MC', 'GROUSE', M, []);
 % Low Rank Recovery
-out = process_matrix('LRR', 'FastLADMAP', M, []);
+out = run_algorithm('LRR', 'FastLADMAP', M, []);
 % Three-Term Decomposition
-out = process_matrix('TTD', '3WD', M, []);
+out = run_algorithm('TTD', '3WD', M, []);
 % Non-Negative Matrix Factorization
-out = process_matrix('NMF', 'ManhNMF', M, []);
+out = run_algorithm('NMF', 'ManhNMF', M, []);
 
 % Show results
 show_results(M,out.L,out.S,out.O,p,m,n);
@@ -69,9 +69,9 @@ show_results(M,out.L,out.S,out.O,p,m,n);
 T = tensor(V);
 
 % Non-Negative Tensor Factorization
-out = process_tensor('NTF', 'bcuNCP', T);
+out = run_algorithm('NTF', 'bcuNCP', T, []);
 % Tensor Decomposition
-out = process_tensor('TD', 'Tucker-ALS', T);
+out = run_algorithm('TD', 'Tucker-ALS', T, []);
 
 % Show results
 show_3dtensors(T,out.L,out.S,out.O);
@@ -122,11 +122,11 @@ for i = 1 : nframes
     disp(['#last frame ' num2str(i)]);
     M = im2double(M);
     tic;
-    out = process_matrix('RPCA', 'GoDec', M, []);
-    %results = process_matrix('RPCA', 'IALM', M, []);
-    %results = process_matrix('RPCA', 'FPCP', M, []);
-    %results = process_matrix('LRR', 'FastLADMAP', M, []);
-    %results = process_matrix('NMF', 'NMF-MU', M, []);
+    out = run_algorithm('RPCA', 'GoDec', M, []);
+    %results = run_algorithm('RPCA', 'IALM', M, []);
+    %results = run_algorithm('RPCA', 'FPCP', M, []);
+    %results = run_algorithm('LRR', 'FastLADMAP', M, []);
+    %results = run_algorithm('NMF', 'NMF-MU', M, []);
     toc
     M_total = [M_total M];
     L_total = [L_total out.L];

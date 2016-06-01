@@ -37,6 +37,8 @@ if nargin < 2; r = 6;  end
 %     warning(TooManySVSrequested,'r > min(m,n)/2');
 % end
 
+r = uint8(r);
+
 % set parameters
 mainargin = nargin;
 set_param;
@@ -372,7 +374,7 @@ for iter = 1:maxit
         [tU,tE] = eig(SYTY);
         rvr0 = rvr;
         rv_sort = sort(diag(tE),'ascend');
-        rvr = rv_sort(end-r+1:end);
+        rvr = rv_sort(end-round(r)+1:end);
         chg_rvr = norm(rvr0-rvr)/norm(rvr);
         hrvs(iter,:) = rvr;
         AY = AY * tU; SX = SX * tU;

@@ -1,0 +1,21 @@
+% LSADM (Goldfarb et al. 2010)
+% process_video('RPCA', 'LSADM', 'dataset/demo.avi', 'output/demo_LSADM.avi');
+opts.D = M;
+opts.mu = norm(M)/1.25;
+[n1,n2] = size(M);
+opts.Xs = M;
+opts.Ys = M;
+opts.n1 = n1;
+opts.n2 = n2;
+opts.sigma = 1e-6;
+opts.maxitr = 500;
+opts.rho = 1/sqrt(n1);
+opts.eta_mu = 2/3;
+opts.eta_sigma = 2/3;
+opts.muf = 1e-6;
+opts.sigmaf = 1e-6;
+opts.epsilon = 1e-7;
+opts.sv = 100;
+out_ALM = ALM_SADAL_smoothed(opts.D,opts);
+L = out_ALM.X;
+S = out_ALM.Y;

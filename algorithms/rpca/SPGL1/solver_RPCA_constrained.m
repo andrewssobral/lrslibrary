@@ -69,7 +69,7 @@ function [L,S,errHist] = solver_RPCA_constrained(AY,lambda_S, tau, A_cell, opts)
 
 % todo: allow S >= 0 constraints, since this is easy
 
-error(nargchk(3,5,nargin,'struct'));
+%error(nargchk(3,5,nargin,'struct'));
 if nargin < 5, opts = []; end
 % == PROCESS OPTIONS ==
 function out = setOpts( field, default )

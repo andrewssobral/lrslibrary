@@ -2,8 +2,9 @@ function GCO_SetDataCost(Handle,DataCost,Label)
 % GCO_SetDataCost   Set the data cost of individual sites.
 %    GCO_SetDataCost(Handle,DataCost) accepts a NumLabels-by-NumSites 
 %    int32 matrix where DataCost(k,i) is the cost of assigning
-%    label k to site i. In this case, the MATLAB matrix is pointed to 
-%    by the C++ code, and so an int32 DataCost array is not copied.
+%    label k to site i. Unfortunately, in MATLAB 2014a the mxCreateReference,
+%    function was removed, so the MEX extension (C++ code) now has to make 
+%    an internal copy of the DataCost array :(
 %
 %    GCO_SetDataCost(Handle,DataCost,Label) accepts a 2-by-N int32 matrix
 %    of (site,cost) pairs, i.e. DataCost(2,i) is the cost of assigning 
@@ -24,6 +25,8 @@ if (~isnumeric(DataCost)), error('DataCost must be numeric'); end
 if (~isreal(DataCost)), error('DataCost cannot be complex'); end
 NumLabels = gco_matlab('gco_getnumlabels',Handle);
 NumSites  = gco_matlab('gco_getnumsites', Handle);
+EnergyTermClass = gco_matlab('gco_get_energyterm_class');
+DataCostClass = class(DataCost);
 if (nargin == 2)
     Label = 0; % no specific label
     if (size(DataCost) ~= [ NumLabels NumSites ])
@@ -37,11 +40,12 @@ else
         error('Sparse DataCost must contain two rows');
     end
 end
-if (~isa(DataCost,'int32'))
-    if (NumSites*NumLabels > 200 || any(any(floor(DataCost) ~= DataCost)))
-        % warning('GCO:int32','DataCost converted to int32');
+if (~strcmp(DataCostClass,EnergyTermClass))
+    OldDataCost = DataCost;
+    DataCost = cast(OldDataCost,EnergyTermClass);
+    if (NumSites*NumLabels > 200 || any(any(cast(DataCost, DataCostClass) ~= OldDataCost)))
+        %warning('GCO:type',['DataCost converted to ' EnergyTermClass]);
     end
-    DataCost = int32(DataCost);
 end
 gco_matlab('gco_setdatacost',Handle,DataCost,int32(Label));
 end

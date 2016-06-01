@@ -151,6 +151,8 @@ the binary energy for the swap algorithm step is regular, using V. Kolmogorov's 
 
 4. Data Types
 
+Inside the GCoptimization.h file you can customize the following typedefs:
+
 typedef  <numeric type>  SiteID;          // index of a site (pixel); default is int32
 typedef  <numeric type>  LabelID;         // index of a label;        default is int32
 typedef  <numeric type>  EnergyType;      // total energy value;      default is int64
@@ -158,7 +160,10 @@ typedef  <numeric type>  EnergyTermType;  // individual energy term;  default is
 
 For efficiency it is best to use integral types when possible; be sure that they are
 large enough to avoid integer overflow. By default, the library will warn if energy 
-terms are dangerously large (larger than GCO_MAX_ENERGYTERM=10000000).
+terms are dangerously large (larger than GCO_MAX_ENERGYTERM=10000000). Even with float
+types it's best to avoid extremely large energy terms, because it introduces rounding
+errors, and the behaviour of the algorithm is undefined if Inf or NaN values appear
+in the energy terms.
 
 Keep in mind that float/double may cause expansion/swap to report small increase in energy, 
 due to arithmetic error during max-flow computation.

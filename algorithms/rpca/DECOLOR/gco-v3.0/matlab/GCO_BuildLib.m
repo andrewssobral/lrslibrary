@@ -6,27 +6,27 @@ function GCO_BuildLib(Options)
 %    YOU DO NOT NEED TO EXPLICITLY CALL THIS FUNCTION, unless you want to
 %    customise the build settings via GCO_BuildLib(Options).
 %    Default options:
-%      Options.Debug=0        % optimised, detailed checking disabled
-%      Options.EnergyType32=0 % 64-bit energy counter, 32-bit energy terms
+%      Options.Debug=0                % optimised, detailed checking disabled
+%      Options.EnergyType='long long' % int64 energy accumulator C type
+%      Options.EnergyTermType='int'   % int32 energy term C type; if not specified, same as EnergyType
 %
 %    Example:
 %      % Enable detailed assertions (e.g. than energy does not go up
-%      % during expansion) and use 32-bit energy counters (slightly faster)
-%      GCO_BuildLib(struct('Debug',1,'EnergyType32',1));
+%      % during expansion) and use double-precision float energy terms.
+%      GCO_BuildLib(struct('Debug',1,'EnergyType','double'));
 %
 
 if (nargin < 1)
     Options = struct();
 end
 if (~isfield(Options,'Debug')), Options.Debug = 0; end
+if (~isfield(Options,'EnergyType')), Options.EnergyType = ''; end
+if (~isfield(Options,'EnergyTermType')), Options.EnergyTermType = ''; end
 if (~isfield(Options,'EnergyType32')), Options.EnergyType32 = 0; end
 if (~isfield(Options,'Force')), Options.Force = 1; end
-if (~Options.Force && exist('gco_matlab')==3)
-    return;
-end
 
 MEXFLAGS = '';
-if (strcmp(computer(),'GLNXA64') || strcmp(computer(),'PCWIN64'))
+if (strcmp(computer(),'GLNXA64') || strcmp(computer(),'PCWIN64') || strcmp(computer(),'MACI64'))
     MEXFLAGS = [MEXFLAGS ' -largeArrayDims -DA64BITS'];
 end
 if (Options.Debug)
@@ -34,6 +34,12 @@ if (Options.Debug)
 end
 if (Options.EnergyType32)
     MEXFLAGS = [MEXFLAGS ' -DGCO_ENERGYTYPE32'];
+end
+if (Options.EnergyType)
+    MEXFLAGS = [MEXFLAGS ' -DGCO_ENERGYTYPE=' Options.EnergyType];
+end
+if (Options.EnergyTermType)
+    MEXFLAGS = [MEXFLAGS ' -DGCO_ENERGYTERMTYPE=' Options.EnergyTermType];
 end
 if (strcmp(computer(),'PCWIN')) % link with libut for user interruptibility
     MEXFLAGS = [MEXFLAGS ' -D_WIN32 "' matlabroot() '\extern\lib\win32\microsoft\libut.lib"' ];
@@ -49,6 +55,9 @@ GCODIR = fileparts(GCOMATDIR);
 OUTDIR = [ GCOMATDIR filesep 'bin' ];
 [status msg msgid] = mkdir(GCOMATDIR, 'bin'); % Create bin directory
 addpath(OUTDIR);                              % and add it to search path
+if (~Options.Force && exist('gco_matlab')==3)
+    return;
+end
 clear gco_matlab;
 
 mexcmd = ['mex ' MEXFLAGS ' -outdir ''' OUTDIR ''' -output ' LIB_NAME ' ' ];

@@ -193,6 +193,15 @@ GCO_Expansion(h);
 Assert(all(GCO_GetLabeling(h) == [7 3 7 3]'));
 GCO_Delete(h);
 
+% Test when NumLabels < NumSites and make sure greedy doesn't crash when all labels 
+% are added. This test thanks to Yangyan Li.
+h = GCO_Create(4,3);
+DoSetDataCost(h,[1 4 9; 5 2 5; 6 1 3; 5 7 1;]',iter);
+GCO_SetLabelCost(h,[1 1 1]);
+GCO_Expansion(h);
+GCO_Delete(h);
+
+
 % Now do the same test, except add label costs to subsets of labels, not
 % just individual labels
 h = GCO_Create(4,9);

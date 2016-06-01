@@ -23,11 +23,14 @@ NumLabels = gco_matlab('gco_getnumlabels',Handle);
 if (size(SmoothCost) ~= [ NumLabels NumLabels ])
     error('SmoothCost size must be [ NumLabels NumLabels ]');
 end
-if ~isa(SmoothCost,'int32')
-    if (NumLabels > 50 || any(any(floor(SmoothCost) ~= SmoothCost)))
-        % warning('GCO:int32','SmoothCost converted to int32');
+EnergyTermClass = gco_matlab('gco_get_energyterm_class');
+SmoothCostClass = class(SmoothCost);
+if (~strcmp(SmoothCostClass,EnergyTermClass))
+    OldSmoothCost = SmoothCost;
+    SmoothCost = cast(OldSmoothCost,EnergyTermClass);
+    if (NumLabels > 50 || any(any(cast(SmoothCost, SmoothCostClass) ~= OldSmoothCost)))
+        warning('GCO:type',['SmoothCost converted to ' EnergyTermClass]);
     end
-    SmoothCost = int32(SmoothCost);
 end
 if (any(SmoothCost ~= SmoothCost'))
     error('SmoothCost must be symmetric');

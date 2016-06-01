@@ -1,0 +1,22 @@
+Main Functions:
+	mink.m -> Matlab file to look for k-smallest elements
+	maxk.m -> Matlab file to look for k-largest elements
+
+Other files:
+	minmaxk.m -> Common Matlab wrapper for mink.m and maxk.m
+	minkmex.c -> Mex engine for mink.m 
+	minkmex.m -> Help file for Mex minkmex
+	maxkmex.c -> Mex engine for maxk.m 
+	maxkmex.m -> Help file for Mex maxkmex
+	buildInternal_mxArrayDef.m -> building the typedef for mxArray
+	inplacecolumnmex.c -> Create inplace column of a full matrix
+	releaseinplace.c -> release the data of the inplace array
+	minmax_install.m -> Installation function (mex build)
+	getmexopts.m -> Tool to get the current MEX setup
+	testminmax.m -> Test program of Min/Max Selection Package
+	Contents.txt -> This file
+	Internal_mxArray_2010B.h -> Prototype file for R2010b
+
+Author Bruno Luong <brunoluong@yahoo.com>
+Contributor: Matt Fig, James Tursa
+Last update: 27-August-2011

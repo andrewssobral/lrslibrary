@@ -2,20 +2,21 @@
 #include <stdio.h>
 #include <map>
 #include <string>
-#include <windows.h>
 #include "../GCoptimization.h"
 
 #if !defined(MX_API_VER) || MX_API_VER < 0x07030000
-typedef int mwSize;
-typedef int mwIndex;
+//commented for MATLAB R2016a
+//typedef int mwSize;
+//typedef int mwIndex;
 #endif
 
-extern "C" mxArray *mxCreateReference(const mxArray*); // undocumented mex function
+// MATLAB 2014a: mxCreateReference is NO LONGER AVAILABLE :(
+//extern "C" mxArray *mxCreateReference(const mxArray*); // undocumented mex function
 
 #define GCO_EXPORT(func) \
-	extern "C" __declspec(dllexport) void func(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]); \
+	extern "C" void func(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]); \
 	FuncRegistry::Entry regentry_##func(#func,func); \
-	extern "C" __declspec(dllexport) void func(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
+	extern "C" void func(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 
 #define MATLAB_ASSERT(expr,msg) if (!(expr)) { throw MatlabError(msg); }
 #define MATLAB_ASSERT_ARGCOUNT(nout, nin) \
@@ -24,9 +25,11 @@ extern "C" mxArray *mxCreateReference(const mxArray*); // undocumented mex funct
 	MATLAB_ASSERT(nrhs >= nin,  "Not enough input arguments, expected " #nin); \
 	MATLAB_ASSERT(nrhs <= nin,  "Too many input arguments, expected " #nin);
 #define MATLAB_ASSERT_INTYPE(arg, type) \
-	MATLAB_ASSERT(mxGetClassID(prhs[arg]) == type, "Expected " #type " for input argument " #arg);
+	MATLAB_ASSERT(mxGetClassID(prhs[arg-1]) == c##type##ClassID, "Expected argument " #arg " to be of type " #type);
+#define MATLAB_ASSERT_INCLASS(arg, classid) \
+	MATLAB_ASSERT(mxGetClassID(prhs[arg-1]) == classid, "Expected argument " #arg " to be of type " #classid);
 #define MATLAB_ASSERT_HANDLE(arg) \
-	MATLAB_ASSERT(mxGetClassID(prhs[arg]) == mxINT32_CLASS, "Expected valid handle for argument " #arg);
+	MATLAB_ASSERT(mxGetClassID(prhs[arg-1]) == mxINT32_CLASS, "Expected argument " #arg " to be a valid GCO instance handle");
 
 struct MatlabError {
 	MatlabError(const char* msg): msg(msg) { }
@@ -58,14 +61,28 @@ struct GCInstanceInfo {
 private:
 };
 
+template <typename ctype> struct ctype2mx { };
+template <> struct ctype2mx<bool>            { static const mxClassID classid = mxLOGICAL_CLASS;   static const char* classname() { return "logical"; } };
+template <> struct ctype2mx<float>           { static const mxClassID classid = mxSINGLE_CLASS;    static const char* classname() { return "single"; }  };
+template <> struct ctype2mx<double>          { static const mxClassID classid = mxDOUBLE_CLASS;    static const char* classname() { return "double"; }  };
+template <> struct ctype2mx<char>            { static const mxClassID classid = mxINT8_CLASS;      static const char* classname() { return "int8"; }    };
+template <> struct ctype2mx<unsigned char>   { static const mxClassID classid = mxUINT8_CLASS;     static const char* classname() { return "uint8"; }   };
+template <> struct ctype2mx<short>           { static const mxClassID classid = mxINT16_CLASS;     static const char* classname() { return "int16"; }   };
+template <> struct ctype2mx<unsigned short>  { static const mxClassID classid = mxUINT16_CLASS;    static const char* classname() { return "uint16"; }  };
+template <> struct ctype2mx<int>             { static const mxClassID classid = mxINT32_CLASS;     static const char* classname() { return "int32"; }   };
+template <> struct ctype2mx<unsigned int>    { static const mxClassID classid = mxUINT32_CLASS;    static const char* classname() { return "uint32"; }  };
+template <> struct ctype2mx<long long>       { static const mxClassID classid = mxINT64_CLASS;     static const char* classname() { return "int64"; }   };
+template <> struct ctype2mx<unsigned long long> { static const mxClassID classid = mxUINT64_CLASS; static const char* classname() { return "uint64"; }  };
+
+
 typedef GCoptimization::LabelID LabelID;
 typedef GCoptimization::SiteID SiteID;
 typedef GCoptimization::EnergyType EnergyType;
 typedef GCoptimization::EnergyTermType EnergyTermType;
-mxClassID cLabelClassID      = sizeof(LabelID)        == 8 ? mxINT64_CLASS : mxINT32_CLASS;
-mxClassID cSiteClassID       = sizeof(SiteID)         == 8 ? mxINT64_CLASS : mxINT32_CLASS;
-mxClassID cEnergyTermClassID = sizeof(EnergyTermType) == 8 ? mxINT64_CLASS : mxINT32_CLASS;
-mxClassID cEnergyClassID     = sizeof(EnergyType)     == 8 ? mxINT64_CLASS : mxINT32_CLASS;
+mxClassID cLabelClassID      = ctype2mx<LabelID>::classid;
+mxClassID cSiteClassID       = ctype2mx<SiteID>::classid;
+mxClassID cEnergyTermClassID = ctype2mx<EnergyTermType>::classid;
+mxClassID cEnergyClassID     = ctype2mx<EnergyType>::classid;
 
 typedef std::map<int,GCInstanceInfo> GCInstanceMap;
 
@@ -133,14 +150,24 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 	}
 }
 
+GCO_EXPORT(gco_get_energyterm_class)
+{
+	// This function is provided so that the GCO_SetDataCost/SetSmoothCost/SetLabelCost
+	// matlab functions can determine if they should automatically convert float input 
+	// matrices to int32 before passing them
+	MATLAB_ASSERT_ARGCOUNT(1,0);
+	char* str = (char*)mxCalloc(32, sizeof(char));
+	strcpy(str, ctype2mx<EnergyTermType>::classname());
+	plhs[0] = mxCreateString(str);
+}
 
 GCO_EXPORT(gco_create_general)
 {
 	int instanceID = 0;
 	try {
 		MATLAB_ASSERT_ARGCOUNT(1,2);
-		MATLAB_ASSERT_INTYPE(0,cSiteClassID);
-		MATLAB_ASSERT_INTYPE(1,cLabelClassID);
+		MATLAB_ASSERT_INTYPE(1,Site);
+		MATLAB_ASSERT_INTYPE(2,Label);
 		SiteID  numSites  = *(SiteID* )mxGetData(prhs[0]); MATLAB_ASSERT(numSites  >= 1, "Number of sites must be positive");
 		LabelID numLabels = *(LabelID*)mxGetData(prhs[1]); MATLAB_ASSERT(numLabels >= 2, "Number of labels must be positive");
 		instanceID = gNextInstanceID++;
@@ -159,7 +186,7 @@ GCO_EXPORT(gco_create_general)
 
 GCO_EXPORT(gco_delete)
 {
-	MATLAB_ASSERT_HANDLE(0);
+	MATLAB_ASSERT_HANDLE(1);
 	const int* instanceIDs = (int*)mxGetData(prhs[0]);
 	MATLAB_ASSERT(mxGetN(prhs[0]) == 1 || mxGetM(prhs[0]) == 1, "Input must be a scalar or a vector");
 	mwIndex count = mxGetNumberOfElements(prhs[0]);
@@ -183,9 +210,9 @@ GCO_EXPORT(gco_listhandles)
 GCO_EXPORT(gco_setdatacost)
 {
 	MATLAB_ASSERT_ARGCOUNT(0,3);
-	MATLAB_ASSERT_HANDLE(0);
-	MATLAB_ASSERT_INTYPE(1,cEnergyTermClassID);
-	MATLAB_ASSERT_INTYPE(2,cLabelClassID);
+	MATLAB_ASSERT_HANDLE(1);
+	MATLAB_ASSERT_INTYPE(2,EnergyTerm);
+	MATLAB_ASSERT_INTYPE(3,Label);
 	GCInstanceInfo& gcinstance = sGetGCInstance(*(int*)mxGetData(prhs[0]));
 	const mxArray* dc = prhs[1];
 	LabelID label = *(LabelID*)mxGetData(prhs[2]);
@@ -193,30 +220,32 @@ GCO_EXPORT(gco_setdatacost)
 		// Dense data costs
 		MATLAB_ASSERT(mxGetN(dc) == gcinstance.gco->numSites() && mxGetM(dc) == gcinstance.gco->numLabels(),
 					  "Numeric data cost must be NumLabels x NumSites in size");
-		// Increment reference count on this array to avoid copy.
-		// This way the GCoptimization object refers directly to the Matlab storage.
-		// If the user modifies their original variable, Matlab will do a lazy copy
-		// before modifying, thus making sure the pointer used here is valid and
-		// still points to the original data.
-		mxArray* newRef = mxCreateReference(dc);
-		gcinstance.gco->setDataCost((EnergyTermType*)mxGetData(dc));
+        // Make a copy since MATLAB no longer supports incrementing reference 
+        // count from mex extensions... I miss you mxCreateReference :(
+        mxArray* dc_copy = mxDuplicateArray(dc);
+        mexMakeArrayPersistent(dc_copy);
+            
+		gcinstance.gco->setDataCost((EnergyTermType*)mxGetData(dc_copy));
 		if (gcinstance.dc)
 			mxDestroyArray(gcinstance.dc);
-		gcinstance.dc = newRef;
+		gcinstance.dc = dc_copy;
 	} else {
 		// Sparse data costs
 		MATLAB_ASSERT(mxGetM(dc) == 2, "Sparse data cost must have 2 rows");
 		MATLAB_ASSERT(sizeof(SiteID) == sizeof(EnergyTermType), 
 			"Sparse data costs cannot be used because GCoptimization was compiled "
 			"such that sizeof(SiteID) != sizeof(EnergyTermType)");
+		MATLAB_ASSERT(cSiteClassID == cEnergyTermClassID, "Sparse data costs only supported when compiled for int32 energy terms");
 		SiteID count = (SiteID)mxGetN(dc);
 		GCoptimization::SparseDataCost* dcmem = (GCoptimization::SparseDataCost*)mxGetData(dc);
 		try {
 			for (LabelID i = 0; i < count; ++i)
 				dcmem[i].site--; // from 1-based to 0-based index
 			gcinstance.gco->setDataCost(label-1,dcmem,count);
-			if (gcinstance.dc) 
+			if (gcinstance.dc) {
 				mxDestroyArray(gcinstance.dc); // the gco object forgets about the pointer, so we let MATLAB know
+				gcinstance.dc = 0;
+			}
 			for (LabelID i = 0; i < count; ++i)
 				dcmem[i].site++; // from 0-based to 1-based index
 		} catch (...) {
@@ -230,21 +259,20 @@ GCO_EXPORT(gco_setdatacost)
 GCO_EXPORT(gco_setsmoothcost)
 {
 	MATLAB_ASSERT_ARGCOUNT(0,2);
-	MATLAB_ASSERT_HANDLE(0);
-	MATLAB_ASSERT_INTYPE(1,cEnergyTermClassID);
+	MATLAB_ASSERT_HANDLE(1);
+	MATLAB_ASSERT_INTYPE(2,EnergyTerm);
 	GCInstanceInfo& gcinstance = sGetGCInstance(*(int*)mxGetData(prhs[0]));
 	const mxArray* sc = prhs[1];
 	// Smooth costs provided as numeric array, and is applied to all neighbouring variables.
 	MATLAB_ASSERT(mxGetN(sc) == gcinstance.gco->numLabels() && mxGetM(sc) == gcinstance.gco->numLabels(),
 	              "Numeric smooth cost must be NumLabels x NumLabels in size");
-	// Increment reference count on this array to avoid copy.
-	// This way the GCoptimization object refers directly to the Matlab storage.
-	// If the user modifies their original variable, Matlab will do a lazy copy
-	// before modifying, thus making sure the pointer used here is valid and
-	// still points to the original data.
+    // Make a copy since MATLAB no longer supports incrementing reference 
+    // count from mex extensions... I miss you mxCreateReference :(
+    mxArray* sc_copy = mxDuplicateArray(sc);
+    mexMakeArrayPersistent(sc_copy);
+	gcinstance.gco->setSmoothCost((EnergyTermType*)mxGetData(sc_copy));
 	if (gcinstance.sc) mxDestroyArray(gcinstance.sc);
-	gcinstance.sc = mxCreateReference(sc);
-	gcinstance.gco->setSmoothCost((EnergyTermType*)mxGetData(sc));
+	gcinstance.sc = sc_copy;
 }
 
 GCO_EXPORT(gco_setlabelcost)
@@ -255,8 +283,8 @@ GCO_EXPORT(gco_setlabelcost)
 		MATLAB_ASSERT(nlhs == 0, "Too many output arguments, expected 0");
 		MATLAB_ASSERT(nrhs >= 2, "Not enough input arguments, expected at least 2");
 		MATLAB_ASSERT(nrhs <= 3, "Too many input arguments, expected at most 3");
-		MATLAB_ASSERT_HANDLE(0);
-		MATLAB_ASSERT_INTYPE(1,cEnergyTermClassID);
+		MATLAB_ASSERT_HANDLE(1);
+		MATLAB_ASSERT_INTYPE(2,EnergyTerm);
 		GCInstanceInfo& gcinstance = sGetGCInstance(*(int*)mxGetData(prhs[0]));
 		const mxArray* lc = prhs[1];
 		if (mxGetN(lc) == 1 && mxGetM(lc) == 1) {
@@ -265,7 +293,7 @@ GCO_EXPORT(gco_setlabelcost)
 				gcinstance.gco->setLabelCost(*(EnergyTermType*)mxGetData(lc));
 			} else {
 				// Cost for using an element from a specific subset of labels
-				MATLAB_ASSERT_INTYPE(2,cLabelClassID);
+				MATLAB_ASSERT_INTYPE(3,Label);
 				subset = (LabelID*)mxGetData(prhs[2]);
 				subsetSize = (LabelID)mxGetNumberOfElements(prhs[2]);
 				for (LabelID i = 0; i < subsetSize; ++i)
@@ -290,8 +318,8 @@ GCO_EXPORT(gco_setlabelcost)
 GCO_EXPORT(gco_setneighbors)
 {
 	MATLAB_ASSERT_ARGCOUNT(0,2);
-	MATLAB_ASSERT_HANDLE(0);
-	MATLAB_ASSERT_INTYPE(1,mxDOUBLE_CLASS);
+	MATLAB_ASSERT_HANDLE(1);
+	MATLAB_ASSERT_INCLASS(2,mxDOUBLE_CLASS);
 	GCInstanceInfo& gcinstance = sGetGCInstance(*(int*)mxGetData(prhs[0]));
 	MATLAB_ASSERT(gcinstance.grid == false, "SetNeighbors can only be called on general graphs");
 	GCoptimizationGeneralGraph* gco = static_cast<GCoptimizationGeneralGraph*>(gcinstance.gco);
@@ -299,7 +327,8 @@ GCO_EXPORT(gco_setneighbors)
 	MATLAB_ASSERT(mxIsSparse(nb), "Expected sparse array for neighbours");
 	MATLAB_ASSERT(mxGetN(nb) == gcinstance.gco->numSites() && mxGetM(nb) == gcinstance.gco->numSites(),
 	              "Neighbours array must be NumSites x NumSites in size");
-	bool warned = false;
+	bool warned_rounding = false;
+	bool warned_nonupper = false;
 	mwIndex n = (mwIndex)mxGetN(nb);
 	const mwIndex* ir = mxGetIr(nb);
 	const mwIndex* jc = mxGetJc(nb);
@@ -313,13 +342,22 @@ GCO_EXPORT(gco_setneighbors)
 			MATLAB_ASSERT(r != c, "A site cannot neighbor itself; make sure diagonal is all zero");
 
 			double dw = pr[count++];
-			int w = (int)dw;
-			if ((double)w != dw && !warned) {
-				mexWarnMsgTxt("Non-integer weight detected; rounding to int32");
-				warned = true;
+			if (ctype2mx<EnergyTermType>::classid == mxINT32_CLASS) {
+				int w = (int)dw;
+				if ((double)w != dw && !warned_rounding) {
+					mexWarnMsgTxt("Non-integer weight detected; rounding to int32");
+					warned_rounding = true;
+				}
 			}
 			if (r < c)
-				gco->setNeighbors((SiteID)r, (SiteID)c, w);
+				gco->setNeighbors((SiteID)r, (SiteID)c, (EnergyTermType)dw);
+			else {
+				if (!warned_nonupper) {
+					mexWarnMsgTxt("Neighbours array should be upper-triangular; entries below the diagnonal will be ignored");
+					warned_nonupper = true;
+				}
+			}
+
 		}
 	}
 }
@@ -327,8 +365,8 @@ GCO_EXPORT(gco_setneighbors)
 GCO_EXPORT(gco_setlabelorder)
 {
 	MATLAB_ASSERT_ARGCOUNT(0,2);
-	MATLAB_ASSERT_HANDLE(0);
-	MATLAB_ASSERT_INTYPE(1,cLabelClassID);
+	MATLAB_ASSERT_HANDLE(1);
+	MATLAB_ASSERT_INTYPE(2,Label);
 	GCInstanceInfo& gcinstance = sGetGCInstance(*(int*)mxGetData(prhs[0]));
 	LabelID* order = (LabelID*)mxGetData(prhs[1]);
 	LabelID size = (LabelID)mxGetNumberOfElements(prhs[1]);
@@ -348,8 +386,8 @@ GCO_EXPORT(gco_setlabelorder)
 GCO_EXPORT(gco_setverbosity)
 {
 	MATLAB_ASSERT_ARGCOUNT(0,2);
-	MATLAB_ASSERT_HANDLE(0);
-	MATLAB_ASSERT_INTYPE(1,mxINT32_CLASS);
+	MATLAB_ASSERT_HANDLE(1);
+	MATLAB_ASSERT_INCLASS(2,mxINT32_CLASS);
 	GCInstanceInfo& gcinstance = sGetGCInstance(*(int*)mxGetData(prhs[0]));
 	int level = *(int*)mxGetData(prhs[1]);
 	MATLAB_ASSERT(level >= 0 && level <= 2,"Level must be in range 0..2");
@@ -359,8 +397,8 @@ GCO_EXPORT(gco_setverbosity)
 GCO_EXPORT(gco_expansion)
 {
 	MATLAB_ASSERT_ARGCOUNT(1,2);
-	MATLAB_ASSERT_HANDLE(0);
-	MATLAB_ASSERT_INTYPE(1,mxINT32_CLASS);
+	MATLAB_ASSERT_HANDLE(1);
+	MATLAB_ASSERT_INCLASS(2,mxINT32_CLASS);
 	GCInstanceInfo& gcinstance = sGetGCInstance(*(int*)mxGetData(prhs[0]));
 	int maxIter = *(int*)mxGetData(prhs[1]);
 	EnergyType energy = gcinstance.gco->expansion(maxIter);
@@ -372,8 +410,8 @@ GCO_EXPORT(gco_expansion)
 GCO_EXPORT(gco_swap)
 {
 	MATLAB_ASSERT_ARGCOUNT(1,2);
-	MATLAB_ASSERT_HANDLE(0);
-	MATLAB_ASSERT_INTYPE(1,mxINT32_CLASS);
+	MATLAB_ASSERT_HANDLE(1);
+	MATLAB_ASSERT_INCLASS(2,mxINT32_CLASS);
 	GCInstanceInfo& gcinstance = sGetGCInstance(*(int*)mxGetData(prhs[0]));
 	int maxIter = *(int*)mxGetData(prhs[1]);
 	EnergyType energy = gcinstance.gco->swap();
@@ -385,8 +423,8 @@ GCO_EXPORT(gco_swap)
 GCO_EXPORT(gco_alphaexpansion)
 {
 	MATLAB_ASSERT_ARGCOUNT(0,2);
-	MATLAB_ASSERT_HANDLE(0);
-	MATLAB_ASSERT_INTYPE(1,cLabelClassID);
+	MATLAB_ASSERT_HANDLE(1);
+	MATLAB_ASSERT_INTYPE(2,Label);
 	GCInstanceInfo& gcinstance = sGetGCInstance(*(int*)mxGetData(prhs[0]));
 	LabelID alpha = *(LabelID*)mxGetData(prhs[1])-1;
 	gcinstance.gco->alpha_expansion(alpha);
@@ -395,7 +433,7 @@ GCO_EXPORT(gco_alphaexpansion)
 GCO_EXPORT(gco_computeenergy)
 {
 	MATLAB_ASSERT_ARGCOUNT(4,1);
-	MATLAB_ASSERT_HANDLE(0);
+	MATLAB_ASSERT_HANDLE(1);
 	GCInstanceInfo& gcinstance = sGetGCInstance(*(int*)mxGetData(prhs[0]));
 	EnergyType energy = gcinstance.gco->compute_energy();
 	mwSize outSize = 1;
@@ -412,8 +450,8 @@ GCO_EXPORT(gco_computeenergy)
 GCO_EXPORT(gco_setlabeling)
 {
 	MATLAB_ASSERT_ARGCOUNT(0,2);
-	MATLAB_ASSERT_HANDLE(0);
-	MATLAB_ASSERT_INTYPE(1,cLabelClassID);
+	MATLAB_ASSERT_HANDLE(1);
+	MATLAB_ASSERT_INTYPE(2,Label);
 	GCInstanceInfo& gcinstance = sGetGCInstance(*(int*)mxGetData(prhs[0]));
 	const mxArray* labeling = prhs[1];
 	MATLAB_ASSERT(mxGetN(labeling) == gcinstance.gco->numSites() || mxGetM(labeling) == gcinstance.gco->numSites(),
@@ -422,16 +460,16 @@ GCO_EXPORT(gco_setlabeling)
 	for (mwIndex i = 0; i < gcinstance.gco->numSites(); ++i) 
 		MATLAB_ASSERT(labeldata[i] >= 1 && labeldata[i] <= gcinstance.gco->numLabels(),
 		             "Labeling must be in range 1..NumLabels");
-	for (mwIndex i = 0; i < gcinstance.gco->numSites(); ++i) 
+	for (mwIndex i = 0; i < gcinstance.gco->numSites(); ++i)
 		gcinstance.gco->setLabel((SiteID)i, labeldata[i]-1);
 }
 
 GCO_EXPORT(gco_getlabeling)
 {
 	MATLAB_ASSERT_ARGCOUNT(1,3);
-	MATLAB_ASSERT_HANDLE(0);
-	MATLAB_ASSERT_INTYPE(1,cSiteClassID);
-	MATLAB_ASSERT_INTYPE(2,cSiteClassID);
+	MATLAB_ASSERT_HANDLE(1);
+	MATLAB_ASSERT_INTYPE(2,Site);
+	MATLAB_ASSERT_INTYPE(3,Site);
 	GCInstanceInfo& gcinstance = sGetGCInstance(*(int*)mxGetData(prhs[0]));
 	MATLAB_ASSERT(*(SiteID*)mxGetData(prhs[1]) > 0, "Start index must be in range 1..NumSites");
 	SiteID start = *(SiteID*)mxGetData(prhs[1])-1;
@@ -448,7 +486,7 @@ GCO_EXPORT(gco_getlabeling)
 GCO_EXPORT(gco_getnumsites)
 {
 	MATLAB_ASSERT_ARGCOUNT(1,1);
-	MATLAB_ASSERT_HANDLE(0);
+	MATLAB_ASSERT_HANDLE(1);
 	GCInstanceInfo& gcinstance = sGetGCInstance(*(int*)mxGetData(prhs[0]));
 	mwSize outdim = 1;
 	plhs[0] = mxCreateNumericArray(1, &outdim, cSiteClassID, mxREAL);
@@ -458,7 +496,7 @@ GCO_EXPORT(gco_getnumsites)
 GCO_EXPORT(gco_getnumlabels)
 {
 	MATLAB_ASSERT_ARGCOUNT(1,1);
-	MATLAB_ASSERT_HANDLE(0);
+	MATLAB_ASSERT_HANDLE(1);
 	GCInstanceInfo& gcinstance = sGetGCInstance(*(int*)mxGetData(prhs[0]));
 	mwSize outSize = 1;
 	plhs[0] = mxCreateNumericArray(1, &outSize, cLabelClassID, mxREAL);

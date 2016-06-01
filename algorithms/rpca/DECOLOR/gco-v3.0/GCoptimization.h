@@ -105,6 +105,7 @@
 #error Requires Visual C++ 2005 (VC8) compiler or later.
 #endif
 
+#include <cstddef>
 #include "energy.h"
 #include "graph.cpp"
 #include "maxflow.cpp"
@@ -126,7 +127,8 @@ typedef __int64 gcoclock_t;
 #include <ctime>
 typedef clock_t gcoclock_t;
 #endif
-gcoclock_t gcoclock();
+extern "C" gcoclock_t gcoclock(); // fairly high-resolution timer... better than clock() when available
+extern "C" gcoclock_t GCO_CLOCKS_PER_SEC; // this variable will stay 0 until gcoclock() is called for the first time
 
 #ifdef _MSC_EXTENSIONS
 #define OLGA_INLINE __forceinline
@@ -140,6 +142,13 @@ gcoclock_t gcoclock();
                                      // the library will raise an exception
 #endif
 
+#if defined(GCO_ENERGYTYPE) && !defined(GCO_ENERGYTERMTYPE)
+#define GCO_ENERGYTERMTYPE GCO_ENERGYTYPE
+#endif
+#if !defined(GCO_ENERGYTYPE) && defined(GCO_ENERGYTERMTYPE)
+#define GCO_ENERGYTYPE GCO_ENERGYTERMTYPE
+#endif
+
 
 /////////////////////////////////////////////////////////////////////
 // GCoptimization class
@@ -149,14 +158,19 @@ class LinkedBlockList;
 class GCoptimization
 {
 public: 
+#ifdef GCO_ENERGYTYPE
+	typedef GCO_ENERGYTYPE EnergyType;
+	typedef GCO_ENERGYTERMTYPE EnergyTermType;
+#else
 #ifdef GCO_ENERGYTYPE32
 	typedef int EnergyType;        // 32-bit energy total
 #else
 	typedef long long EnergyType;  // 64-bit energy total
 #endif
 	typedef int EnergyTermType;    // 32-bit energy terms
-	typedef Energy<EnergyTermType,EnergyTermType,EnergyType> Energy;
-	typedef Energy::Var VarID;
+#endif
+	typedef Energy<EnergyTermType,EnergyTermType,EnergyType> EnergyT;
+	typedef EnergyT::Var VarID;
 	typedef int LabelID;                     // Type for labels
 	typedef VarID SiteID;                    // Type for sites
 	typedef EnergyTermType (*SmoothCostFn)(SiteID s1, SiteID s2, LabelID l1, LabelID l2);
@@ -302,11 +316,11 @@ protected:
 
 	EnergyType (GCoptimization::*m_giveSmoothEnergyInternal)();
 	SiteID (GCoptimization::*m_queryActiveSitesExpansion)(LabelID, SiteID*);
-	void (GCoptimization::*m_setupDataCostsExpansion)(SiteID,LabelID,Energy*,SiteID*);
-	void (GCoptimization::*m_setupSmoothCostsExpansion)(SiteID,LabelID,Energy*,SiteID*);
-	void (GCoptimization::*m_setupDataCostsSwap)(SiteID,LabelID,LabelID,Energy*,SiteID*);
-	void (GCoptimization::*m_setupSmoothCostsSwap)(SiteID,LabelID,LabelID,Energy*,SiteID*);
-	void (GCoptimization::*m_applyNewLabeling)(Energy*,SiteID*,SiteID,LabelID);
+	void (GCoptimization::*m_setupDataCostsExpansion)(SiteID,LabelID,EnergyT*,SiteID*);
+	void (GCoptimization::*m_setupSmoothCostsExpansion)(SiteID,LabelID,EnergyT*,SiteID*);
+	void (GCoptimization::*m_setupDataCostsSwap)(SiteID,LabelID,LabelID,EnergyT*,SiteID*);
+	void (GCoptimization::*m_setupSmoothCostsSwap)(SiteID,LabelID,LabelID,EnergyT*,SiteID*);
+	void (GCoptimization::*m_applyNewLabeling)(EnergyT*,SiteID*,SiteID,LabelID);
 	void (GCoptimization::*m_updateLabelingDataCosts)();
 
 	void (*m_datacostFnDelete)(void* f);
@@ -368,7 +382,7 @@ protected:
 	};
 
 	struct SmoothCostFnPotts {
-		OLGA_INLINE EnergyTermType compute(SiteID, SiteID, LabelID l1, LabelID l2){return l1 != l2 ? 1 : 0;}
+		OLGA_INLINE EnergyTermType compute(SiteID, SiteID, LabelID l1, LabelID l2){return l1 != l2 ? (EnergyTermType)1 : (EnergyTermType)0;}
 	};
 
 	/////////////////////////////////////////////////////////////////////
@@ -382,7 +396,7 @@ protected:
 		// The amount (cLogSitesPerBucket - cLinearSearchSize) determines the maximum 
 		// number of binary search steps taken for a cost lookup for specific (site,label).
 		//
-		static const int cLogSitesPerBucket = 7;
+		static const int cLogSitesPerBucket = 9;
 		static const int cSitesPerBucket = (1 << cLogSitesPerBucket); 
 		static const size_t    cDataCostPtrMask = ~(sizeof(SparseDataCost)-1);
 		static const ptrdiff_t cLinearSearchSize = 64/sizeof(SparseDataCost);
@@ -429,22 +443,22 @@ protected:
 	};
 
 	template <typename DataCostT> SiteID queryActiveSitesExpansion(LabelID alpha_label, SiteID* activeSites);
-	template <typename DataCostT>   void setupDataCostsExpansion(SiteID size,LabelID alpha_label,Energy *e,SiteID *activeSites);
-	template <typename DataCostT>   void setupDataCostsSwap(SiteID size,LabelID alpha_label,LabelID beta_label,Energy *e,SiteID *activeSites);
-	template <typename SmoothCostT> void setupSmoothCostsExpansion(SiteID size,LabelID alpha_label,Energy *e,SiteID *activeSites);
-	template <typename SmoothCostT> void setupSmoothCostsSwap(SiteID size,LabelID alpha_label,LabelID beta_label,Energy *e,SiteID *activeSites);
-	template <typename DataCostT>   void applyNewLabeling(Energy *e,SiteID *activeSites,SiteID size,LabelID alpha_label);
+	template <typename DataCostT>   void setupDataCostsExpansion(SiteID size,LabelID alpha_label,EnergyT *e,SiteID *activeSites);
+	template <typename DataCostT>   void setupDataCostsSwap(SiteID size,LabelID alpha_label,LabelID beta_label,EnergyT *e,SiteID *activeSites);
+	template <typename SmoothCostT> void setupSmoothCostsExpansion(SiteID size,LabelID alpha_label,EnergyT *e,SiteID *activeSites);
+	template <typename SmoothCostT> void setupSmoothCostsSwap(SiteID size,LabelID alpha_label,LabelID beta_label,EnergyT *e,SiteID *activeSites);
+	template <typename DataCostT>   void applyNewLabeling(EnergyT *e,SiteID *activeSites,SiteID size,LabelID alpha_label);
 	template <typename DataCostT>   void updateLabelingDataCosts();
 	template <typename UserFunctor> void specializeDataCostFunctor(const UserFunctor f);
 	template <typename UserFunctor> void specializeSmoothCostFunctor(const UserFunctor f);
 
-	EnergyType setupLabelCostsExpansion(SiteID size,LabelID alpha_label,Energy *e,SiteID *activeSites);
+	EnergyType setupLabelCostsExpansion(SiteID size,LabelID alpha_label,EnergyT *e,SiteID *activeSites);
 	void       updateLabelingInfo(bool updateCounts=true,bool updateActive=true,bool updateCosts=true);
 	
 	// Check for overflow and submodularity issues when setting up binary graph cut
-	void addterm1_checked(Energy *e,VarID i,EnergyTermType e0,EnergyTermType e1);
-	void addterm1_checked(Energy *e,VarID i,EnergyTermType e0,EnergyTermType e1,EnergyTermType w);
-	void addterm2_checked(Energy *e,VarID i,VarID j,EnergyTermType e00,EnergyTermType e01,EnergyTermType e10,EnergyTermType e11,EnergyTermType w);
+	void addterm1_checked(EnergyT *e,VarID i,EnergyTermType e0,EnergyTermType e1);
+	void addterm1_checked(EnergyT *e,VarID i,EnergyTermType e0,EnergyTermType e1,EnergyTermType w);
+	void addterm2_checked(EnergyT *e,VarID i,VarID j,EnergyTermType e00,EnergyTermType e01,EnergyTermType e10,EnergyTermType e11,EnergyTermType w);
 
 	// Returns Smooth Energy of current labeling
 	template <typename SmoothCostT> EnergyType giveSmoothEnergyInternal();
@@ -480,7 +494,7 @@ private:
 
 		OLGA_INLINE void start(const LabelID* labels, LabelID labelCount=1)
 		{
-			m_site = 0;
+			m_site = labelCount ? 0 : m_numSites;
 			m_label = m_lbegin = labels;
 			m_lend = labels + labelCount;
 		}

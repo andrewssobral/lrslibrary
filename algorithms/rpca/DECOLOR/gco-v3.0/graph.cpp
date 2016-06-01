@@ -8,7 +8,7 @@
 
 
 template <typename captype, typename tcaptype, typename flowtype> 
-	Graph<captype, tcaptype, flowtype>::Graph(int node_num_max, int edge_num_max, void (*err_function)(char *))
+	Graph<captype, tcaptype, flowtype>::Graph(int node_num_max, int edge_num_max, void (*err_function)(const char *))
 	: node_num(0),
 	  nodeptr_block(NULL),
 	  error_function(err_function)
