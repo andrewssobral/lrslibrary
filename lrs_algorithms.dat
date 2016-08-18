@@ -1,8 +1,8 @@
 -
-RPCA | RPCA | Robust Principal Component Analysis (De la Torre and Black, 2001) | 3 
+RPCA | RPCA | Robust Principal Component Analysis (De la Torre and Black, 2001) | 3
 RPCA | PCP  | Principal Component Pursuit (Candes et al. 2009) | 2
 RPCA | FPCP | Fast PCP (Rodriguez and Wohlberg, 2013) | 1
-RPCA | R2PCP | Riemannian Robust Principal Component Pursuit (Hintermüller and Wu, 2014) | 1
+RPCA | R2PCP | Riemannian Robust Principal Component Pursuit (Hintermï¿½ller and Wu, 2014) | 1
 RPCA | AS-RPCA | Active Subspace: Towards Scalable Low-Rank Learning (Liu and Yan, 2012) | 1
 RPCA | ALM   | Augmented Lagrange Multiplier (Tang and Nehorai, 2011) | 3
 RPCA | EALM  | Exact ALM (Lin et al. 2009) | 2
@@ -58,6 +58,7 @@ ST | GOSUS   | Grassmannian Online Subspace Updates with Structured-sparsity (Xu
 ST | pROST   | Robust PCA and subspace tracking from incomplete observations using L0-surrogates (Hage and Kleinsteuber, 2013) | 3
 ---
 --- MC (Matrix Completion) ---
+MC | PG-RMC | Nearly Optimal Robust matrix Completion (Cherapanamjeri et al. 2016) | 1
 MC | FPC | Fixed point and Bregman iterative methods for matrix rank minimization (Ma et al. 2008) | 3
 MC | GROUSE   | Grassmannian Rank-One Update Subspace Estimation (Balzano et al. 2010) | 1
 MC | IALM-MC | Inexact ALM for Matrix Completion (Lin et al. 2009) | 2
