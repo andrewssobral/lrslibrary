@@ -1,0 +1,62 @@
+LANEIG  Compute a few eigenvalues and eigenvectors.
+   LANEIG solves the eigenvalue problem A*v=lambda*v, when A is 
+   real and symmetric using the Lanczos algorithm with partial 
+   reorthogonalization (PRO). 
+
+   [V,D] = LANEIG(A) 
+   [V,D] = LANEIG('Afun',N) 
+
+   The first input argument is either a real symmetric matrix, or a 
+   string containing the name of an M-file which applies a linear 
+   operator to the columns of a given matrix.  In the latter case,
+   the second input argument must be N, the order of the problem.
+
+   The full calling sequence is
+
+   [V,D,ERR] = LANEIG(A,K,SIGMA,OPTIONS)
+   [V,D,ERR] = LANEIG('Afun',N,K,SIGMA,OPTIONS)
+
+   On exit ERR contains the computed error bounds.  K is the number of
+   eigenvalues desired and SIGMA is numerical shift or a two letter string
+   which specifies which part of the spectrum should be computed:
+
+   SIGMA            Specified eigenvalues
+
+   'AL'            Algebraically Largest 
+   'AS'            Algebraically Smallest
+   'LM'            Largest Magnitude   (default)
+   'SM'            Smallest Magnitude  (does not work when A is an m-file)
+   'BE'            Both Ends.  Computes k/2 eigenvalues
+                   from each end of the spectrum (one more
+                   from the high end if k is odd.) 
+
+   The OPTIONS structure specifies certain parameters in the algorithm.
+
+    Field name      Parameter                              Default
+   
+    OPTIONS.tol     Convergence tolerance                  16*eps
+    OPTIONS.lanmax  Dimension of the Lanczos basis.
+    OPTIONS.v0      Starting vector for the Lanczos        rand(n,1)-0.5
+                    iteration.
+    OPTIONS.delta   Level of orthogonality among the       sqrt(eps/K)
+                    Lanczos vectors.
+    OPTIONS.eta     Level of orthogonality after           10*eps^(3/4)
+                    reorthogonalization. 
+    OPTIONS.cgs     reorthogonalization method used        0
+                    '0' : iterated modified Gram-Schmidt 
+                    '1' : iterated classical Gram-Schmidt
+    OPTIONS.elr     If equal to 1 then extended local      1
+                    reorthogonalization is enforced. 
+
+   See also LANPRO, EIGS, EIG.
+
+ References: 
+ R.M. Larsen, Ph.D. Thesis, Aarhus University, 1998.
+
+ B. N. Parlett, ``The Symmetric Eigenvalue Problem'', 
+ Prentice-Hall, Englewood Cliffs, NJ, 1980.
+
+ H. D. Simon, ``The Lanczos algorithm with partial reorthogonalization'',
+ Math. Comp. 42 (1984), no. 165, 115--142.
+
+ Rasmus Munk Larsen, DAIMI, 1998
