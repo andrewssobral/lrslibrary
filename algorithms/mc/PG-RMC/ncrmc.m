@@ -1,8 +1,8 @@
 function [U_t, SV_t] = ncrmc(M, I)
   %, true_r, p, MAX_ITER, run_time, EPS, EPS_S, incoh, TOL)
 
-addpath PROPACK
-addpath Mex
+%addpath PROPACK
+%addpath Mex
 
 TOL = 1e-1;
 incoh = 1;

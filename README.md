@@ -1,12 +1,12 @@
-Last Page Update: **01/06/2016**
+Last Page Update: **20/09/2016**
 
-Latest Library Version: **1.0.7** (see Release Notes for more info)
+Latest Library Version: **1.0.8** (see Release Notes for more info)
 
 LRSLibrary
 ----------
 *Low-Rank and Sparse* tools for Background Modeling and Subtraction in Videos.
 
-The *LRSLibrary* provides a collection of **low-rank and sparse decomposition** algorithms in MATLAB. The library was designed for motion segmentation in videos, but it can be also used or adapted for other computer vision problems (for more information, please see this [page](http://perception.csl.illinois.edu/matrix-rank/applications.html)). Currently the LRSLibrary contains a total of **103** *matrix-based* and *tensor-based* algorithms. The LRSLibrary was tested successfully in MATLAB R2013, R2014, R2015, and R2016 both x86 and x64 versions.
+The *LRSLibrary* provides a collection of **low-rank and sparse decomposition** algorithms in MATLAB. The library was designed for motion segmentation in videos, but it can be also used or adapted for other computer vision problems (for more information, please see this [page](http://perception.csl.illinois.edu/matrix-rank/applications.html)). Currently the LRSLibrary contains a total of **104** *matrix-based* and *tensor-based* algorithms. The LRSLibrary was tested successfully in MATLAB R2013, R2014, R2015, and R2016 both x86 and x64 versions.
 
 <p align="center"><img src="https://sites.google.com/site/andrewssobral/lrs_results2.png" /></p>
 
@@ -57,23 +57,23 @@ List of the algorithms available in LRSLibrary
 * RPCA: Robust PCA (44)
 * * RPCA: Robust Principal Component Analysis [(De la Torre and Black, 2001)](http://users.salleurl.edu/~ftorre/papers/rpca/rpca.pdf) [website](http://users.salleurl.edu/~ftorre/papers/rpca2.html)
 
-* * PCP: Principal Component Pursuit [(Candes et al. 2009)](http://arxiv.org/abs/0912.3599) 
+* * PCP: Principal Component Pursuit [(Candes et al. 2009)](http://arxiv.org/abs/0912.3599)
 
-* * FPCP: Fast PCP [(Rodriguez and Wohlberg, 2013)](http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=6738015) 
+* * FPCP: Fast PCP [(Rodriguez and Wohlberg, 2013)](http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=6738015)
 
-* * R2PCP: Riemannian Robust Principal Component Pursuit [(Hintermüller and Wu, 2014)](http://link.springer.com/article/10.1007/s10851-014-0527-y) 
+* * R2PCP: Riemannian Robust Principal Component Pursuit [(Hintermüller and Wu, 2014)](http://link.springer.com/article/10.1007/s10851-014-0527-y)
 
 * * AS-RPCA: Active Subspace: Towards Scalable Low-Rank Learning [(Liu and Yan, 2012)](http://dl.acm.org/citation.cfm?id=2421487)
 
-* * ALM: Augmented Lagrange Multiplier [(Tang and Nehorai 2011)](http://dx.doi.org/10.1109/CISS.2011.5766144) 
+* * ALM: Augmented Lagrange Multiplier [(Tang and Nehorai 2011)](http://dx.doi.org/10.1109/CISS.2011.5766144)
 
 * * EALM: Exact ALM [(Lin et al. 2009)](http://arxiv.org/abs/1009.5055) [website](http://perception.csl.illinois.edu/matrix-rank/sample_code.html)
 
 * * IALM: Inexact ALM [(Lin et al. 2009)](http://arxiv.org/abs/1009.5055)  [website](http://perception.csl.illinois.edu/matrix-rank/sample_code.html)
 
-* * IALM_LMSVDS: IALM with LMSVDS [(Liu et al. 2012)](http://epubs.siam.org/doi/abs/10.1137/120871328) 
+* * IALM_LMSVDS: IALM with LMSVDS [(Liu et al. 2012)](http://epubs.siam.org/doi/abs/10.1137/120871328)
 
-* * IALM_BLWS: IALM with BLWS [(Lin and Wei, 2010)](http://arxiv.org/abs/1012.0365) 
+* * IALM_BLWS: IALM with BLWS [(Lin and Wei, 2010)](http://arxiv.org/abs/1012.0365)
 
 * * APG_PARTIAL: Partial Accelerated Proximal Gradient [(Lin et al. 2009)](http://arxiv.org/abs/1009.5055)  [website](http://perception.csl.illinois.edu/matrix-rank/sample_code.html)
 
@@ -85,9 +85,9 @@ List of the algorithms available in LRSLibrary
 
 * * ADM: Alternating Direction Method [(Yuan and Yang, 2009)](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.400.8797) 
 
-* * LSADM: LSADM [(Goldfarb et al. 2010)](http://arxiv.org/abs/0912.4571) 
+* * LSADM: LSADM [(Goldfarb et al. 2010)](http://arxiv.org/abs/0912.4571)
 
-* * L1F: L1 Filtering [(Liu et al. 2011)](http://arxiv.org/abs/1108.5359) 
+* * L1F: L1 Filtering [(Liu et al. 2011)](http://arxiv.org/abs/1108.5359)
 
 * * DECOLOR: Contiguous Outliers in the Low-Rank Representation [(Zhou et al. 2011)](http://arxiv.org/abs/1109.0882) [website1](https://sites.google.com/site/eeyangc/software/decolor) [website2](https://fling.seas.upenn.edu/~xiaowz/dynamic/wordpress/?p=144)
 
@@ -105,11 +105,11 @@ List of the algorithms available in LRSLibrary
 
 * * noncvxRPCA: Robust PCA via Nonconvex Rank Approximation [(Kang et al. 2015)](http://arxiv.org/abs/1511.05261)
 
-* * NSA1: Non-Smooth Augmented Lagrangian v1 [(Aybat et al. 2011)](http://arxiv.org/abs/1105.2126) 
+* * NSA1: Non-Smooth Augmented Lagrangian v1 [(Aybat et al. 2011)](http://arxiv.org/abs/1105.2126)
 
-* * NSA2: Non-Smooth Augmented Lagrangian v2 [(Aybat et al. 2011)](http://arxiv.org/abs/1105.2126) 
+* * NSA2: Non-Smooth Augmented Lagrangian v2 [(Aybat et al. 2011)](http://arxiv.org/abs/1105.2126)
 
-* * PSPG: Partially Smooth Proximal Gradient [(Aybat et al. 2012)](http://arxiv.org/abs/1309.6976) 
+* * PSPG: Partially Smooth Proximal Gradient [(Aybat et al. 2012)](http://arxiv.org/abs/1309.6976)
 
 * * flip-SPCP-sum-SPG: Flip-Flop version of Stable PCP-sum solved by Spectral Projected Gradient [(Aravkin et al. 2014)](https://github.com/stephenbeckr/fastRPCA)
 
@@ -123,15 +123,15 @@ List of the algorithms available in LRSLibrary
 
 * * BRPCA-MD: Bayesian Robust PCA with Markov Dependency [(Ding et al. 2011)](http://people.ee.duke.edu/~lcarin/LRS_09.pdf) [website](http://people.ee.duke.edu/~lcarin/BCS.html)
 
-* * BRPCA-MD-NSS: BRPCA-MD with Non-Stationary Noise [(Ding et al. 2011)](http://people.ee.duke.edu/~lcarin/LRS_09.pdf) [website](http://people.ee.duke.edu/~lcarin/BCS.html) 
+* * BRPCA-MD-NSS: BRPCA-MD with Non-Stationary Noise [(Ding et al. 2011)](http://people.ee.duke.edu/~lcarin/LRS_09.pdf) [website](http://people.ee.duke.edu/~lcarin/BCS.html)
 
-* * VBRPCA: Variational Bayesian RPCA [(Babacan et al. 2011)](http://arxiv.org/abs/1102.5288) 
+* * VBRPCA: Variational Bayesian RPCA [(Babacan et al. 2011)](http://arxiv.org/abs/1102.5288)
 
 * * PRMF: Probabilistic Robust Matrix Factorization [(Wang et al. 2012)](http://winsty.net/papers/prmf.pdf) [website](http://winsty.net/prmf.html)
 
 * * OPRMF: Online PRMF [(Wang et al. 2012)](http://winsty.net/papers/prmf.pdf) [website](http://winsty.net/prmf.html)
 
-* * MBRMF: Markov BRMF [(Wang and Yeung, 2013)](http://winsty.net/papers/brmf.pdf) [website](http://winsty.net/brmf.html) 
+* * MBRMF: Markov BRMF [(Wang and Yeung, 2013)](http://winsty.net/papers/brmf.pdf) [website](http://winsty.net/brmf.html)
 
 * * TFOCS-EC: TFOCS with equality constraints [(Becker et al. 2011)](https://github.com/cvxr/TFOCS/raw/gh-pages/TFOCS.pdf) [website](http://cvxr.com/tfocs/demos/rpca/)
 
@@ -150,7 +150,9 @@ List of the algorithms available in LRSLibrary
 
 * * pROST: Robust PCA and subspace tracking from incomplete observations using L0-surrogates [(Hage and Kleinsteuber, 2013)](http://arxiv.org/abs/1210.0805) [website](http://www.gol.ei.tum.de/index.php?id=37&L=1)
 
-* MC: Matrix Completion (14)
+* MC: Matrix Completion (15)
+* * PG-RMC: Nearly Optimal Robust matrix Completion [(Cherapanamjeri et al. 2016)](https://arxiv.org/abs/1606.07315)
+
 * * FPC: Fixed point and Bregman iterative methods for matrix rank minimization [(Ma et al. 2008)](http://arxiv.org/pdf/0905.1643.pdf) [website](http://www1.se.cuhk.edu.hk/~sqma/FPCA.html)
 
 * * GROUSE: Grassmannian Rank-One Update Subspace Estimation [(Balzano et al. 2010)](http://arxiv.org/pdf/1006.4046.pdf) [website](http://sunbeam.ece.wisc.edu/grouse/)
@@ -180,15 +182,15 @@ List of the algorithms available in LRSLibrary
 * * SVT: A singular value thresholding algorithm for matrix completion [(Cai et al. 2008)](http://arxiv.org/pdf/0810.3286.pdf) [website](http://svt.stanford.edu/)
 
 * LRR: Low Rank Recovery (6)
-* * EALM: Exact ALM [(Lin et al. 2009)](http://arxiv.org/abs/1009.5055) 
+* * EALM: Exact ALM [(Lin et al. 2009)](http://arxiv.org/abs/1009.5055)
 
-* * IALM: Inexact ALM [(Lin et al. 2009)](http://arxiv.org/abs/1009.5055) 
+* * IALM: Inexact ALM [(Lin et al. 2009)](http://arxiv.org/abs/1009.5055)
 
 * * ADM: Alternating Direction Method [(Lin et al. 2011)](http://arxiv.org/abs/1109.0367)
 
 * * LADMAP: Linearized ADM with Adaptive Penalty [(Lin et al. 2011)](http://arxiv.org/abs/1109.0367)
 
-* * FastLADMAP: Fast LADMAP [(Lin et al. 2011)](http://arxiv.org/abs/1109.0367) 
+* * FastLADMAP: Fast LADMAP [(Lin et al. 2011)](http://arxiv.org/abs/1109.0367)
 
 * * ROSL: Robust Orthonormal Subspace Learning [(Shu et al. 2014)](https://dl.dropboxusercontent.com/u/10893363/Homepage/CVPR2014_ROSL.pdf) [website](https://sites.google.com/site/xianbiaoshu/)
 
@@ -202,49 +204,49 @@ List of the algorithms available in LRSLibrary
 * * ADMM: Alternating Direction Method of Multipliers [(Parikh and Boyd, 2014)](http://projects.medialab-tju.org/bf_separation/download/2015_TCSVT.pdf) [website1](http://stanford.edu/~boyd/admm.html) [website2](http://web.stanford.edu/~boyd/papers/prox_algs.html)
 
 * NMF: Non-Negative Matrix Factorization (14)
-* * NMF-MU: NMF solved by Multiplicative Updates 
+* * NMF-MU: NMF solved by Multiplicative Updates
 
-* * NMF-PG: NMF solved by Projected Gradient 
+* * NMF-PG: NMF solved by Projected Gradient
 
-* * NMF-ALS: NMF solved by Alternating Least Squares 
+* * NMF-ALS: NMF solved by Alternating Least Squares
 
-* * NMF-ALS-OBS: NMF solved by Alternating Least Squares with Optimal Brain Surgeon 
+* * NMF-ALS-OBS: NMF solved by Alternating Least Squares with Optimal Brain Surgeon
 
-* * PNMF: Probabilistic Non-negative Matrix Factorization 
+* * PNMF: Probabilistic Non-negative Matrix Factorization
 
-* * ManhNMF: Manhattan NMF [(Guan et al. 2013)](http://arxiv.org/abs/1207.3438) [website](https://sites.google.com/site/nmfsolvers/) 
+* * ManhNMF: Manhattan NMF [(Guan et al. 2013)](http://arxiv.org/abs/1207.3438) [website](https://sites.google.com/site/nmfsolvers/)
 
-* * NeNMF: NMF via Nesterovs Optimal Gradient Method [(Guan et al. 2012)](http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=6166359) [website](https://sites.google.com/site/nmfsolvers/) 
+* * NeNMF: NMF via Nesterovs Optimal Gradient Method [(Guan et al. 2012)](http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=6166359) [website](https://sites.google.com/site/nmfsolvers/)
 
-* * LNMF: Spatially Localized NMF [(Li et al. 2001)](http://dx.doi.org/10.1109/CVPR.2001.990477) 
+* * LNMF: Spatially Localized NMF [(Li et al. 2001)](http://dx.doi.org/10.1109/CVPR.2001.990477)
 
 * * ENMF: Exact NMF [(Gillis and Glineur, 2012)](http://arxiv.org/abs/1009.0880) [website](https://sites.google.com/site/nicolasgillis/code)
 
-* * nmfLS2: Non-negative Matrix Factorization with sparse matrix [(Ji and Eisenstein, 2013)](http://www.cc.gatech.edu/~jeisenst/papers/ji-emnlp-2013.pdf) [website](https://github.com/jiyfeng/tfkld) 
+* * nmfLS2: Non-negative Matrix Factorization with sparse matrix [(Ji and Eisenstein, 2013)](http://www.cc.gatech.edu/~jeisenst/papers/ji-emnlp-2013.pdf) [website](https://github.com/jiyfeng/tfkld)
 
 * * Semi-NMF: Semi Non-negative Matrix Factorization
 
-* * Deep-Semi-NMF: Deep Semi Non-negative Matrix Factorization [(Trigeorgis et al. 2014)](http://trigeorgis.com/uploads/downloads/file/1/cameraready.pdf) [website](http://trigeorgis.com/papers/deepseminmfmodel-2014) 
+* * Deep-Semi-NMF: Deep Semi Non-negative Matrix Factorization [(Trigeorgis et al. 2014)](http://trigeorgis.com/uploads/downloads/file/1/cameraready.pdf) [website](http://trigeorgis.com/papers/deepseminmfmodel-2014)
 
-* * iNMF: Incremental Subspace Learning via NMF [(Bucak and Gunsel, 2009)](http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=4298684) [website](http://www.cse.msu.edu/~bucakser/inmf_genel.html) 
+* * iNMF: Incremental Subspace Learning via NMF [(Bucak and Gunsel, 2009)](http://ieeexplore.ieee.org/xpl/articleDetails.jsp?arnumber=4298684) [website](http://www.cse.msu.edu/~bucakser/inmf_genel.html)
 
-* * DRMF: Direct Robust Matrix Factorization [(Xiong et al. 2011)](http://ieeexplore.ieee.org/xpl/freeabs_all.jsp?arnumber=6137289) [website](http://www.autonlab.org/autonweb/20605.html) 
+* * DRMF: Direct Robust Matrix Factorization [(Xiong et al. 2011)](http://ieeexplore.ieee.org/xpl/freeabs_all.jsp?arnumber=6137289) [website](http://www.autonlab.org/autonweb/20605.html)
 
 * NTF: Non-Negative Tensor Factorization (6)
-* * betaNTF: Simple beta-NTF implementation [(Antoine Liutkus, 2012)](http://www.mathworks.com/matlabcentral/fileexchange/38109-nonnegative-matrix-and-tensor-factorization--nmf--ntf--with-any-beta-divergence) 
+* * betaNTF: Simple beta-NTF implementation [(Antoine Liutkus, 2012)](http://www.mathworks.com/matlabcentral/fileexchange/38109-nonnegative-matrix-and-tensor-factorization--nmf--ntf--with-any-beta-divergence)
 
 * * bcuNTD: Non-negative Tucker Decomposition by block-coordinate update (Xu and Yin, 2012) [website](http://www.math.ucla.edu/~wotaoyin/papers/bcu/ntd/index.html)
 
 * * bcuNCP: Non-negative CP Decomposition by block-coordinate update (Xu and Yin, 2012) [website](http://www.math.ucla.edu/~wotaoyin/papers/bcu/ncp/index.html)
 
-* * NTD-MU: Non-negative Tucker Decomposition solved by Multiplicative Updates [(Zhou et al. 2012)](http://dx.doi.org/10.1109/TSP.2012.2190410) 
+* * NTD-MU: Non-negative Tucker Decomposition solved by Multiplicative Updates [(Zhou et al. 2012)](http://dx.doi.org/10.1109/TSP.2012.2190410)
 
-* * NTD-APG: Non-negative Tucker Decomposition solved by Accelerated Proximal Gradient [(Zhou et al. 2012)](http://dx.doi.org/10.1109/TSP.2012.2190410) 
+* * NTD-APG: Non-negative Tucker Decomposition solved by Accelerated Proximal Gradient [(Zhou et al. 2012)](http://dx.doi.org/10.1109/TSP.2012.2190410)
 
-* * NTD-HALS: Non-negative Tucker Decomposition solved by Hierarchical ALS [(Zhou et al. 2012)](http://dx.doi.org/10.1109/TSP.2012.2190410)  
+* * NTD-HALS: Non-negative Tucker Decomposition solved by Hierarchical ALS [(Zhou et al. 2012)](http://dx.doi.org/10.1109/TSP.2012.2190410)
 
 * TD: Tensor Decomposition (12)
-* * HoSVD: Higher-order Singular Value Decomposition (Tucker Decomposition) 
+* * HoSVD: Higher-order Singular Value Decomposition (Tucker Decomposition)
 
 * * HoRPCA-IALM: HoRPCA solved by IALM [(Goldfarb and Qin, 2013)](http://arxiv.org/abs/1311.6182) [website](https://sites.google.com/site/tonyqin/research)
 
@@ -254,17 +256,17 @@ List of the algorithms available in LRSLibrary
 
 * * Tucker-ADAL: Tucker Decomposition solved by ADAL [(Goldfarb and Qin, 2013)](http://arxiv.org/abs/1311.6182) [website](https://sites.google.com/site/tonyqin/research)
 
-* * Tucker-ALS: Tucker Decomposition solved by ALS 
+* * Tucker-ALS: Tucker Decomposition solved by ALS
 
-* * CP-ALS: PARAFAC/CP decomposition solved by ALS 
+* * CP-ALS: PARAFAC/CP decomposition solved by ALS
 
-* * CP-APR: PARAFAC/CP decomposition solved by Alternating Poisson Regression [(Chi et al. 2011)](http://arxiv.org/abs/1112.2414) 
+* * CP-APR: PARAFAC/CP decomposition solved by Alternating Poisson Regression [(Chi et al. 2011)](http://arxiv.org/abs/1112.2414)
 
-* * CP2: PARAFAC2 decomposition solved by ALS [(Bro et al. 1999)](http://www.mathworks.com/matlabcentral/fileexchange/1089-parafac2) 
+* * CP2: PARAFAC2 decomposition solved by ALS [(Bro et al. 1999)](http://www.mathworks.com/matlabcentral/fileexchange/1089-parafac2)
 
-* * RSTD: Rank Sparsity Tensor Decomposition [(Yin Li, 2010)](www.pami.sjtu.edu.cn/demo/RSTD.pdf) [website](http://yinli.cvpr.net/) 
+* * RSTD: Rank Sparsity Tensor Decomposition [(Yin Li, 2010)](www.pami.sjtu.edu.cn/demo/RSTD.pdf) [website](http://yinli.cvpr.net/)
 
-* * t-SVD: Tensor SVD in Fourrier Domain [(Zhang et al. 2013)](http://arxiv.org/abs/1307.0805) 
+* * t-SVD: Tensor SVD in Fourrier Domain [(Zhang et al. 2013)](http://arxiv.org/abs/1307.0805)
 
 * * OSTD: Online Stochastic Tensor Decomposition [(Sobral et al. 2015)](http://www.cv-foundation.org/openaccess/content_iccv_2015_workshops/w24/papers/Sobral_Online_Stochastic_Tensor_ICCV_2015_paper.pdf) [website](https://github.com/andrewssobral/ostd)
 
@@ -379,6 +381,8 @@ If you have any problems or questions, please contact the author: Andrews Sobral
 
 Release Notes:
 --------------
+* Version 1.0.8: Added PG-RMC (Cherapanamjeri et al. 2016).
+
 * Version 1.0.7: Code refactoring: *process\_matrix()*, *process\_tensor()*, *run\_algorithm\_###()* were excluded. A standard interface called *run\_algorithm* was created. For each algorithm, there is a *run\_alg.m* script for execution. Added 10 new algorithms: OSTD (Sobral et al. 2015), Nonconvex RPCA (Kang et al. 2015), MC_logdet (Kang et al. 2016), RPCA-GD (Yi et al. 2016), LMaFit (Wen et al. 2012), MC-NMF (Xu et al. 2011), ScGrassMC (Ngo and Saad, 2012), SVP (Meka et al. 2009), OR1MP (Wang et al. 2015), IALM-MC (Lin et al. 2009). OP-RPCA was moved from RPCA to MC category.
 
 * Version 1.0.6: Added three new algorithms: STOC-RPCA: Online Robust PCA via Stochastic Optimization of Feng et al. (2013), MoG-RPCA: Mixture of Gaussians RPCA of Zhao et al. (2014), and OP-RPCA: Robust PCA via Outlier Pursuit of Xu et al. (2012).
