@@ -23,11 +23,11 @@ M = nma_rescale(M,0.01,0.99);
 s = 0.5; % 50% of observed values
 [n1,n2] = size(M);
 numrc = n1*n2;
-I = randperm(numrc)';
+Idx = randperm(numrc)';
 k = floor(s*numrc);
-I = I(1:k);
-MI = M(I);
-M2 = M(:); M2(I) = 0;
+Idx = Idx(1:k);
+MI = M(Idx);
+M2 = M(:); M2(Idx) = 0;
 M2 = reshape(M2,n1,n2);
 
 %%% Set parameters and solve
@@ -51,7 +51,7 @@ delta = 1.2/s;
 %   (i.e. equality constraints).
 fprintf('\nSolving by SVT...\n');
 %warning('off','SVT:NotUsingMex')
-[U,S,V,numiter] = SVT([n1 n2],I,MI,tau,delta,maxiter,tol);
+[U,S,V,numiter] = SVT([n1 n2],Idx,MI,tau,delta,maxiter,tol);
 L = U*S*V';
 S = M - L;
 

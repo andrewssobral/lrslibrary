@@ -22,11 +22,11 @@ M = nma_rescale(M,0.01,0.99);
 s = 0.5; % 50% of observed values
 [n1,n2] = size(M);
 numrc = n1*n2;
-I = randperm(numrc)';
+Idx = randperm(numrc)';
 k = floor(s*numrc);
-I = I(1:k);
-MI = M(I);
-M2 = M(:); M2(I) = 0;
+Idx = Idx(1:k);
+MI = M(Idx);
+M2 = M(:); M2(Idx) = 0;
 M2 = reshape(M2,n1,n2);
 
 % Approximate minimum nuclear norm solution by FPC algorithm
@@ -39,7 +39,7 @@ maxiter = 500;
 mu_final = .01; tol = 1e-3;
 
 fprintf('\nSolving by FPC...\n');
-[U,S,V,numiter] = FPC([n1 n2],I,MI,mu_final,maxiter,tol);
+[U,S,V,numiter] = FPC([n1 n2],Idx,MI,mu_final,maxiter,tol);
 
 L = U*S*V';
 S = M - L;

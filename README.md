@@ -10,9 +10,8 @@ The *LRSLibrary* provides a collection of **low-rank and sparse decomposition** 
 
 <p align="center"><img src="https://sites.google.com/site/andrewssobral/lrs_results2.png" /></p>
 
-```
 See also:
-
+```
 Presentation about Matrix and Tensor Tools for Computer Vision
 http://www.slideshare.net/andrewssobral/matrix-and-tensor-tools-for-computer-vision
 
@@ -32,7 +31,18 @@ author    = {Sobral, Andrews and Bouwmans, Thierry and Zahzah, El-hadi},
 title     = {LRSLibrary: Low-Rank and Sparse tools for Background Modeling and Subtraction in Videos},
 booktitle = {Robust Low-Rank and Sparse Matrix Decomposition: Applications in Image and Video Processing},
 publisher = {CRC Press, Taylor and Francis Group.}
+year      = {2015}
+}
+```
+Additional reference:
+```
+@article{bouwmans2015,
+author    = {Bouwmans, Thierry and Sobral, Andrews and Javed, Sajid and Jung, Soon Ki and Zahzah, El-hadi},
+title     = {Decomposition into Low-rank plus Additive Matrices for Background/Foreground Separation: {A} Review for a Comparative Evaluation with a Large-Scale Dataset},
+journal   = {CoRR},
+volume    = {abs/1511.01245}
 year      = {2015},
+url       = {http://arxiv.org/abs/1511.01245}
 }
 ```
 
@@ -369,6 +379,32 @@ Option 1: email it to me (andrewssobral **at** gmail **dot** com).
 
 Option 2: fork the library on GitHub, push your changes, then send me a pull request.
 
+For the Option 2 you can follow the instructions below:
+
+1) Create the algorithm folder in **lrslibrary/algorithms/XYZ/** where "**XYZ**" is one of the following methods: **RPCA** (for Robust PCA), **ST** (for Subspace Tracking), **MC** (for Matrix Completion), **LRR** (for Low Rank Recovery), **TTD** (for Three-Term Decomposition), **NMF** (for Non-Negative Matrix Factorization), **NTF** (for Non-Negative Tensor Factorization), and **TD** (for Tensor Decomposition).
+
+2) Create a **run_alg.m** script file to execute your algorithm, all **run_alg.m** files are called automatically by the lrslibrary and each of them receives a full rank matrix/tensor named "**M**" or "**T**" for a matrix-based or a tensor-based algorithm, respectively. For the matrix **M**, each column is a vectorized version of a gray-scale frame. The number of columns in **M** is the number of frames given a video, and the number of rows represents the number of pixels in the frame. For the tensor **T** each frontal slice represents a frame given a video.
+
+2.1) For the matrix/tensor completion case you need to define a random sub-sampling matrix/tensor named "**Idx**" that indicates which elements from the input matrix/tensor (**M** or **T**) are observed (setting **1**'s and **0**'s for observed and unobserved elements, respectively).
+
+3) The output of your **run_alg.m** script file are a matrix/tensor named "**L**" that represents the low-rank component, and a matrix/tensor named "**S**" that represents the sparse components.
+
+4) The last step is to add your algorithm details in the **lrs_algorithms.dat** file (open it as text file):
+https://github.com/andrewssobral/lrslibrary/blob/master/lrs_algorithms.dat
+For example:
+**XYZ | ABB | NAME_REFERENCE | SPEED_CLASS**
+where:
+* **XYZ** is one of the following options: **RPCA**, **ST**, **MC**, **LRR**, **TTD**, **NMF**, **NTF**, or **TD**.
+* **ABB** abbreviation name for your method, i.e: **APG** for Accelerated Proximal Gradient.
+* **NAME_REFERENCE** the full name of your method and reference, i.e: **Accelerated Proximal Gradient (Lin et al. 2009)**.
+* **SPEED_CLASS** represents the speed classification of your algorithm for the demo case. For this, you need to compare the CPU time consumption of your algorithm from all others following this section:
+https://github.com/andrewssobral/lrslibrary#cpu-time-consumption
+
+i.e.:
+**RPCA | FPCP | Fast PCP (Rodriguez and Wohlberg, 2013) | 1**
+
+That's all ;-)
+
 License
 -------
 The LRSLibrary is free and open source for academic/research purposes (non-commercial)¹.
@@ -381,7 +417,7 @@ If you have any problems or questions, please contact the author: Andrews Sobral
 
 Release Notes:
 --------------
-* Version 1.0.8: Added PG-RMC (Cherapanamjeri et al. 2016).
+* Version 1.0.8: Added PG-RMC (Cherapanamjeri et al. 2016) and fixed some small issues.
 
 * Version 1.0.7: Code refactoring: *process\_matrix()*, *process\_tensor()*, *run\_algorithm\_###()* were excluded. A standard interface called *run\_algorithm* was created. For each algorithm, there is a *run\_alg.m* script for execution. Added 10 new algorithms: OSTD (Sobral et al. 2015), Nonconvex RPCA (Kang et al. 2015), MC_logdet (Kang et al. 2016), RPCA-GD (Yi et al. 2016), LMaFit (Wen et al. 2012), MC-NMF (Xu et al. 2011), ScGrassMC (Ngo and Saad, 2012), SVP (Meka et al. 2009), OR1MP (Wang et al. 2015), IALM-MC (Lin et al. 2009). OP-RPCA was moved from RPCA to MC category.
 

@@ -9,11 +9,11 @@ V = im2double(imgdb{100});
 %}
 
 %[numr,numc] = size(M);
-%I = randi([0 1],numr,numc);
-I = ones(size(M));
+%Idx = randi([0 1],numr,numc);
+Idx = ones(size(M));
 
 lambda = 0.35; % [0,1] 0.5(+lowrank) 0.4 0.3 0.2(+sparse)
-[L,S] = mr_pca_part(M, I, lambda);
+[L,S] = mr_pca_part(M,Idx,lambda);
 
 %{
 show_2dvideo(M,m,n);

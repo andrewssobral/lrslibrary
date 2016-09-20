@@ -35,7 +35,7 @@ function [A iter svp] = inexact_alm_mc(D, tol, maxIter, rho)
 % Copyright: Microsoft Research Asia, Beijing
 
 %clear global;
-%global A Sparse_Z;
+global A Sparse_Z;
 
 %addpath PROPACK;
 

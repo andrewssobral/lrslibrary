@@ -23,8 +23,8 @@ alpha_bnd = gamma*alpha;
 
 % subsampling
 [numr,numc] = size(M);
-I = randi([0 1],numr,numc); % ones(size(M));
-Y0 = sparse(M.*I);
+Idx = randi([0 1],numr,numc); % ones(size(M));
+Y0 = sparse(M.*Idx);
 
 [U,V] = rpca_gd(Y0, r, alpha_bnd, params);
 
