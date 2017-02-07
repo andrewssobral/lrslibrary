@@ -9,5 +9,5 @@ function O = hard_threshold(S)
   beta = 0.5*(std(S(:)))^2; % begin beta, start from a big value
   
   % direct hard thresholding if no smoothness
-  O = 0.5*S.^2 > beta;
+  O = double(0.5*S.^2 > beta);
 end

@@ -1,6 +1,6 @@
-Last Page Update: **20/09/2016**
+Last Page Update: **07/02/2017**
 
-Latest Library Version: **1.0.8** (see Release Notes for more info)
+Latest Library Version: **1.0.9** (see Release Notes for more info)
 
 LRSLibrary
 ----------
@@ -331,17 +331,19 @@ show_3dvideo(V);
 show_2dvideo(M,m,n);
 
 % Robust PCA
-out = run_algorithm('RPCA', 'FPCP', M, []);
+out = run_algorithm('RPCA', 'FPCP', M);
 % Subspace Tracking
-out = run_algorithm('ST', 'GRASTA', M, []);
+out = run_algorithm('ST', 'GRASTA', M);
 % Matrix Completion
-out = run_algorithm('MC', 'GROUSE', M, []);
+obs = 0.5; % Percentual of observed entries [0...1]
+[params.Idx, params.Omega] = subsampling(M, obs);
+out = run_algorithm('MC', 'GROUSE', M, params);
 % Low Rank Recovery
-out = run_algorithm('LRR', 'FastLADMAP', M, []);
+out = run_algorithm('LRR', 'FastLADMAP', M);
 % Three-Term Decomposition
-out = run_algorithm('TTD', '3WD', M, []);
+out = run_algorithm('TTD', '3WD', M);
 % Non-Negative Matrix Factorization
-out = run_algorithm('NMF', 'ManhNMF', M, []);
+out = run_algorithm('NMF', 'ManhNMF', M);
 
 % Show results
 show_results(M,out.L,out.S,out.O,p,m,n);
@@ -350,9 +352,9 @@ show_results(M,out.L,out.S,out.O,p,m,n);
 T = tensor(V);
 
 % Non-Negative Tensor Factorization
-out = run_algorithm('NTF', 'bcuNCP', T, []);
+out = run_algorithm('NTF', 'bcuNCP', T);
 % Tensor Decomposition
-out = run_algorithm('TD', 'Tucker-ALS', T, []);
+out = run_algorithm('TD', 'Tucker-ALS', T);
 
 % Show results
 show_3dtensors(T,out.L,out.S,out.O);
@@ -417,6 +419,8 @@ If you have any problems or questions, please contact the author: Andrews Sobral
 
 Release Notes:
 --------------
+* Version 1.0.9: Fixed some issues for matrix completion methods.
+
 * Version 1.0.8: Added PG-RMC (Cherapanamjeri et al. 2016) and fixed some small issues.
 
 * Version 1.0.7: Code refactoring: *process\_matrix()*, *process\_tensor()*, *run\_algorithm\_###()* were excluded. A standard interface called *run\_algorithm* was created. For each algorithm, there is a *run\_alg.m* script for execution. Added 10 new algorithms: OSTD (Sobral et al. 2015), Nonconvex RPCA (Kang et al. 2015), MC_logdet (Kang et al. 2016), RPCA-GD (Yi et al. 2016), LMaFit (Wen et al. 2012), MC-NMF (Xu et al. 2011), ScGrassMC (Ngo and Saad, 2012), SVP (Meka et al. 2009), OR1MP (Wang et al. 2015), IALM-MC (Lin et al. 2009). OP-RPCA was moved from RPCA to MC category.

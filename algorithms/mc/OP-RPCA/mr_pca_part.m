@@ -1,4 +1,4 @@
-function [L,C] = mr_pca_part(M, Omega,lambda, varargin)
+function [L,C] = mr_pca_part(M,Omega,lambda, varargin)
 % This is a function to solve mr_PCA with partial observation
 % M is the input matrix with partical observation
 % Omega is the sampling set, i.e., Omega_(i,j)=1 if M_i,j is observed

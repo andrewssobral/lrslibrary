@@ -1,66 +1,66 @@
-%% LRSLibrary: A <Low-Rank and Sparse tools> Library for Background Modeling and Subtraction in Videos
+%% LRSLibrary: A library of low-rank and sparse tools for background/foreground separation in videos
 close, clear, clc;
 % restoredefaultpath;
 
 %% First run the setup script
 lrs_setup; % or run('C:/GitHub/lrslibrary/lrs_setup')
 
-%% GUI
+%% LRS GUI (graphical user interface)
 lrs_gui;
 
-%% Load configuration
+%% Load configuration (for demos)
 lrs_load_conf;
 
-%% UTILS
+%% Auxiliary functions
 
 %%% Load video
 input_avi = fullfile(lrs_conf.lrs_dir,'dataset','demo.avi');
 video = load_video_file(input_avi);
 show_video(video);
 
-%%% Convert video to MAT
+%%% Convert video to MAT (MATLAB format)
 output_mat = fullfile(lrs_conf.lrs_dir,'dataset','demo.mat');
 video2mat(input_avi, output_mat);
 
-%%% 2D demo
+%%% Convert video to matrix representation (2D array)
 M = im2double(convert_video_to_2d(video));
 show_2dvideo(M,video.height,video.width);
 
-%%% 3D demo
-video3d = im2double(convert_video_to_3d(video));
-show_3dvideo(video3d);
+%%% Convert video to 3D array
+V = im2double(convert_video_to_3d(video));
+show_3dvideo(V);
 
-%%% 3D tensor demo
+%%% Convert video to 3D tensor
 T = convert_video_to_3dtensor(video);
-tensorlab.slice3(double(T)), colormap('gray');
+tensorlab.slice3(double(T)), colormap('gray'); % Visualize a third-order tensor with slices.
 
-%%% 4D demo
+%%% Convert video to 4D array/tensor
 video4d = convert_video_to_4d(video);
 video4d = crop_4dvideo(video4d,1,10);
 video4d = resize_4dvideo(video4d,2);
 show_4dvideo(video4d);
 
-%% DEMO 01
+%% DEMO 01 (process matrix/tensor data)
 load(fullfile(lrs_conf.lrs_dir,'dataset','trafficdb','traffic_patches.mat'));
 V = im2double(imgdb{100});
 show_3dvideo(V);
 
-%%% Matrix-based algorithms
+%%% For matrix-based algorithms
 [M,m,n,p] = convert_video3d_to_2d(V);
 show_2dvideo(M,m,n);
 
 % Robust PCA
-out = run_algorithm('RPCA', 'FPCP', M, []);
+out = run_algorithm('RPCA', 'FPCP', M);
 % Subspace Tracking
-out = run_algorithm('ST', 'GRASTA', M, []);
-% Matrix Completion
-out = run_algorithm('MC', 'GROUSE', M, []);
+out = run_algorithm('ST', 'GRASTA', M);
+% Matrix Completion (sample randomly 50% of the observations)
+out = run_algorithm('MC', 'GROUSE', M);
 % Low Rank Recovery
-out = run_algorithm('LRR', 'FastLADMAP', M, []);
+out = run_algorithm('LRR', 'FastLADMAP', M);
 % Three-Term Decomposition
-out = run_algorithm('TTD', '3WD', M, []);
+out = run_algorithm('TTD', '3WD', M);
 % Non-Negative Matrix Factorization
-out = run_algorithm('NMF', 'ManhNMF', M, []);
+out = run_algorithm('NMF', 'ManhNMF', M);
 
 % Show results
 show_results(M,out.L,out.S,out.O,p,m,n);
@@ -69,14 +69,33 @@ show_results(M,out.L,out.S,out.O,p,m,n);
 T = tensor(V);
 
 % Non-Negative Tensor Factorization
-out = run_algorithm('NTF', 'bcuNCP', T, []);
+out = run_algorithm('NTF', 'bcuNCP', T);
 % Tensor Decomposition
-out = run_algorithm('TD', 'Tucker-ALS', T, []);
+out = run_algorithm('TD', 'Tucker-ALS', T);
 
 % Show results
 show_3dtensors(T,out.L,out.S,out.O);
 
-%% DEMO 02
+%% DEMO 02 (data completion)
+load(fullfile(lrs_conf.lrs_dir,'dataset','trafficdb','traffic_patches.mat'));
+V = im2double(imgdb{100});
+show_3dvideo(V);
+
+%%% For matrix-based algorithms
+[M,m,n,p] = convert_video3d_to_2d(V);
+show_2dvideo(M,m,n);
+
+%%% Define observed entries
+obs = 0.5; % Percentual [0...1]
+[params.Idx, params.Omega] = subsampling(M, obs);
+
+%%% Matrix completion
+out = run_algorithm('MC', 'GROUSE', M, params);
+
+%%% Show results
+show_results(M.*out.Omega,out.L,out.S,out.O,p,m,n);
+
+%% DEMO 03 (process video data)
 
 % Load video
 input_avi = fullfile(lrs_conf.lrs_dir,'dataset','demo.avi');
@@ -99,7 +118,7 @@ process_video('NTF', 'bcuNCP', input_avi, output_avi);
 % Tensor Decomposition
 process_video('TD', 'Tucker-ALS', input_avi, output_avi);
 
-%% DEMO 03 - For Large Videos (block by block)
+%% DEMO 04 - Process large videos (block by block)
 input_avi = fullfile(lrs_conf.lrs_dir,'dataset','highway.avi');
 video = load_video_file(input_avi);
 % show_video(video);

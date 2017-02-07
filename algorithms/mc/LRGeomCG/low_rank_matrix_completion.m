@@ -1,4 +1,4 @@
-function [L,S] = low_rank_matrix_completion(A)
+function [L,S] = low_rank_matrix_completion(params)
 % Given partial observation of a low rank matrix, attempts to complete it.
 %
 % function [L,S] = low_rank_matrix_completion(A)
@@ -32,8 +32,10 @@ global PA;
 global problem;
 
 k = 1; % rank
+A = params.A;
+P = params.Omega;
 [m,n] = size(A);
-P = sparse(randi([0 1],m,n));
+%P = sparse(randi([0 1],m,n));
 
 % Random data generation. First, choose the size of the problem.
 % We will complete a matrix of size mxn of rank k:
@@ -92,15 +94,10 @@ X = trustregions(problem, X0);
 
 % The reconstructed matrix is X, represented as a structure with fields
 % U, S and V.
-Xmat = X.U*X.S*X.V';
-fprintf('||X-A||_F = %g\n', norm(Xmat - A, 'fro'));
+L = X.U*X.S*X.V'; % low-rank
+S = A - L; % sparse
 
-L = Xmat;
-S = A - L;
-% show_2dvideo(A,48,48);
-% show_2dvideo(L,48,48);
-% show_2dvideo(S,48,48);
-% show_2dvideo(full(PA),48,48);
+fprintf('||X-A||_F = %g\n', norm(L - A, 'fro'));
 
 % Alternatively, we could decide to use a solver such as
 % steepestdescent or conjugategradient. These solvers need to solve a

@@ -1,9 +1,17 @@
-[numr,numc] = size(M);
-Idx = randi([0 1],numr,numc); % ones(size(M));
+%{
+load('dataset/trafficdb/traffic_patches.mat');
+[M,m,n,p] = convert_video3d_to_2d(im2double(imgdb{100}));
+out = run_algorithm('MC', 'ScGrassMC', M, [])
+show_results(M.*out.Omega,out.L,out.S,out.O,p,m,n);
+%}
 
-M(M == 0) = 1e-3;
-params.M = M.*Idx;
-params.Idx = Idx;
-
-L = run_mc(params);
-S = (M - L);
+MIdx = M(Idx);
+[U,S,V,hist] = ScGrassMC(Omega, MIdx, 2,...
+                  'tol', 1.e-6,...
+                  'maxit',100,...
+                  'grad_type','scaled',...
+                  'beta_type','P-R',...
+                  'sigma_type','approx',... %'tol_reschg', tol_reschg,...
+                  'verbose', 1);
+L = (U*S*V'); % low-rank
+S = (M - L); % sparse

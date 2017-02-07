@@ -1,6 +1,7 @@
 function M_hat = run_mc(params)
   M = params.M;
   Idx = params.Idx;
+  
   Ms = sparse(M);
   [~,~,VALS] = find(Ms);
   Known = logical(Idx);
