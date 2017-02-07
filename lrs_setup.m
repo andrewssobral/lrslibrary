@@ -58,7 +58,7 @@ addpath(genpath(fullfile(lrs_conf.manopt_path,'manopt')));
 disp('Running VLFeat setup!');
 run(lrs_conf.vl_path); % add VLFeat
 
-if(~isemptydir(lrs_conf.cvx_path,3))
+if(~isemptydir(lrs_conf.cvx_path,3) && exist(fullfile(lrs_conf.cvx_path,'cvx_setup.m'),'file'))
   addpath(lrs_conf.cvx_path); % add CVX
   disp('Running CVX setup!');
   cvx_setup;
