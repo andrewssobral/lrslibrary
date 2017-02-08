@@ -10,3 +10,6 @@
 [submodule "libs/tensor_toolbox"]
 	path = libs/tensor_toolbox
 	url = https://github.com/andrewssobral/tensor_toolbox.git
+[submodule "libs/nway"]
+	path = libs/nway
+	url = https://github.com/andrewssobral/nway.git
