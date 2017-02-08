@@ -4,3 +4,6 @@
 [submodule "libs/vlfeat"]
 	path = libs/vlfeat
 	url = https://github.com/vlfeat/vlfeat.git
+[submodule "libs/TFOCS"]
+	path = libs/TFOCS
+	url = https://github.com/cvxr/TFOCS.git

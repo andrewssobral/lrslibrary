@@ -10,3 +10,4 @@ demo_bmc2.m
 demo_bmc_eval.m
 demo_bmc_eval2.m
 dataset/BMC2012
+lrs_conf.mat
