@@ -13,3 +13,6 @@
 [submodule "libs/nway"]
 	path = libs/nway
 	url = https://github.com/andrewssobral/nway.git
+[submodule "libs/poblano_toolbox"]
+	path = libs/poblano_toolbox
+	url = https://github.com/andrewssobral/poblano_toolbox.git
