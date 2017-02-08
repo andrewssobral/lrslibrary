@@ -1,3 +1,0 @@
-*.manifest -crlf -diff -merge
-*.vcproj binary
-*.sln binary
