@@ -67,7 +67,7 @@ function results = run_algorithm(method_id, algorithm_id, data, params)
   
   % For matrix/tensor completion
   if(~isfield(params,'Idx') && ~isfield(params,'Omega')) 
-    [params.Idx, params.Omega] = subsampling(data, obs);
+    [params.Idx, params.Omega] = subsampling(data, 0.5);
   end
   if(isfield(params,'Idx') && ~isfield(params,'Omega')) % Build "params.Omega" from "params.Idx"
     params.Omega = zeros(size(data)); 
