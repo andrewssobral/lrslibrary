@@ -7,3 +7,6 @@
 [submodule "libs/TFOCS"]
 	path = libs/TFOCS
 	url = https://github.com/cvxr/TFOCS.git
+[submodule "libs/tensor_toolbox"]
+	path = libs/tensor_toolbox
+	url = https://github.com/andrewssobral/tensor_toolbox.git
