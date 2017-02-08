@@ -1,3 +1,0 @@
-[submodule "libs/CVX"]
-	path = libs/CVX
-	url = https://github.com/cvxr/CVX.git
