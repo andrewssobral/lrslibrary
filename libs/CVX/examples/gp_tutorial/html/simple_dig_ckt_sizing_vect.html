@@ -1,0 +1,212 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Digital circuit sizing (vectorized)</title>
+<link rel="canonical" href="/Users/mcgrant/Projects/CVX/examples/gp_tutorial/html/simple_dig_ckt_sizing_vect.html">
+<link rel="stylesheet" href="../../examples.css" type="text/css">
+</head>
+<body>
+<div id="header">
+<h1>Digital circuit sizing (vectorized)</h1>
+Jump to:&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#source">Source code</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#output">Text output</a>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#plots">Plots</a>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../index.html">Library index</a>
+</div>
+<div id="content">
+<a id="source"></a>
+<pre class="codeinput">
+<span class="comment">% Boyd, Kim, Vandenberghe, and Hassibi, "A Tutorial on Geometric Programming"</span>
+<span class="comment">% Written for CVX by Almir Mutapcic 02/08/06</span>
+<span class="comment">% (a figure is generated)</span>
+<span class="comment">%</span>
+<span class="comment">% Solves the problem of choosing gate scale factors x_i to give</span>
+<span class="comment">% minimum ckt delay, subject to limits on the total area and power.</span>
+<span class="comment">%</span>
+<span class="comment">%   minimize   D</span>
+<span class="comment">%       s.t.   P &lt;= Pmax, A &lt;= Amax</span>
+<span class="comment">%              x &gt;= 1</span>
+<span class="comment">%</span>
+<span class="comment">% where variables are scale factors x.</span>
+<span class="comment">%</span>
+<span class="comment">% This code uses matrices in order to evaluate signal paths</span>
+<span class="comment">% through the circuit (thus, it uses vectorize Matlab features).</span>
+<span class="comment">% It is specific to the digital circuit shown in figure 4 (page 28)</span>
+<span class="comment">% of GP tutorial paper.</span>
+
+<span class="comment">% digital circuit shown in figure 4 (page 28) of GP tutorial paper</span>
+m = 7;  <span class="comment">% number of cells</span>
+n = 8;  <span class="comment">% number of edges</span>
+A = sparse(m,n);
+
+<span class="comment">% A is standard cell-edge incidence matrix of the circuit</span>
+<span class="comment">% A_ij = 1 if edge j comes out of cell i, -1 if it comes in, 0 otherwise</span>
+  A(1,1) =     1;
+  A(2,2) =     1;
+  A(2,3) =     1;
+  A(3,4) =     1;
+  A(3,8) =     1;
+  A(4,1) =    -1;
+  A(4,2) =    -1;
+  A(4,5) =     1;
+  A(4,6) =     1;
+  A(5,3) =    -1;
+  A(5,4) =    -1;
+  A(5,7) =     1;
+  A(6,5) =    -1;
+  A(7,6) =    -1;
+  A(7,7) =    -1;
+  A(7,8) =    -1;
+
+<span class="comment">% decompose A into edge outgoing and edge-incoming part</span>
+Aout = double(A &gt; 0);
+Ain = double(A &lt; 0);
+
+<span class="comment">% problem constants</span>
+f = [1 0.8 1 0.7 0.7 0.5 0.5]';
+e = [1 2 1 1.5 1.5 1 2]';
+Cout6 = 10;
+Cout7 = 10;
+
+a     = ones(m,1);
+alpha = ones(m,1);
+beta  = ones(m,1);
+gamma = ones(m,1);
+
+<span class="comment">% varying parameters for an optimal trade-off curve</span>
+N = 20;
+Pmax = linspace(10,100,N);
+Amax = [25 50 100];
+min_delay = zeros(length(Amax),N);
+
+disp(<span class="string">'Generating the optimal tradeoff curve...'</span>)
+
+<span class="keyword">for</span> k = 1:length(Amax)
+    fprintf( <span class="string">'Amax = %d:\n'</span>, Amax(k) );
+    <span class="keyword">for</span> n = 1:N
+        fprintf( <span class="string">'    Pmax = %6.2f: '</span>, Pmax(n) );
+        cvx_begin <span class="string">gp</span> <span class="string">quiet</span>
+          <span class="comment">% optimization variables</span>
+          variable <span class="string">x(m)</span>                 <span class="comment">% scale factors</span>
+          variable <span class="string">t(m)</span>                 <span class="comment">% arrival times</span>
+
+          <span class="comment">% objective is the upper bound on the overall delay</span>
+          <span class="comment">% and that is the max of arrival times for output gates 6 and 7</span>
+          minimize( max( t(6),t(7) ) )
+          subject <span class="string">to</span>
+            <span class="comment">% input capacitance is an affine function of sizes</span>
+            cin = alpha + beta.*x;
+
+            <span class="comment">% load capacitance is the input capacitance times the fan-out matrix</span>
+            <span class="comment">% given by Fout = Aout*Ain'</span>
+            cload = (Aout*Ain')*cin;
+            cload(6) = Cout6;          <span class="comment">% load capacitance of the output gate 6</span>
+            cload(7) = Cout7;          <span class="comment">% load capacitance of othe utput gate 7</span>
+
+            <span class="comment">% delay is the product of its driving resistance R = gamma./x and cload</span>
+            d = cload.*gamma./x;
+
+            <span class="comment">% power and area definitions</span>
+            power = (f.*e)'*x;
+            area = a'*x;
+
+            <span class="comment">% scale size, power, and area constraints</span>
+            x &gt;= 1;
+            power &lt;= Pmax(n);
+            area &lt;= Amax(k);
+
+            <span class="comment">% create timing constraints</span>
+            <span class="comment">% these constraints enforce t_j + d_j &lt;= t_i over all gates j that drive gate i</span>
+            Aout'*t + Ain'*d &lt;= Ain'*t;
+
+            <span class="comment">% for gates with inputs not connected to other gates we enforce d_i &lt;= t_i</span>
+            d(1:3) &lt;= t(1:3);
+        cvx_end
+        fprintf( <span class="string">'delay = %3.2f\n'</span>, cvx_optval );
+        min_delay(k,n) = cvx_optval;
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="comment">% plot the tradeoff curve</span>
+plot(Pmax,min_delay(1,:), Pmax,min_delay(2,:), Pmax,min_delay(3,:));
+xlabel(<span class="string">'Pmax'</span>); ylabel(<span class="string">'Dmin'</span>);
+disp(<span class="string">'Optimal tradeoff curve plotted.'</span>)
+</pre>
+<a id="output"></a>
+<pre class="codeoutput">
+Generating the optimal tradeoff curve...
+Amax = 25:
+    Pmax =  10.00: delay = 12.21
+    Pmax =  14.74: delay = 9.41
+    Pmax =  19.47: delay = 8.01
+    Pmax =  24.21: delay = 7.11
+    Pmax =  28.95: delay = 6.80
+    Pmax =  33.68: delay = 6.80
+    Pmax =  38.42: delay = 6.80
+    Pmax =  43.16: delay = 6.80
+    Pmax =  47.89: delay = 6.80
+    Pmax =  52.63: delay = 6.80
+    Pmax =  57.37: delay = 6.80
+    Pmax =  62.11: delay = 6.80
+    Pmax =  66.84: delay = 6.80
+    Pmax =  71.58: delay = 6.80
+    Pmax =  76.32: delay = 6.80
+    Pmax =  81.05: delay = 6.80
+    Pmax =  85.79: delay = 6.80
+    Pmax =  90.53: delay = 6.80
+    Pmax =  95.26: delay = 6.80
+    Pmax = 100.00: delay = 6.80
+Amax = 50:
+    Pmax =  10.00: delay = 12.21
+    Pmax =  14.74: delay = 9.41
+    Pmax =  19.47: delay = 8.01
+    Pmax =  24.21: delay = 7.11
+    Pmax =  28.95: delay = 6.46
+    Pmax =  33.68: delay = 5.97
+    Pmax =  38.42: delay = 5.59
+    Pmax =  43.16: delay = 5.27
+    Pmax =  47.89: delay = 5.01
+    Pmax =  52.63: delay = 4.79
+    Pmax =  57.37: delay = 4.71
+    Pmax =  62.11: delay = 4.71
+    Pmax =  66.84: delay = 4.71
+    Pmax =  71.58: delay = 4.71
+    Pmax =  76.32: delay = 4.71
+    Pmax =  81.05: delay = 4.71
+    Pmax =  85.79: delay = 4.71
+    Pmax =  90.53: delay = 4.71
+    Pmax =  95.26: delay = 4.71
+    Pmax = 100.00: delay = 4.71
+Amax = 100:
+    Pmax =  10.00: delay = 12.21
+    Pmax =  14.74: delay = 9.41
+    Pmax =  19.47: delay = 8.01
+    Pmax =  24.21: delay = 7.11
+    Pmax =  28.95: delay = 6.46
+    Pmax =  33.68: delay = 5.97
+    Pmax =  38.42: delay = 5.59
+    Pmax =  43.16: delay = 5.27
+    Pmax =  47.89: delay = 5.01
+    Pmax =  52.63: delay = 4.79
+    Pmax =  57.37: delay = 4.60
+    Pmax =  62.11: delay = 4.43
+    Pmax =  66.84: delay = 4.28
+    Pmax =  71.58: delay = 4.15
+    Pmax =  76.32: delay = 4.03
+    Pmax =  81.05: delay = 3.92
+    Pmax =  85.79: delay = 3.82
+    Pmax =  90.53: delay = 3.73
+    Pmax =  95.26: delay = 3.65
+    Pmax = 100.00: delay = 3.57
+Optimal tradeoff curve plotted.
+</pre>
+<a id="plots"></a>
+<div id="plotoutput">
+<img src="simple_dig_ckt_sizing_vect__01.png" alt=""> 
+</div>
+</div>
+</body>
+</html>

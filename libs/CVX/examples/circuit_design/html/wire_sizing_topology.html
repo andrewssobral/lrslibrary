@@ -1,0 +1,271 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Wire sizing and topology design</title>
+<link rel="canonical" href="/Users/mcgrant/Projects/CVX/examples/circuit_design/html/wire_sizing_topology.html">
+<link rel="stylesheet" href="../../examples.css" type="text/css">
+</head>
+<body>
+<div id="header">
+<h1>Wire sizing and topology design</h1>
+Jump to:&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#source">Source code</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#output">Text output</a>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#plots">Plots</a>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../index.html">Library index</a>
+</div>
+<div id="content">
+<a id="source"></a>
+<pre class="codeinput">
+<span class="comment">% Section 5.3,  L. Vandenberghe, S. Boyd, and A. El Gamal</span>
+<span class="comment">% "Optimizing dominant time constant in RC circuits"</span>
+<span class="comment">% Original by Lieven Vandenberghe</span>
+<span class="comment">% Adapted for CVX by Joelle Skaf - 11/25/05</span>
+<span class="comment">% Modified by Michael Grant - 3/8/06</span>
+<span class="comment">%</span>
+<span class="comment">% We size the wires for an interconnect circuit with four nodes. The</span>
+<span class="comment">% topology of the circuit is more complex; the wires don't even form a tree</span>
+<span class="comment">% (refer to Figure 13 in the paper).</span>
+<span class="comment">% The problem can be formulated with the following SDP:</span>
+<span class="comment">%               minimize        sum(xi*li)</span>
+<span class="comment">%                   s.t.        0 &lt;= xi &lt;= wmax</span>
+<span class="comment">%                               Tmax*G(x) - C(x) &gt;= 0</span>
+<span class="comment">% Please refer to the paper (section 2) to find what G(x) and C(x) are.</span>
+
+<span class="comment">%</span>
+<span class="comment">% Circuit parameters</span>
+<span class="comment">%</span>
+
+n      = 4;    <span class="comment">% number of nodes</span>
+m      = 6;    <span class="comment">% number of branches</span>
+G      = 0.1;  <span class="comment">% resistor between node 1 and 0</span>
+Co     = 10;   <span class="comment">% load capacitance</span>
+wmax   = 10.0; <span class="comment">% maximum width</span>
+<span class="comment">% alpha: conductance per segment</span>
+<span class="comment">% 2 * beta: capacitance per segment</span>
+alpha  = [ 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 ];
+beta   = [ 10,  10,  100, 1,   1,   1   ];
+
+<span class="comment">%</span>
+<span class="comment">% Build capacitance and conductance matrices</span>
+<span class="comment">%</span>
+
+CC = zeros(n,n,m+1);
+GG = zeros(n,n,m+1);
+<span class="comment">% constant terms</span>
+CC(3,3,1) = Co;
+GG(1,1,1) = G;
+<span class="comment">% branch 1</span>
+CC(1,1,2) = + beta(1);
+CC(2,2,2) = + beta(1);
+GG(1,1,2) = + alpha(1);
+GG(2,1,2) = - alpha(1);
+GG(1,2,2) = - alpha(1);
+GG(2,2,2) = + alpha(1);
+<span class="comment">% branch 2</span>
+CC(2,2,3) = + beta(2);
+CC(3,3,3) = + beta(2);
+GG(2,2,3) = + alpha(2);
+GG(3,2,3) = - alpha(2);
+GG(2,3,3) = - alpha(2);
+GG(3,3,3) = + alpha(2);
+<span class="comment">% branch 3</span>
+CC(1,1,4) = + beta(3);
+CC(3,3,4) = + beta(3);
+GG(1,1,4) = + alpha(3);
+GG(3,1,4) = - alpha(3);
+GG(1,3,4) = - alpha(3);
+GG(3,3,4) = + alpha(3);
+<span class="comment">% branch 4</span>
+CC(1,1,5) = + beta(4);
+CC(4,4,5) = + beta(4);
+GG(1,1,5) = + alpha(4);
+GG(4,1,5) = - alpha(4);
+GG(1,4,5) = - alpha(4);
+GG(4,4,5) = + alpha(4);
+<span class="comment">% branch 5</span>
+CC(2,2,6) = + beta(5);
+CC(4,4,6) = + beta(5);
+GG(2,2,6) = + alpha(5);
+GG(2,4,6) = - alpha(5);
+GG(4,2,6) = - alpha(5);
+GG(4,4,6) = + alpha(5);
+<span class="comment">% branch 6</span>
+CC(3,3,7) = + beta(6);
+CC(4,4,7) = + beta(6);
+GG(3,3,7) = + alpha(6);
+GG(4,3,7) = - alpha(6);
+GG(3,4,7) = - alpha(6);
+GG(4,4,7) = + alpha(6);
+
+<span class="comment">% Reshape for easy Matlab use</span>
+CC = reshape(CC,n*n,m+1);
+GG = reshape(GG,n*n,m+1);
+
+<span class="comment">%</span>
+<span class="comment">% Compute points the tradeoff curve, and the three sample points</span>
+<span class="comment">%</span>
+
+npts    = 50;
+delays  = linspace( 180, 800, npts );
+xdelays = [ 200, 400, 600 ];
+xnpts   = length(xdelays);
+areas   = zeros(1,npts);
+sizes   = zeros(6,xnpts);
+<span class="keyword">for</span> i = 1 : npts  + xnpts,
+
+    <span class="keyword">if</span> i &gt; npts,
+        xi = i - npts;
+        delay = xdelays(xi);
+        disp( sprintf( <span class="string">'Particular solution %d of %d (Tmax = %g)'</span>, xi, xnpts, delay ) );
+    <span class="keyword">else</span>,
+        delay = delays(i);
+        disp( sprintf( <span class="string">'Point %d of %d on the tradeoff curve (Tmax = %g)'</span>, i, npts, delay ) );
+    <span class="keyword">end</span>
+
+    <span class="comment">%</span>
+    <span class="comment">% Construct and solve the convex model</span>
+    <span class="comment">%</span>
+
+    cvx_begin <span class="string">sdp</span> <span class="string">quiet</span>
+        variable <span class="string">x(6)</span>
+        variable <span class="string">G(n,n)</span> <span class="string">symmetric</span>
+        variable <span class="string">C(n,n)</span> <span class="string">symmetric</span>
+        minimize( sum( x ) )
+        subject <span class="string">to</span>
+            G == reshape( GG * [ 1 ; x ], n, n );
+            C == reshape( CC * [ 1 ; x ], n, n );
+            delay * G - C &gt;= 0;
+            0 &lt;= x &lt;= wmax;
+    cvx_end
+
+    <span class="keyword">if</span> i &lt;= npts,
+        areas(i) = cvx_optval;
+    <span class="keyword">else</span>,
+        xareas(xi) = cvx_optval;
+        sizes(:,xi) = x;
+
+        <span class="comment">%</span>
+        <span class="comment">% Plot the step response</span>
+        <span class="comment">%</span>
+
+        figure(xi+1);
+        A = -inv(C)*G;
+        B = -A*ones(n,1);
+        T = linspace(0,1000,1000);
+        Y = simple_step(A,B,T(2),length(T));
+        hold <span class="string">off</span>; plot(T,Y([1,3,4],:),<span class="string">'-'</span>);  hold <span class="string">on</span>;
+
+        <span class="comment">% compute threshold delay, elmore delay, dominant time constant</span>
+        tthres=T(min(find(Y(3,:)&gt;0.5)));
+        tdom=max(eig(inv(G)*C));
+        telm=max(sum((inv(G)*C)'));
+        plot(tdom*[1;1], [0;1], <span class="string">'--'</span>, telm*[1;1], [0;1],<span class="string">'--'</span>, <span class="keyword">...</span>
+             tthres*[1;1], [0;1], <span class="string">'--'</span>);
+        text(tdom,0,<span class="string">'d'</span>);
+        text(telm,0,<span class="string">'e'</span>);
+        text(tthres,0,<span class="string">'t'</span>);
+        title(sprintf(<span class="string">'Step response for solution (%d), Tmax=%g'</span>, xi, delay ));
+
+    <span class="keyword">end</span>
+
+<span class="keyword">end</span>
+
+<span class="comment">%</span>
+<span class="comment">% Plot the tradeoff curve</span>
+<span class="comment">%</span>
+
+figure(1)
+ind = isfinite(areas);
+plot(areas(ind), delays(ind));
+xlabel(<span class="string">'Area'</span>);
+ylabel(<span class="string">'Tdom'</span>);
+title(<span class="string">'Area-delay tradeoff curve'</span>);
+hold <span class="string">on</span>
+<span class="keyword">for</span> k = 1 : xnpts,
+    text( xareas(k), xdelays(k), sprintf( <span class="string">'(%d)'</span>, k ) );
+<span class="keyword">end</span>
+
+<span class="comment">%</span>
+<span class="comment">% Display sizes for the three solutions</span>
+<span class="comment">%</span>
+
+disp([<span class="string">'Three specific solutions:'</span>]);
+sizes
+</pre>
+<a id="output"></a>
+<pre class="codeoutput">
+Point 1 of 50 on the tradeoff curve (Tmax = 180)
+Point 2 of 50 on the tradeoff curve (Tmax = 192.653)
+Point 3 of 50 on the tradeoff curve (Tmax = 205.306)
+Point 4 of 50 on the tradeoff curve (Tmax = 217.959)
+Point 5 of 50 on the tradeoff curve (Tmax = 230.612)
+Point 6 of 50 on the tradeoff curve (Tmax = 243.265)
+Point 7 of 50 on the tradeoff curve (Tmax = 255.918)
+Point 8 of 50 on the tradeoff curve (Tmax = 268.571)
+Point 9 of 50 on the tradeoff curve (Tmax = 281.224)
+Point 10 of 50 on the tradeoff curve (Tmax = 293.878)
+Point 11 of 50 on the tradeoff curve (Tmax = 306.531)
+Point 12 of 50 on the tradeoff curve (Tmax = 319.184)
+Point 13 of 50 on the tradeoff curve (Tmax = 331.837)
+Point 14 of 50 on the tradeoff curve (Tmax = 344.49)
+Point 15 of 50 on the tradeoff curve (Tmax = 357.143)
+Point 16 of 50 on the tradeoff curve (Tmax = 369.796)
+Point 17 of 50 on the tradeoff curve (Tmax = 382.449)
+Point 18 of 50 on the tradeoff curve (Tmax = 395.102)
+Point 19 of 50 on the tradeoff curve (Tmax = 407.755)
+Point 20 of 50 on the tradeoff curve (Tmax = 420.408)
+Point 21 of 50 on the tradeoff curve (Tmax = 433.061)
+Point 22 of 50 on the tradeoff curve (Tmax = 445.714)
+Point 23 of 50 on the tradeoff curve (Tmax = 458.367)
+Point 24 of 50 on the tradeoff curve (Tmax = 471.02)
+Point 25 of 50 on the tradeoff curve (Tmax = 483.673)
+Point 26 of 50 on the tradeoff curve (Tmax = 496.327)
+Point 27 of 50 on the tradeoff curve (Tmax = 508.98)
+Point 28 of 50 on the tradeoff curve (Tmax = 521.633)
+Point 29 of 50 on the tradeoff curve (Tmax = 534.286)
+Point 30 of 50 on the tradeoff curve (Tmax = 546.939)
+Point 31 of 50 on the tradeoff curve (Tmax = 559.592)
+Point 32 of 50 on the tradeoff curve (Tmax = 572.245)
+Point 33 of 50 on the tradeoff curve (Tmax = 584.898)
+Point 34 of 50 on the tradeoff curve (Tmax = 597.551)
+Point 35 of 50 on the tradeoff curve (Tmax = 610.204)
+Point 36 of 50 on the tradeoff curve (Tmax = 622.857)
+Point 37 of 50 on the tradeoff curve (Tmax = 635.51)
+Point 38 of 50 on the tradeoff curve (Tmax = 648.163)
+Point 39 of 50 on the tradeoff curve (Tmax = 660.816)
+Point 40 of 50 on the tradeoff curve (Tmax = 673.469)
+Point 41 of 50 on the tradeoff curve (Tmax = 686.122)
+Point 42 of 50 on the tradeoff curve (Tmax = 698.776)
+Point 43 of 50 on the tradeoff curve (Tmax = 711.429)
+Point 44 of 50 on the tradeoff curve (Tmax = 724.082)
+Point 45 of 50 on the tradeoff curve (Tmax = 736.735)
+Point 46 of 50 on the tradeoff curve (Tmax = 749.388)
+Point 47 of 50 on the tradeoff curve (Tmax = 762.041)
+Point 48 of 50 on the tradeoff curve (Tmax = 774.694)
+Point 49 of 50 on the tradeoff curve (Tmax = 787.347)
+Point 50 of 50 on the tradeoff curve (Tmax = 800)
+Particular solution 1 of 3 (Tmax = 200)
+Particular solution 2 of 3 (Tmax = 400)
+Particular solution 3 of 3 (Tmax = 600)
+Three specific solutions:
+
+sizes =
+
+    0.0000    0.0000    0.0000
+    0.0000    0.0000    0.0000
+    0.0000    0.0381    0.0273
+    0.2303    0.0369    0.0000
+    0.0000    0.0000    0.0000
+    0.2156    0.0361    0.0000
+
+</pre>
+<a id="plots"></a>
+<div id="plotoutput">
+<img src="wire_sizing_topology__01.png" alt=""> <img src="wire_sizing_topology__02.png" alt=""> <img src="wire_sizing_topology__03.png" alt=""> <img src="wire_sizing_topology__04.png" alt=""> 
+</div>
+</div>
+</body>
+</html>

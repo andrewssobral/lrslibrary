@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Probability estimate using Monte Carlo methods</title>
+<link rel="canonical" href="/Users/mcgrant/Projects/CVX/examples/cvxbook/Ch07_statistical_estim/html/montecarlo.html">
+<link rel="stylesheet" href="../../../examples.css" type="text/css">
+</head>
+<body>
+<div id="header">
+<h1>Probability estimate using Monte Carlo methods</h1>
+Jump to:&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#source">Source code</a>&nbsp;&nbsp;&nbsp;&nbsp;
+Text output
+&nbsp;&nbsp;&nbsp;&nbsp;
+Plots
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../../index.html">Library index</a>
+</div>
+<div id="content">
+<a id="source"></a>
+<pre class="codeinput">
+<span class="keyword">function</span> prob = montecarlo(A,b,Sigma,notrials);
+
+<span class="comment">% Estimates the probability that a random vector x in R2</span>
+<span class="comment">% with mean zero and covariance Sigma satisfies Ax &lt;= b,</span>
+<span class="comment">% based on 100 * notrials trials. Sigma must be PSD.</span>
+
+m = size(A,1);
+
+R = chol(Sigma);   <span class="comment">% Y = R^{-T}X has covariance I</span>
+X = R'*randn(2,notrials);
+prob = length(find(sum(A*X - b(:,ones(1,notrials)) &lt; 0) == m))/notrials;
+
+<span class="keyword">for</span> i=1:99
+X = R'*randn(2,notrials);
+prob = 0.5*(prob + <span class="keyword">...</span>
+  length(find(sum(A*X - b(:,ones(1,notrials)) &lt; 0) == m))/notrials);
+<span class="keyword">end</span>;
+</pre>
+</div>
+</body>
+</html>

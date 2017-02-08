@@ -1,0 +1,118 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Euclidean distance between polyhedra</title>
+<link rel="canonical" href="/Users/mcgrant/Projects/CVX/examples/cvxbook/Ch08_geometric_probs/html/eucl_dist_poly.html">
+<link rel="stylesheet" href="../../../examples.css" type="text/css">
+</head>
+<body>
+<div id="header">
+<h1>Euclidean distance between polyhedra</h1>
+Jump to:&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#source">Source code</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#output">Text output</a>
+&nbsp;&nbsp;&nbsp;&nbsp;
+Plots
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../../index.html">Library index</a>
+</div>
+<div id="content">
+<a id="source"></a>
+<pre class="codeinput">
+<span class="comment">% Section 8.2.1, Boyd &amp; Vandenberghe "Convex Optimization"</span>
+<span class="comment">% Joelle Skaf - 10/09/05</span>
+<span class="comment">%</span>
+<span class="comment">% Given two polyhedra C = {x | A1*x &lt;= b1} and D = {x | A2*x &lt;= b2}, the</span>
+<span class="comment">% distance between them is the optimal value of the problem:</span>
+<span class="comment">%           minimize    || x - y ||_2</span>
+<span class="comment">%               s.t.    A1*x &lt;= b1</span>
+<span class="comment">%                       A2*y &lt;= b2</span>
+
+<span class="comment">% Input data</span>
+randn(<span class="string">'state'</span>,0);
+rand(<span class="string">'state'</span>,0);
+
+n  = 5;
+m1 = 2*n;
+m2 = 3*n;
+A1 = randn(m1,n);
+A2 = randn(m2,n);
+b1 = rand(m1,1);
+b2 = rand(m2,1) + A2*randn(n,1);
+
+<span class="comment">% Solution via CVX</span>
+cvx_begin
+    variables <span class="string">x(n)</span> <span class="string">y(n)</span>
+    minimize (norm(x - y))
+    A1*x &lt;= b1;
+    A2*y &lt;= b2;
+cvx_end
+
+<span class="comment">% Displaying results</span>
+disp(<span class="string">'------------------------------------------------------------------'</span>);
+disp(<span class="string">'The distance between the 2 polyhedra C and D is: '</span> );
+disp([<span class="string">'dist(C,D) = '</span> num2str(cvx_optval)]);
+</pre>
+<a id="output"></a>
+<pre class="codeoutput">
+ 
+Calling SDPT3 4.0: 31 variables, 11 equality constraints
+   For improved efficiency, SDPT3 is solving the dual problem.
+------------------------------------------------------------
+
+ num. of constraints = 11
+ dim. of socp   var  =  6,   num. of socp blk  =  1
+ dim. of linear var  = 25
+*******************************************************************
+   SDPT3: Infeasible path-following algorithms
+*******************************************************************
+ version  predcorr  gam  expon  scale_data
+    NT      1      0.000   1        0    
+it pstep dstep pinfeas dinfeas  gap      prim-obj      dual-obj    cputime
+-------------------------------------------------------------------
+ 0|0.000|0.000|4.9e+01|7.0e+00|2.5e+03| 1.401402e+02  0.000000e+00| 0:0:00| chol  1  1 
+ 1|0.193|0.645|3.9e+01|2.5e+00|1.6e+03| 1.400766e+02 -3.014994e+01| 0:0:00| chol  1  1 
+ 2|0.911|0.702|3.5e+00|7.6e-01|5.8e+02| 1.795535e+02 -2.396806e+01| 0:0:00| chol  1  1 
+ 3|1.000|0.955|1.5e-05|3.5e-02|9.0e+01| 7.786451e+01 -4.168794e+00| 0:0:00| chol  1  1 
+ 4|0.885|1.000|3.5e-06|7.8e-05|1.2e+01| 9.239431e+00 -2.981045e+00| 0:0:00| chol  1  1 
+ 5|0.795|1.000|7.1e-07|8.2e-06|6.1e+00| 4.520886e+00 -1.536892e+00| 0:0:00| chol  1  1 
+ 6|1.000|0.871|1.2e-10|1.9e-06|1.9e+00| 7.328309e-01 -1.126315e+00| 0:0:00| chol  1  1 
+ 7|1.000|0.853|3.4e-10|3.4e-07|8.3e-01| 1.611200e-01 -6.710325e-01| 0:0:00| chol  1  1 
+ 8|0.850|0.859|5.0e-11|5.4e-08|1.6e-01|-3.730764e-01 -5.368661e-01| 0:0:00| chol  1  1 
+ 9|1.000|1.000|4.0e-11|7.6e-10|6.3e-02|-4.638722e-01 -5.269634e-01| 0:0:00| chol  1  1 
+10|0.918|0.986|3.2e-12|9.3e-11|4.7e-03|-5.044152e-01 -5.090797e-01| 0:0:00| chol  1  1 
+11|0.989|0.993|3.6e-14|9.1e-12|1.7e-04|-5.084285e-01 -5.086021e-01| 0:0:00| chol  1  1 
+12|0.981|0.987|1.5e-14|1.1e-12|3.0e-06|-5.085645e-01 -5.085675e-01| 0:0:00| chol  1  1 
+13|1.000|1.000|6.6e-12|1.0e-12|1.2e-07|-5.085670e-01 -5.085671e-01| 0:0:00| chol  1  1 
+14|1.000|1.000|1.5e-12|1.3e-12|1.7e-09|-5.085671e-01 -5.085671e-01| 0:0:00|
+  stop: max(relative gap, infeasibilities) &lt; 1.49e-08
+-------------------------------------------------------------------
+ number of iterations   = 14
+ primal objective value = -5.08567059e-01
+ dual   objective value = -5.08567060e-01
+ gap := trace(XZ)       = 1.72e-09
+ relative gap           = 8.55e-10
+ actual relative gap    = 8.53e-10
+ rel. primal infeas (scaled problem)   = 1.55e-12
+ rel. dual     "        "       "      = 1.32e-12
+ rel. primal infeas (unscaled problem) = 0.00e+00
+ rel. dual     "        "       "      = 0.00e+00
+ norm(X), norm(y), norm(Z) = 1.8e+00, 1.7e+00, 4.2e+00
+ norm(A), norm(b), norm(C) = 1.1e+01, 2.0e+00, 6.8e+00
+ Total CPU time (secs)  = 0.17  
+ CPU time per iteration = 0.01  
+ termination code       =  0
+ DIMACS: 1.5e-12  0.0e+00  2.3e-12  0.0e+00  8.5e-10  8.5e-10
+-------------------------------------------------------------------
+ 
+------------------------------------------------------------
+Status: Solved
+Optimal value (cvx_optval): +0.508567
+ 
+------------------------------------------------------------------
+The distance between the 2 polyhedra C and D is: 
+dist(C,D) = 0.50857
+</pre>
+</div>
+</body>
+</html>

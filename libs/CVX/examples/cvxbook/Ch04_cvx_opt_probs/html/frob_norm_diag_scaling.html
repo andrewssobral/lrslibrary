@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Section 4.5.4: Frobenius norm diagonal scaling (GP)</title>
+<link rel="canonical" href="/Users/mcgrant/Projects/CVX/examples/cvxbook/Ch04_cvx_opt_probs/html/frob_norm_diag_scaling.html">
+<link rel="stylesheet" href="../../../examples.css" type="text/css">
+</head>
+<body>
+<div id="header">
+<h1>Section 4.5.4: Frobenius norm diagonal scaling (GP)</h1>
+Jump to:&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#source">Source code</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#output">Text output</a>
+&nbsp;&nbsp;&nbsp;&nbsp;
+Plots
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../../index.html">Library index</a>
+</div>
+<div id="content">
+<a id="source"></a>
+<pre class="codeinput">
+<span class="comment">% Boyd &amp; Vandenberghe "Convex Optimization"</span>
+<span class="comment">% Joelle Skaf - 01/29/06</span>
+<span class="comment">% Updated to use GP mode by Almir Mutapcic 02/08/06</span>
+<span class="comment">%</span>
+<span class="comment">% Given a square matrix M, the goal is to find a vector (with dii &gt; 0)</span>
+<span class="comment">% such that ||DMD^{-1}||_F is minimized, where D = diag(d).</span>
+<span class="comment">% The problem can be cast as an unconstrained geometric program:</span>
+<span class="comment">%           minimize sqrt( sum_{i,j=1}^{n} Mij^2*di^2/dj^2 )</span>
+<span class="comment">%</span>
+
+rs = randn( <span class="string">'state'</span> );
+randn( <span class="string">'state'</span>, 0 );
+
+<span class="comment">% matrix size (M is an n-by-n matrix)</span>
+n = 4;
+M = randn(n,n);
+
+<span class="comment">% formulating the problem as a GP</span>
+cvx_begin <span class="string">gp</span>
+  variable <span class="string">d(n)</span>
+  minimize( sqrt( sum( sum( diag(d.^2)*(M.^2)*diag(d.^-2) ) ) ) )
+  <span class="comment">% Alternate formulation: norm( diag(d)*abs(M)*diag(1./d), 'fro' )</span>
+cvx_end
+
+<span class="comment">% displaying results</span>
+D = diag(d);
+disp(<span class="string">'The matrix D that minimizes ||DMD^{-1}||_F is: '</span>);
+disp(D);
+disp(<span class="string">'The minimium Frobenius norm achieved is: '</span>);
+disp(norm(D*M*inv(D),<span class="string">'fro'</span>));
+disp(<span class="string">'while the Frobunius norm of the original matrix M is: '</span>);
+disp(norm(M,<span class="string">'fro'</span>));
+</pre>
+<a id="output"></a>
+<pre class="codeoutput">
+ 
+Successive approximation method to be employed.
+   SDPT3 will be called several times to refine the solution.
+   Original size: 82 variables, 32 equality constraints
+   16 exponentials add 128 variables, 80 equality constraints
+-----------------------------------------------------------------
+ Cones  |             Errors              |
+Mov/Act | Centering  Exp cone   Poly cone | Status
+--------+---------------------------------+---------
+ 16/ 16 | 8.000e+00  1.276e+01  0.000e+00 | Solved
+ 16/ 16 | 1.590e+00  1.546e-01  0.000e+00 | Solved
+ 15/ 15 | 7.950e-02  4.018e-04  0.000e+00 | Solved
+  2/  9 | 1.198e-03  7.548e-08  0.000e+00 | Solved
+  0/  0 | 2.616e-05  0.000e+00  0.000e+00 | Solved
+-----------------------------------------------------------------
+Status: Solved
+Optimal value (cvx_optval): +3.25231
+ 
+The matrix D that minimizes ||DMD^{-1}||_F is: 
+    1.0885         0         0         0
+         0    0.9138         0         0
+         0         0    0.9754         0
+         0         0         0    1.6294
+
+The minimium Frobenius norm achieved is: 
+    3.2523
+
+while the Frobunius norm of the original matrix M is: 
+    3.6126
+
+</pre>
+</div>
+</body>
+</html>

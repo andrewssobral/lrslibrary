@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Exercise 5.33: Parametrized l1-norm approximation</title>
+<link rel="canonical" href="/Users/mcgrant/Projects/CVX/examples/cvxbook/Ch05_duality/html/ex_5_33.html">
+<link rel="stylesheet" href="../../../examples.css" type="text/css">
+</head>
+<body>
+<div id="header">
+<h1>Exercise 5.33: Parametrized l1-norm approximation</h1>
+Jump to:&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#source">Source code</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#output">Text output</a>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#plots">Plots</a>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../../index.html">Library index</a>
+</div>
+<div id="content">
+<a id="source"></a>
+<pre class="codeinput">
+<span class="comment">% Boyd &amp; Vandenberghe "Convex Optimization"</span>
+<span class="comment">% Jo&euml;lle Skaf - 08/29/05</span>
+<span class="comment">% (a figure is generated)</span>
+<span class="comment">%</span>
+<span class="comment">% Let p_star(epsilon) be the optimal value of the following problem:</span>
+<span class="comment">%               minimize    ||Ax + b + epsilon*d||_1</span>
+<span class="comment">% Plots p_star(epsilon) versus epsilon and demonstrates the fact that it's</span>
+<span class="comment">% affine on an interval that includes epsilon = 0.</span>
+
+<span class="comment">% Input data</span>
+A = [-2  7  1; <span class="keyword">...</span>
+     -5 -1  3; <span class="keyword">...</span>
+     -7  3 -5; <span class="keyword">...</span>
+     -1  4 -4; <span class="keyword">...</span>
+      1  5  5; <span class="keyword">...</span>
+      2 -5 -1];
+b = [-4 3 9 0 -11 5]';
+d = [-10 -13 -27 -10 -7 14]';
+epsilon = [-1:0.05:1];
+p_star = zeros(size(epsilon));
+
+fprintf(1,<span class="string">'Computing p*(epsilon) for -1 &lt;= epsilon &lt;= 1 ...'</span>);
+
+<span class="keyword">for</span> i=1:length(epsilon)
+    cvx_begin <span class="string">quiet</span>
+        variable <span class="string">x(3)</span>;
+        minimize ( norm( A*x + b + epsilon(i)*d, 1) )
+    cvx_end
+    p_star(i)= cvx_optval;
+<span class="keyword">end</span>
+
+fprintf(1,<span class="string">'Done! \n'</span>);
+
+<span class="comment">% Plots</span>
+plot(epsilon, p_star)
+line([-.2 -.2], [2 14], <span class="string">'LineStyle'</span>, <span class="string">'--'</span>)
+line([.5 .5], [2 14], <span class="string">'LineStyle'</span>, <span class="string">'--'</span>)
+xlabel(<span class="string">'\epsilon'</span>);
+ylabel(<span class="string">'p^*(\epsilon)'</span>);
+title(<span class="string">'p^*(\epsilon) vs \epsilon'</span>);
+</pre>
+<a id="output"></a>
+<pre class="codeoutput">
+Computing p*(epsilon) for -1 &lt;= epsilon &lt;= 1 ...Done! 
+</pre>
+<a id="plots"></a>
+<div id="plotoutput">
+<img src="ex_5_33__01.png" alt=""> 
+</div>
+</div>
+</body>
+</html>

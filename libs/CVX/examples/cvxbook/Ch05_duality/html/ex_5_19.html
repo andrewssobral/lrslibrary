@@ -1,0 +1,249 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Exercise 5.19c: Markovitz portfolio optimization w/ diversification constraint</title>
+<link rel="canonical" href="/Users/mcgrant/Projects/CVX/examples/cvxbook/Ch05_duality/html/ex_5_19.html">
+<link rel="stylesheet" href="../../../examples.css" type="text/css">
+</head>
+<body>
+<div id="header">
+<h1>Exercise 5.19c: Markovitz portfolio optimization w/ diversification constraint</h1>
+Jump to:&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#source">Source code</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#output">Text output</a>
+&nbsp;&nbsp;&nbsp;&nbsp;
+Plots
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../../index.html">Library index</a>
+</div>
+<div id="content">
+<a id="source"></a>
+<pre class="codeinput">
+<span class="comment">% Boyd &amp; Vandenberghe, "Convex Optimization"</span>
+<span class="comment">% Jo&euml;lle Skaf - 08/29/05</span>
+<span class="comment">%</span>
+<span class="comment">% Solves an extension of the classical Markovitz portfolio optimization</span>
+<span class="comment">% problem:      minimize    x'Sx</span>
+<span class="comment">%                   s.t.    p_'*x &gt;= r_min</span>
+<span class="comment">%                           1'*x = 1,   x &gt;= 0</span>
+<span class="comment">%                           sum_{i=1}^{0.1*n}x[i] &lt;= alpha</span>
+<span class="comment">% where p_ and S are the mean and covariance matrix of the price range</span>
+<span class="comment">% vector p, x[i] is the ith greatest component in x.</span>
+<span class="comment">% The last constraint can be replaced by this equivalent set of constraints</span>
+<span class="comment">%                           r*t + sum(u) &lt;= alpha</span>
+<span class="comment">%                           t*1 + u &gt;= x</span>
+<span class="comment">%                           u &gt;= 0</span>
+
+<span class="comment">% Input data</span>
+randn(<span class="string">'state'</span>,0);
+n = 25;
+p_mean = randn(n,1);
+temp = randn(n);
+sig = temp'*temp;
+r = floor(0.1*n);
+alpha = 0.8;
+r_min = 1;
+
+<span class="comment">% original formulation</span>
+fprintf(1,<span class="string">'Computing the optimal Markovitz portfolio: \n'</span>);
+fprintf(1,<span class="string">'# using the original formulation ... '</span>);
+
+cvx_begin
+    variable <span class="string">x1(n)</span>
+    minimize ( quad_form(x1,sig) )
+    p_mean'*x1 &gt;= r_min;
+    ones(1,n)*x1 == 1;
+    x1 &gt;= 0;
+    sum_largest(x1,r) &lt;= alpha;
+cvx_end
+
+fprintf(1,<span class="string">'Done! \n'</span>);
+opt1 = cvx_optval;
+
+<span class="comment">% equivalent formulation</span>
+fprintf(1,<span class="string">'# using an equivalent formulation by replacing the diversification\n'</span>);
+fprintf(1,<span class="string">'  constraint by an equivalent set of linear constraints...'</span>);
+
+cvx_begin
+    variables <span class="string">x2(n)</span> <span class="string">u(n)</span> <span class="string">t(1)</span>
+    minimize ( quad_form(x2,sig) )
+    p_mean'*x2 &gt;= r_min;
+    sum(x2) == 1;
+    x2 &gt;= 0;
+    r*t + sum(u) &lt;= alpha;
+    t*ones(n,1) + u &gt;= x2;
+    u &gt;= 0;
+cvx_end
+
+fprintf(1,<span class="string">'Done! \n'</span>);
+opt2 = cvx_optval;
+
+<span class="comment">% Displaying results</span>
+disp(<span class="string">'------------------------------------------------------------------------'</span>);
+disp(<span class="string">'The optimal portfolios obtained from the original problem formulation and'</span>);
+disp(<span class="string">'from the equivalent formulation are respectively: '</span>);
+disp([x1 x2])
+disp(<span class="string">'They are equal as expected!'</span>);
+</pre>
+<a id="output"></a>
+<pre class="codeoutput">
+Computing the optimal Markovitz portfolio: 
+# using the original formulation ...  
+Calling SDPT3 4.0: 105 variables, 52 equality constraints
+   For improved efficiency, SDPT3 is solving the dual problem.
+------------------------------------------------------------
+
+ num. of constraints = 52
+ dim. of socp   var  = 27,   num. of socp blk  =  1
+ dim. of linear var  = 77
+ dim. of free   var  =  1 *** convert ublk to lblk
+*******************************************************************
+   SDPT3: Infeasible path-following algorithms
+*******************************************************************
+ version  predcorr  gam  expon  scale_data
+    NT      1      0.000   1        0    
+it pstep dstep pinfeas dinfeas  gap      prim-obj      dual-obj    cputime
+-------------------------------------------------------------------
+ 0|0.000|0.000|2.1e+02|2.8e+01|3.1e+05|-8.063529e+01  0.000000e+00| 0:0:00| chol  1  1 
+ 1|1.000|0.483|3.6e-05|1.5e+01|1.7e+05| 1.185100e+03 -2.293968e+02| 0:0:00| chol  1  1 
+ 2|1.000|0.972|3.9e-06|5.0e-01|6.7e+03| 1.049396e+03 -2.631938e+01| 0:0:00| chol  1  1 
+ 3|1.000|0.807|2.7e-07|1.2e-01|2.2e+03| 8.206845e+02 -3.612868e+01| 0:0:00| chol  1  1 
+ 4|1.000|0.450|1.1e-06|6.9e-02|9.8e+02| 4.566425e+02 -3.269217e+01| 0:0:00| chol  1  1 
+ 5|0.933|0.994|4.0e-07|2.9e-03|1.5e+02| 1.173937e+02 -2.449329e+01| 0:0:00| chol  1  1 
+ 6|0.905|0.953|4.6e-08|8.3e-04|1.6e+01|-8.869877e+00 -2.415960e+01| 0:0:00| chol  1  1 
+ 7|1.000|0.073|5.0e-09|7.9e-04|9.8e+00|-1.454831e+01 -2.411304e+01| 0:0:00| chol  1  1 
+ 8|1.000|0.631|4.3e-09|3.0e-04|5.4e+00|-1.835253e+01 -2.369065e+01| 0:0:00| chol  1  1 
+ 9|0.846|0.486|1.6e-09|1.5e-04|2.2e+00|-2.133672e+01 -2.356079e+01| 0:0:00| chol  1  1 
+10|1.000|0.347|9.0e-10|9.9e-05|1.0e+00|-2.243699e+01 -2.345827e+01| 0:0:00| chol  1  1 
+11|1.000|0.466|2.6e-10|5.3e-05|4.2e-01|-2.294740e+01 -2.336188e+01| 0:0:00| chol  1  1 
+12|1.000|0.427|6.2e-10|3.0e-05|2.1e-01|-2.310092e+01 -2.330676e+01| 0:0:00| chol  1  1 
+13|0.985|0.572|9.1e-11|1.3e-05|6.7e-02|-2.319410e+01 -2.326065e+01| 0:0:00| chol  1  1 
+14|0.958|0.726|1.1e-11|3.6e-06|1.5e-02|-2.321891e+01 -2.323367e+01| 0:0:00| chol  1  1 
+15|0.882|0.752|3.1e-12|8.8e-07|3.4e-03|-2.322248e+01 -2.322583e+01| 0:0:00| chol  1  1 
+16|0.995|0.866|1.1e-11|7.1e-06|3.9e-04|-2.322323e+01 -2.322360e+01| 0:0:00| chol  1  1 
+17|1.000|0.819|3.9e-13|8.2e-07|8.4e-05|-2.322325e+01 -2.322333e+01| 0:0:00| chol  1  1 
+18|0.961|0.955|5.7e-14|1.8e-07|2.0e-05|-2.322327e+01 -2.322328e+01| 0:0:00| chol  1  1 
+19|0.994|0.988|8.5e-14|4.2e-08|4.8e-07|-2.322328e+01 -2.322328e+01| 0:0:00| chol  1  1 
+20|0.997|0.989|1.5e-13|1.0e-09|8.2e-09|-2.322328e+01 -2.322328e+01| 0:0:00|
+  stop: max(relative gap, infeasibilities) &lt; 1.49e-08
+-------------------------------------------------------------------
+ number of iterations   = 20
+ primal objective value = -2.32232795e+01
+ dual   objective value = -2.32232795e+01
+ gap := trace(XZ)       = 8.20e-09
+ relative gap           = 1.73e-10
+ actual relative gap    = 1.37e-10
+ rel. primal infeas (scaled problem)   = 1.53e-13
+ rel. dual     "        "       "      = 1.01e-09
+ rel. primal infeas (unscaled problem) = 0.00e+00
+ rel. dual     "        "       "      = 0.00e+00
+ norm(X), norm(y), norm(Z) = 3.4e+01, 6.5e-01, 1.3e+00
+ norm(A), norm(b), norm(C) = 1.7e+01, 4.6e+01, 3.2e+00
+ Total CPU time (secs)  = 0.31  
+ CPU time per iteration = 0.02  
+ termination code       =  0
+ DIMACS: 1.5e-13  0.0e+00  1.6e-09  0.0e+00  1.4e-10  1.7e-10
+-------------------------------------------------------------------
+ 
+------------------------------------------------------------
+Status: Solved
+Optimal value (cvx_optval): +0.75017
+ 
+Done! 
+# using an equivalent formulation by replacing the diversification
+  constraint by an equivalent set of linear constraints... 
+Calling SDPT3 4.0: 105 variables, 52 equality constraints
+   For improved efficiency, SDPT3 is solving the dual problem.
+------------------------------------------------------------
+
+ num. of constraints = 52
+ dim. of socp   var  = 27,   num. of socp blk  =  1
+ dim. of linear var  = 77
+ dim. of free   var  =  1 *** convert ublk to lblk
+*******************************************************************
+   SDPT3: Infeasible path-following algorithms
+*******************************************************************
+ version  predcorr  gam  expon  scale_data
+    NT      1      0.000   1        0    
+it pstep dstep pinfeas dinfeas  gap      prim-obj      dual-obj    cputime
+-------------------------------------------------------------------
+ 0|0.000|0.000|2.1e+02|2.8e+01|3.1e+05|-8.063529e+01  0.000000e+00| 0:0:00| chol  1  1 
+ 1|1.000|0.483|3.4e-05|1.5e+01|1.7e+05| 1.185100e+03 -2.293968e+02| 0:0:00| chol  1  1 
+ 2|1.000|0.972|3.6e-06|5.0e-01|6.7e+03| 1.049396e+03 -2.631938e+01| 0:0:00| chol  1  1 
+ 3|1.000|0.807|2.6e-07|1.2e-01|2.2e+03| 8.206845e+02 -3.612868e+01| 0:0:00| chol  1  1 
+ 4|1.000|0.450|8.1e-07|6.9e-02|9.8e+02| 4.566425e+02 -3.269217e+01| 0:0:00| chol  1  1 
+ 5|0.933|0.994|2.3e-07|2.9e-03|1.5e+02| 1.173937e+02 -2.449329e+01| 0:0:00| chol  1  1 
+ 6|0.905|0.953|2.7e-08|8.3e-04|1.6e+01|-8.869882e+00 -2.415960e+01| 0:0:00| chol  1  1 
+ 7|1.000|0.073|4.7e-09|7.9e-04|9.8e+00|-1.454829e+01 -2.411304e+01| 0:0:00| chol  1  1 
+ 8|1.000|0.631|4.3e-09|3.0e-04|5.4e+00|-1.835244e+01 -2.369065e+01| 0:0:00| chol  1  1 
+ 9|0.846|0.486|1.5e-09|1.5e-04|2.2e+00|-2.133670e+01 -2.356079e+01| 0:0:00| chol  1  1 
+10|1.000|0.347|1.4e-09|9.9e-05|1.0e+00|-2.243700e+01 -2.345827e+01| 0:0:00| chol  1  1 
+11|1.000|0.466|2.6e-10|5.3e-05|4.2e-01|-2.294740e+01 -2.336188e+01| 0:0:00| chol  1  1 
+12|1.000|0.427|9.2e-10|3.0e-05|2.1e-01|-2.310093e+01 -2.330676e+01| 0:0:00| chol  1  1 
+13|0.985|0.572|9.5e-11|1.3e-05|6.7e-02|-2.319410e+01 -2.326065e+01| 0:0:00| chol  1  1 
+14|0.958|0.726|7.5e-11|3.6e-06|1.5e-02|-2.321891e+01 -2.323367e+01| 0:0:00| chol  1  1 
+15|0.882|0.752|5.6e-12|8.8e-07|3.4e-03|-2.322248e+01 -2.322583e+01| 0:0:00| chol  1  1 
+16|0.995|0.866|3.5e-12|7.1e-06|3.9e-04|-2.322323e+01 -2.322360e+01| 0:0:00| chol  1  1 
+17|1.000|0.819|2.2e-13|8.2e-07|8.4e-05|-2.322325e+01 -2.322333e+01| 0:0:00| chol  1  1 
+18|0.961|0.955|6.6e-14|1.8e-07|2.0e-05|-2.322327e+01 -2.322328e+01| 0:0:00| chol  1  1 
+19|0.994|0.988|8.1e-14|4.2e-08|4.8e-07|-2.322328e+01 -2.322328e+01| 0:0:00| chol  1  1 
+20|0.997|0.989|9.0e-14|1.0e-09|8.2e-09|-2.322328e+01 -2.322328e+01| 0:0:00|
+  stop: max(relative gap, infeasibilities) &lt; 1.49e-08
+-------------------------------------------------------------------
+ number of iterations   = 20
+ primal objective value = -2.32232795e+01
+ dual   objective value = -2.32232795e+01
+ gap := trace(XZ)       = 8.20e-09
+ relative gap           = 1.73e-10
+ actual relative gap    = 1.37e-10
+ rel. primal infeas (scaled problem)   = 9.00e-14
+ rel. dual     "        "       "      = 1.01e-09
+ rel. primal infeas (unscaled problem) = 0.00e+00
+ rel. dual     "        "       "      = 0.00e+00
+ norm(X), norm(y), norm(Z) = 3.4e+01, 6.5e-01, 1.3e+00
+ norm(A), norm(b), norm(C) = 1.7e+01, 4.6e+01, 3.2e+00
+ Total CPU time (secs)  = 0.27  
+ CPU time per iteration = 0.01  
+ termination code       =  0
+ DIMACS: 9.0e-14  0.0e+00  1.6e-09  0.0e+00  1.4e-10  1.7e-10
+-------------------------------------------------------------------
+ 
+------------------------------------------------------------
+Status: Solved
+Optimal value (cvx_optval): +0.75017
+ 
+Done! 
+------------------------------------------------------------------------
+The optimal portfolios obtained from the original problem formulation and
+from the equivalent formulation are respectively: 
+    0.0000    0.0000
+    0.0000    0.0000
+    0.1342    0.1342
+    0.0000    0.0000
+    0.0000    0.0000
+    0.1177    0.1177
+    0.1134    0.1134
+    0.0123    0.0123
+    0.0904    0.0904
+    0.0256    0.0256
+    0.0451    0.0451
+    0.0437    0.0437
+    0.0000    0.0000
+    0.1435    0.1435
+    0.0000    0.0000
+    0.0086    0.0086
+    0.1177    0.1177
+    0.0000    0.0000
+    0.0000    0.0000
+    0.0000    0.0000
+    0.0000    0.0000
+    0.0000    0.0000
+    0.0313    0.0313
+    0.1164    0.1164
+    0.0000    0.0000
+
+They are equal as expected!
+</pre>
+</div>
+</body>
+</html>

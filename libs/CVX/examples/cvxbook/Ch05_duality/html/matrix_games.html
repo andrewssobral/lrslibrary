@@ -1,0 +1,212 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Section 5.2.5: Mixed strategies for matrix games</title>
+<link rel="canonical" href="/Users/mcgrant/Projects/CVX/examples/cvxbook/Ch05_duality/html/matrix_games.html">
+<link rel="stylesheet" href="../../../examples.css" type="text/css">
+</head>
+<body>
+<div id="header">
+<h1>Section 5.2.5: Mixed strategies for matrix games</h1>
+Jump to:&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#source">Source code</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#output">Text output</a>
+&nbsp;&nbsp;&nbsp;&nbsp;
+Plots
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../../index.html">Library index</a>
+</div>
+<div id="content">
+<a id="source"></a>
+<pre class="codeinput">
+<span class="comment">% Boyd &amp; Vandenberghe "Convex Optimization"</span>
+<span class="comment">% Jo&euml;lle Skaf - 08/24/05</span>
+<span class="comment">%</span>
+<span class="comment">% Player 1 wishes to choose u to minimize his expected payoff u'Pv, while</span>
+<span class="comment">% player 2 wishes to choose v to maximize u'Pv, where P is the payoff</span>
+<span class="comment">% matrix, u and v are the probability distributions of the choices of each</span>
+<span class="comment">% player (i.e. u&gt;=0, v&gt;=0, sum(u_i)=1, sum(v_i)=1)</span>
+
+<span class="comment">% Input data</span>
+randn(<span class="string">'state'</span>,0);
+n = 10;
+m = 10;
+P = randn(n,m);
+
+<span class="comment">% Optimal strategy for Player 1</span>
+fprintf(1,<span class="string">'Computing the optimal strategy for player 1 ... '</span>);
+
+cvx_begin
+    variable <span class="string">u(n)</span>
+    minimize ( max ( P'*u) )
+    u &gt;= 0;
+    ones(1,n)*u == 1;
+cvx_end
+
+fprintf(1,<span class="string">'Done! \n'</span>);
+obj1 = cvx_optval;
+
+<span class="comment">% Optimal strategy for Player 2</span>
+fprintf(1,<span class="string">'Computing the optimal strategy for player 2 ... '</span>);
+
+cvx_begin
+    variable <span class="string">v(m)</span>
+    maximize ( min (P*v) )
+    v &gt;= 0;
+    ones(1,m)*v == 1;
+cvx_end
+
+fprintf(1,<span class="string">'Done! \n'</span>);
+obj2 = cvx_optval;
+
+<span class="comment">% Displaying results</span>
+disp(<span class="string">'------------------------------------------------------------------------'</span>);
+disp(<span class="string">'The optimal strategies for players 1 and 2 are respectively: '</span>);
+disp([u v]);
+disp(<span class="string">'The expected payoffs for player 1 and player 2 respectively are: '</span>);
+[obj1 obj2]
+disp(<span class="string">'They are equal as expected!'</span>);
+</pre>
+<a id="output"></a>
+<pre class="codeoutput">
+Computing the optimal strategy for player 1 ...  
+Calling SDPT3 4.0: 21 variables, 11 equality constraints
+   For improved efficiency, SDPT3 is solving the dual problem.
+------------------------------------------------------------
+
+ num. of constraints = 11
+ dim. of linear var  = 20
+ dim. of free   var  =  1 *** convert ublk to lblk
+*******************************************************************
+   SDPT3: Infeasible path-following algorithms
+*******************************************************************
+ version  predcorr  gam  expon  scale_data
+    NT      1      0.000   1        0    
+it pstep dstep pinfeas dinfeas  gap      prim-obj      dual-obj    cputime
+-------------------------------------------------------------------
+ 0|0.000|0.000|6.8e+01|1.9e+01|2.0e+03|-2.875957e-10  0.000000e+00| 0:0:00| chol  1  1 
+ 1|0.922|0.672|5.3e+00|6.2e+00|5.3e+02| 1.092866e+01 -8.571053e+00| 0:0:00| chol  1  1 
+ 2|1.000|0.983|1.6e-06|1.1e-01|2.8e+01| 1.120629e+01 -9.348594e+00| 0:0:00| chol  1  1 
+ 3|1.000|0.778|1.5e-05|2.6e-02|4.9e+00| 2.004974e+00 -2.556511e+00| 0:0:00| chol  1  1 
+ 4|1.000|0.059|5.1e-07|2.5e-02|3.4e+00| 6.870098e-01 -2.471027e+00| 0:0:00| chol  1  1 
+ 5|1.000|0.811|1.4e-06|4.7e-03|1.2e+00| 4.497659e-01 -7.508211e-01| 0:0:00| chol  1  1 
+ 6|0.788|0.439|4.3e-07|2.7e-03|6.9e-01| 1.587167e-01 -5.229421e-01| 0:0:00| chol  1  1 
+ 7|1.000|0.243|2.0e-07|2.0e-03|5.4e-01| 9.891227e-02 -4.359804e-01| 0:0:00| chol  1  1 
+ 8|1.000|0.345|1.1e-07|1.3e-03|4.0e-01| 8.446486e-02 -3.138211e-01| 0:0:00| chol  1  1 
+ 9|1.000|0.538|3.2e-08|6.1e-04|1.8e-01| 7.062822e-03 -1.681214e-01| 0:0:00| chol  1  1 
+10|0.973|0.554|7.2e-09|2.7e-04|7.3e-02|-2.008158e-02 -9.295244e-02| 0:0:00| chol  1  1 
+11|1.000|0.259|1.0e-09|2.0e-04|5.5e-02|-2.280339e-02 -7.724530e-02| 0:0:00| chol  1  1 
+12|1.000|0.506|4.5e-10|9.9e-05|2.7e-02|-2.599561e-02 -5.299552e-02| 0:0:00| chol  1  1 
+13|1.000|0.684|1.1e-10|3.1e-05|8.4e-03|-2.746133e-02 -3.582520e-02| 0:0:00| chol  1  1 
+14|1.000|0.570|1.3e-11|1.3e-05|3.5e-03|-2.777471e-02 -3.129391e-02| 0:0:00| chol  1  1 
+15|1.000|0.835|5.1e-12|2.2e-06|5.7e-04|-2.785176e-02 -2.842344e-02| 0:0:00| chol  1  1 
+16|0.990|0.980|3.7e-13|7.7e-06|1.2e-05|-2.785582e-02 -2.786744e-02| 0:0:00| chol  1  1 
+17|1.000|0.989|1.3e-15|1.6e-07|2.7e-07|-2.785581e-02 -2.785607e-02| 0:0:00| chol  1  1 
+18|1.000|0.989|4.7e-16|3.6e-09|5.0e-09|-2.785588e-02 -2.785588e-02| 0:0:00|
+  stop: max(relative gap, infeasibilities) &lt; 1.49e-08
+-------------------------------------------------------------------
+ number of iterations   = 18
+ primal objective value = -2.78558776e-02
+ dual   objective value = -2.78558824e-02
+ gap := trace(XZ)       = 4.98e-09
+ relative gap           = 4.72e-09
+ actual relative gap    = 4.55e-09
+ rel. primal infeas (scaled problem)   = 4.67e-16
+ rel. dual     "        "       "      = 3.58e-09
+ rel. primal infeas (unscaled problem) = 0.00e+00
+ rel. dual     "        "       "      = 0.00e+00
+ norm(X), norm(y), norm(Z) = 1.0e+00, 4.4e-01, 7.8e-01
+ norm(A), norm(b), norm(C) = 1.2e+01, 2.0e+00, 2.4e+00
+ Total CPU time (secs)  = 0.19  
+ CPU time per iteration = 0.01  
+ termination code       =  0
+ DIMACS: 4.7e-16  0.0e+00  4.3e-09  0.0e+00  4.5e-09  4.7e-09
+-------------------------------------------------------------------
+ 
+------------------------------------------------------------
+Status: Solved
+Optimal value (cvx_optval): +0.0278559
+ 
+Done! 
+Computing the optimal strategy for player 2 ...  
+Calling SDPT3 4.0: 21 variables, 11 equality constraints
+   For improved efficiency, SDPT3 is solving the dual problem.
+------------------------------------------------------------
+
+ num. of constraints = 11
+ dim. of linear var  = 20
+ dim. of free   var  =  1 *** convert ublk to lblk
+*******************************************************************
+   SDPT3: Infeasible path-following algorithms
+*******************************************************************
+ version  predcorr  gam  expon  scale_data
+    NT      1      0.000   1        0    
+it pstep dstep pinfeas dinfeas  gap      prim-obj      dual-obj    cputime
+-------------------------------------------------------------------
+ 0|0.000|0.000|6.4e+01|1.9e+01|2.0e+03|-2.875957e-10  0.000000e+00| 0:0:00| chol  1  1 
+ 1|0.918|0.659|5.2e+00|6.4e+00|5.4e+02| 1.096098e+01 -8.090662e+00| 0:0:00| chol  1  1 
+ 2|1.000|0.983|2.6e-06|1.2e-01|2.8e+01| 1.127141e+01 -9.363119e+00| 0:0:00| chol  1  1 
+ 3|1.000|0.795|1.5e-05|2.5e-02|4.7e+00| 2.064202e+00 -2.318812e+00| 0:0:00| chol  1  1 
+ 4|1.000|0.059|8.2e-07|2.4e-02|3.1e+00| 5.952251e-01 -2.240006e+00| 0:0:00| chol  1  1 
+ 5|1.000|0.817|1.2e-06|4.4e-03|1.1e+00| 4.136831e-01 -6.778022e-01| 0:0:00| chol  1  1 
+ 6|0.857|0.466|3.7e-07|2.3e-03|6.1e-01| 2.070733e-01 -3.961679e-01| 0:0:00| chol  1  1 
+ 7|1.000|0.244|1.7e-07|1.8e-03|4.7e-01| 1.456891e-01 -3.182912e-01| 0:0:00| chol  1  1 
+ 8|0.877|0.499|9.8e-08|8.8e-04|2.4e-01| 7.303608e-02 -1.654118e-01| 0:0:00| chol  1  1 
+ 9|1.000|0.298|1.9e-08|6.2e-04|1.7e-01| 5.689301e-02 -1.144651e-01| 0:0:00| chol  1  1 
+10|1.000|0.516|8.3e-09|3.0e-04|8.3e-02| 3.785206e-02 -4.426405e-02| 0:0:00| chol  1  1 
+11|1.000|0.623|1.8e-09|1.1e-04|3.0e-02| 3.055158e-02  4.199343e-04| 0:0:00| chol  1  1 
+12|0.890|0.635|4.4e-10|4.1e-05|1.1e-02| 2.849869e-02  1.779363e-02| 0:0:00| chol  1  1 
+13|0.977|0.575|5.9e-11|1.8e-05|4.4e-03| 2.791838e-02  2.355086e-02| 0:0:00| chol  1  1 
+14|1.000|0.845|8.8e-12|2.7e-06|6.8e-04| 2.785824e-02  2.718556e-02| 0:0:00| chol  1  1 
+15|0.990|0.979|7.4e-13|9.0e-06|1.5e-05| 2.785591e-02  2.784165e-02| 0:0:00| chol  1  1 
+16|1.000|0.989|3.9e-15|2.0e-07|3.3e-07| 2.785596e-02  2.785564e-02| 0:0:00| chol  1  1 
+17|1.000|0.989|2.2e-15|4.4e-09|6.1e-09| 2.785588e-02  2.785587e-02| 0:0:00|
+  stop: max(relative gap, infeasibilities) &lt; 1.49e-08
+-------------------------------------------------------------------
+ number of iterations   = 17
+ primal objective value =  2.78558806e-02
+ dual   objective value =  2.78558747e-02
+ gap := trace(XZ)       = 6.12e-09
+ relative gap           = 5.79e-09
+ actual relative gap    = 5.58e-09
+ rel. primal infeas (scaled problem)   = 2.16e-15
+ rel. dual     "        "       "      = 4.39e-09
+ rel. primal infeas (unscaled problem) = 0.00e+00
+ rel. dual     "        "       "      = 0.00e+00
+ norm(X), norm(y), norm(Z) = 7.8e-01, 5.4e-01, 1.0e+00
+ norm(A), norm(b), norm(C) = 1.2e+01, 2.0e+00, 2.4e+00
+ Total CPU time (secs)  = 0.16  
+ CPU time per iteration = 0.01  
+ termination code       =  0
+ DIMACS: 2.2e-15  0.0e+00  5.3e-09  0.0e+00  5.6e-09  5.8e-09
+-------------------------------------------------------------------
+ 
+------------------------------------------------------------
+Status: Solved
+Optimal value (cvx_optval): +0.0278559
+ 
+Done! 
+------------------------------------------------------------------------
+The optimal strategies for players 1 and 2 are respectively: 
+    0.1804    0.0000
+    0.0000    0.3254
+    0.0000    0.0924
+    0.1549    0.0000
+    0.1129    0.0000
+    0.0000    0.0264
+    0.0000    0.4099
+    0.1003    0.0509
+    0.1474    0.0949
+    0.3040    0.0000
+
+The expected payoffs for player 1 and player 2 respectively are: 
+
+ans =
+
+    0.0279    0.0279
+
+They are equal as expected!
+</pre>
+</div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Computes Chernoff upper bounds on probability</title>
+<link rel="canonical" href="/Users/mcgrant/Projects/CVX/examples/cvxbook/Ch07_statistical_estim/html/cher.html">
+<link rel="stylesheet" href="../../../examples.css" type="text/css">
+</head>
+<body>
+<div id="header">
+<h1>Computes Chernoff upper bounds on probability</h1>
+Jump to:&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#source">Source code</a>&nbsp;&nbsp;&nbsp;&nbsp;
+Text output
+&nbsp;&nbsp;&nbsp;&nbsp;
+Plots
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../../index.html">Library index</a>
+</div>
+<div id="content">
+<a id="source"></a>
+<pre class="codeinput">
+<span class="keyword">function</span> prob = cher( A, b, Sigma );
+
+<span class="comment">% Computes a bound on the probability that a Gaussian random vector</span>
+<span class="comment">% N(0,Sigma) satisfies A x &lt;= b, by solving a QP</span>
+<span class="comment">%</span>
+
+[ m, n ] = size( A );
+cvx_begin <span class="string">quiet</span>
+    variable <span class="string">u( m )</span>
+    minimize( b' * u + 0.5 * sum_square( chol( Sigma ) * A' * u ) )
+    subject <span class="string">to</span>
+        u &gt;= 0;
+cvx_end
+prob = exp( cvx_optval );
+</pre>
+</div>
+</body>
+</html>

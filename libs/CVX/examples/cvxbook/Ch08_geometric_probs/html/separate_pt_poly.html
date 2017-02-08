@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Section 8.1.1: Separating a point from a polyhedron</title>
+<link rel="canonical" href="/Users/mcgrant/Projects/CVX/examples/cvxbook/Ch08_geometric_probs/html/separate_pt_poly.html">
+<link rel="stylesheet" href="../../../examples.css" type="text/css">
+</head>
+<body>
+<div id="header">
+<h1>Section 8.1.1: Separating a point from a polyhedron</h1>
+Jump to:&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#source">Source code</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#output">Text output</a>
+&nbsp;&nbsp;&nbsp;&nbsp;
+Plots
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../../index.html">Library index</a>
+</div>
+<div id="content">
+<a id="source"></a>
+<pre class="codeinput">
+<span class="comment">% Boyd &amp; Vandenberghe "Convex Optimization"</span>
+<span class="comment">% Joelle Skaf - 10/09/05</span>
+<span class="comment">%</span>
+<span class="comment">% The goal is to produce a hyperplane separating x0 and the polyhedron</span>
+<span class="comment">% defined as {x | Ax &lt;= b}</span>
+<span class="comment">%           minimize    mu'*x0 - b'*lambda</span>
+<span class="comment">%                       A'*lambda = mu</span>
+<span class="comment">%                       norm(mu)* &lt;= 1</span>
+<span class="comment">%                       lambda &gt;= 0</span>
+
+<span class="comment">% Input data</span>
+randn(<span class="string">'seed'</span>,0);
+n  = 10;
+m  = 2*n;
+x0 = randn(n,1);
+A  = randn(m,n);
+b  = rand(m,1);
+
+<span class="comment">% CVX solution</span>
+fprintf(1,<span class="string">'Finding a separating hyperplane between the 2 polyhedra...'</span>);
+
+cvx_begin <span class="string">quiet</span>
+    variables <span class="string">muu(n)</span> <span class="string">lambda(m)</span>
+    maximize ( muu'*x0 - b'*lambda )
+    A'*lambda == muu;
+    norm(muu) &lt;= 1;
+    lambda &gt;= 0;
+cvx_end
+
+fprintf(1,<span class="string">'Done! \n'</span>);
+
+<span class="comment">% Verification</span>
+disp(<span class="string">'------------------------------------------------------------------'</span>);
+disp(<span class="string">'Note that 0 is in {x | Ax &lt;= b} by construction...'</span> );
+disp(<span class="string">'Verifying that x0 is separated from {x | Ax &lt;= b} i.e. mu^T*x0 &gt; 0'</span>);
+disp([<span class="string">' mu^T*x0 = '</span> num2str(muu'*x0) ]);
+</pre>
+<a id="output"></a>
+<pre class="codeoutput">
+Finding a separating hyperplane between the 2 polyhedra...Done! 
+------------------------------------------------------------------
+Note that 0 is in {x | Ax &lt;= b} by construction...
+Verifying that x0 is separated from {x | Ax &lt;= b} i.e. mu^T*x0 &gt; 0
+ mu^T*x0 = 2.7668
+</pre>
+</div>
+</body>
+</html>

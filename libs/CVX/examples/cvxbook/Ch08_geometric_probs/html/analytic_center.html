@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Section 8.5.3: Analytic center of a set of linear inequalities</title>
+<link rel="canonical" href="/Users/mcgrant/Projects/CVX/examples/cvxbook/Ch08_geometric_probs/html/analytic_center.html">
+<link rel="stylesheet" href="../../../examples.css" type="text/css">
+</head>
+<body>
+<div id="header">
+<h1>Section 8.5.3: Analytic center of a set of linear inequalities</h1>
+Jump to:&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#source">Source code</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#output">Text output</a>
+&nbsp;&nbsp;&nbsp;&nbsp;
+Plots
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../../index.html">Library index</a>
+</div>
+<div id="content">
+<a id="source"></a>
+<pre class="codeinput">
+<span class="comment">% Boyd &amp; Vandenberghe "Convex Optimization"</span>
+<span class="comment">% Jo&Atilde;&laquo;lle Skaf - 04/29/08</span>
+<span class="comment">%</span>
+<span class="comment">% The analytic center of a set of linear inequalities and equalities:</span>
+<span class="comment">%           a_i^Tx &lt;= b_i   i=1,...,m,</span>
+<span class="comment">%           Fx = g,</span>
+<span class="comment">% is the solution of the unconstrained minimization problem</span>
+<span class="comment">%           minimize    -sum_{i=1}^m log(b_i-a_i^Tx).</span>
+
+<span class="comment">% Input data</span>
+randn(<span class="string">'state'</span>, 0);
+rand(<span class="string">'state'</span>, 0);
+n = 10;
+m = 50;
+p = 5;
+tmp = randn(n,1);
+A = randn(m,n);
+b = A*tmp + 10*rand(m,1);
+F = randn(p,n);
+g = F*tmp;
+
+<span class="comment">% Analytic center</span>
+cvx_begin
+    variable <span class="string">x(n)</span>
+    minimize <span class="string">-sum(log(b-A*x))</span>
+    F*x == g
+cvx_end
+
+disp([<span class="string">'The analytic center of the set of linear inequalities and '</span> <span class="keyword">...</span>
+      <span class="string">'equalities is: '</span>]);
+disp(x);
+</pre>
+<a id="output"></a>
+<pre class="codeoutput">
+ 
+Successive approximation method to be employed.
+   For improved efficiency, SDPT3 is solving the dual problem.
+   SDPT3 will be called several times to refine the solution.
+   Original size: 155 variables, 60 equality constraints
+   50 exponentials add 400 variables, 250 equality constraints
+-----------------------------------------------------------------
+ Cones  |             Errors              |
+Mov/Act | Centering  Exp cone   Poly cone | Status
+--------+---------------------------------+---------
+ 50/ 50 | 3.700e+00  7.922e-01  0.000e+00 | Solved
+ 50/ 50 | 6.027e-01  2.364e-02  0.000e+00 | Solved
+ 46/ 50 | 5.799e-02  2.176e-04  0.000e+00 | Solved
+ 13/ 39 | 6.785e-03  2.986e-06  0.000e+00 | Solved
+  2/ 12 | 7.432e-04  3.537e-08  0.000e+00 | Solved
+  0/  1 | 8.438e-05  6.251e-11  0.000e+00 | Solved
+-----------------------------------------------------------------
+Status: Solved
+Optimal value (cvx_optval): -64.8504
+ 
+The analytic center of the set of linear inequalities and equalities is: 
+   -0.3618
+   -1.5333
+    0.1387
+    0.2491
+   -1.1163
+    1.3142
+    1.2303
+   -0.0511
+    0.4031
+    0.1248
+
+</pre>
+</div>
+</body>
+</html>

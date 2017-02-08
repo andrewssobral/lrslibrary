@@ -1,0 +1,119 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Box volume maximization</title>
+<link rel="canonical" href="/Users/mcgrant/Projects/CVX/examples/gp_tutorial/html/max_volume_box.html">
+<link rel="stylesheet" href="../../examples.css" type="text/css">
+</head>
+<body>
+<div id="header">
+<h1>Box volume maximization</h1>
+Jump to:&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#source">Source code</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#output">Text output</a>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#plots">Plots</a>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../index.html">Library index</a>
+</div>
+<div id="content">
+<a id="source"></a>
+<pre class="codeinput">
+<span class="comment">% Boyd, Kim, Vandenberghe, and Hassibi, "A Tutorial on Geometric Programming"</span>
+<span class="comment">% Written for CVX by Almir Mutapcic 02/08/06</span>
+<span class="comment">% (a figure is generated)</span>
+<span class="comment">%</span>
+<span class="comment">% Maximizes volume of a box-shaped structure which has constraints</span>
+<span class="comment">% on its total wall area, its total floor area, and which has lower</span>
+<span class="comment">% and upper bounds on the aspect ratios. This leads to a GP:</span>
+<span class="comment">%</span>
+<span class="comment">%   maximize   h*w*d</span>
+<span class="comment">%       s.t.   2(h*w + h*d) &lt;= Awall, w*d &lt;= Afloor</span>
+<span class="comment">%              alpha &lt;= h/w &lt;= beta</span>
+<span class="comment">%              gamma &lt;= d/w &lt;= delta</span>
+<span class="comment">%</span>
+<span class="comment">% where variables are the box height h, width w, and depth d.</span>
+
+<span class="comment">% problem constants</span>
+alpha = 0.5; beta = 2; gamma = 0.5; delta = 2;
+
+<span class="comment">% varying parameters for an optimal trade-off curve</span>
+N = 10;
+Afloor = logspace(1,3,N);
+Awall  = [100 1000 10000];
+opt_volumes = zeros(length(Awall),N);
+
+disp(<span class="string">'Computing optimal box volume for:'</span>)
+
+<span class="comment">% setup various GP problems with varying parameters</span>
+<span class="keyword">for</span> k = 1:length(Awall)
+  Awall_k = Awall(k);
+  fprintf( <span class="string">'Awall = %d:\n'</span>, Awall(k) );
+  <span class="keyword">for</span> n = 1:N
+    <span class="comment">% resolve the problem with varying parameters</span>
+    Afloor_n = Afloor(n);
+    fprintf( <span class="string">'    Afloor = %7.2f: '</span>, Afloor(n) );
+    cvx_begin <span class="string">gp</span> <span class="string">quiet</span>
+      variables <span class="string">h</span> <span class="string">w</span> <span class="string">d</span>
+      <span class="comment">% objective function is the box volume</span>
+      maximize( h*w*d )
+      subject <span class="string">to</span>
+        2*(h*w + h*d) &lt;= Awall_k;
+        w*d &lt;= Afloor_n;
+        alpha &lt;= h/w &lt;= beta;
+        gamma &lt;= d/w &lt;= delta;
+    cvx_end
+    fprintf( <span class="string">'max_volume = %3.2f\n'</span>, cvx_optval );
+    opt_volumes(k,n) = cvx_optval;
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="comment">% plot the tradeoff curve</span>
+figure, clf
+loglog(Afloor,opt_volumes(1,:), Afloor,opt_volumes(2,:), Afloor,opt_volumes(3,:));
+xlabel(<span class="string">'Afloor'</span>); ylabel(<span class="string">'V'</span>);
+</pre>
+<a id="output"></a>
+<pre class="codeoutput">
+Computing optimal box volume for:
+Awall = 100:
+    Afloor =   10.00: max_volume = 77.46
+    Afloor =   16.68: max_volume = 102.11
+    Afloor =   27.83: max_volume = 131.87
+    Afloor =   46.42: max_volume = 170.32
+    Afloor =   77.43: max_volume = 192.45
+    Afloor =  129.15: max_volume = 192.45
+    Afloor =  215.44: max_volume = 192.45
+    Afloor =  359.38: max_volume = 192.45
+    Afloor =  599.48: max_volume = 192.45
+    Afloor = 1000.00: max_volume = 192.45
+Awall = 1000:
+    Afloor =   10.00: max_volume = 89.44
+    Afloor =   16.68: max_volume = 192.70
+    Afloor =   27.83: max_volume = 415.16
+    Afloor =   46.42: max_volume = 894.43
+    Afloor =   77.43: max_volume = 1926.98
+    Afloor =  129.15: max_volume = 2841.16
+    Afloor =  215.44: max_volume = 3669.50
+    Afloor =  359.38: max_volume = 4739.34
+    Afloor =  599.48: max_volume = 5998.71
+    Afloor = 1000.00: max_volume = 6085.81
+Awall = 10000:
+    Afloor =   10.00: max_volume = 89.44
+    Afloor =   16.68: max_volume = 192.70
+    Afloor =   27.83: max_volume = 415.16
+    Afloor =   46.42: max_volume = 894.43
+    Afloor =   77.43: max_volume = 1926.98
+    Afloor =  129.15: max_volume = 4151.56
+    Afloor =  215.44: max_volume = 8944.27
+    Afloor =  359.38: max_volume = 19269.85
+    Afloor =  599.48: max_volume = 41515.63
+    Afloor = 1000.00: max_volume = 77459.67
+</pre>
+<a id="plots"></a>
+<div id="plotoutput">
+<img src="max_volume_box__01.png" alt=""> 
+</div>
+</div>
+</body>
+</html>

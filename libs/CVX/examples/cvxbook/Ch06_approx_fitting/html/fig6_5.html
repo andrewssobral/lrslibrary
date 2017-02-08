@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Example 6.2: Robust regression using the Huber penalty</title>
+<link rel="canonical" href="/Users/mcgrant/Projects/CVX/examples/cvxbook/Ch06_approx_fitting/html/fig6_5.html">
+<link rel="stylesheet" href="../../../examples.css" type="text/css">
+</head>
+<body>
+<div id="header">
+<h1>Example 6.2: Robust regression using the Huber penalty</h1>
+Jump to:&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#source">Source code</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#output">Text output</a>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#plots">Plots</a>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../../index.html">Library index</a>
+</div>
+<div id="content">
+<a id="source"></a>
+<pre class="codeinput">
+<span class="comment">% Section 6.1.2, Figure 6.5</span>
+<span class="comment">% Boyd &amp; Vandenberghe "Convex Optimization"</span>
+<span class="comment">% Original by Lieven Vandenberghe</span>
+<span class="comment">% Adapted for CVX by Joelle Skaf - 09/07/05</span>
+<span class="comment">%</span>
+<span class="comment">% Compares the solution of regular Least-squares:</span>
+<span class="comment">%           minimize    sum(y_i - alpha - beta*t_i)^2</span>
+<span class="comment">% to the solution of the following:</span>
+<span class="comment">%           minimize    sum( phi_h (y_i - alpha - beta*t_i)^2 )</span>
+<span class="comment">% where phi_h is the Huber penalty function, (t_i,y_i) are data points in a</span>
+<span class="comment">% plane.</span>
+
+<span class="comment">% Input data</span>
+randn(<span class="string">'seed'</span>,1);
+rand(<span class="string">'seed'</span>,1);
+
+m=40;  n=2;    A = randn(m,n);
+xex = [5;1];
+pts = -10+20*rand(m,1);
+A = [ones(m,1) pts];
+b = A*xex + .5*randn(m,1);
+outliers = [-9.5; 9];  outvals = [20; -15];
+A = [A; ones(length(outliers),1), outliers];
+b = [b; outvals];
+m = size(A,1);
+pts = [pts;outliers];
+
+<span class="comment">% Least Squares</span>
+fprintf(1,<span class="string">'Computing the solution of the least-squares problem...'</span>);
+
+xls =  A\b;
+
+fprintf(1,<span class="string">'Done! \n'</span>);
+
+<span class="comment">% Huber</span>
+fprintf(1,<span class="string">'Computing the solution of the huber-penalized problem...'</span>);
+
+cvx_begin <span class="string">quiet</span>
+    variable <span class="string">xhub(n)</span>
+    minimize(sum(huber(A*xhub-b)))
+cvx_end
+
+fprintf(1,<span class="string">'Done! \n'</span>);
+
+<span class="comment">% Plots</span>
+figure(1);  hold <span class="string">off</span>
+plot(pts,b,<span class="string">'o'</span>, [-11; 11], [1 -11; 1 11]*xhub, <span class="string">'-'</span>, <span class="keyword">...</span>
+     [-11; 11], [1 -11; 1 11]*xls, <span class="string">'--'</span>);
+axis([-11 11 -20 25])
+title(<span class="string">'Least-square fit vs robust least-squares fit (Huber-penalized)'</span>);
+xlabel(<span class="string">'x'</span>);
+ylabel(<span class="string">'y'</span>);
+legend(<span class="string">'Data points'</span>,<span class="string">'Huber penalty'</span>,<span class="string">'Regular LS'</span>,<span class="string">'Location'</span>,<span class="string">'Best'</span>);
+<span class="comment">%print -deps robustls.eps</span>
+</pre>
+<a id="output"></a>
+<pre class="codeoutput">
+Computing the solution of the least-squares problem...Done! 
+Computing the solution of the huber-penalized problem...Done! 
+</pre>
+<a id="plots"></a>
+<div id="plotoutput">
+<img src="fig6_5__01.png" alt=""> 
+</div>
+</div>
+</body>
+</html>

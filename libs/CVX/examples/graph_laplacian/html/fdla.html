@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Computes the fastest distributed linear averaging (FDLA) edge weights</title>
+<link rel="canonical" href="/Users/mcgrant/Projects/CVX/examples/graph_laplacian/html/fdla.html">
+<link rel="stylesheet" href="../../examples.css" type="text/css">
+</head>
+<body>
+<div id="header">
+<h1>Computes the fastest distributed linear averaging (FDLA) edge weights</h1>
+Jump to:&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#source">Source code</a>&nbsp;&nbsp;&nbsp;&nbsp;
+Text output
+&nbsp;&nbsp;&nbsp;&nbsp;
+Plots
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../index.html">Library index</a>
+</div>
+<div id="content">
+<a id="source"></a>
+<pre class="codeinput">
+<span class="keyword">function</span> [ w, cvx_optval ] = fdla( A )
+
+<span class="comment">% [W,S] = FDLA(A) gives a vector of the fastest distributed linear averaging</span>
+<span class="comment">% edge weights for a graph described by the incidence matrix A (n x m).</span>
+<span class="comment">% Here n is the number of nodes and m is the number of edges in the graph;</span>
+<span class="comment">% each column of A has exactly one +1 and one -1.</span>
+<span class="comment">%</span>
+<span class="comment">% The FDLA edge weights are given by the SDP:</span>
+<span class="comment">%</span>
+<span class="comment">%   minimize    s</span>
+<span class="comment">%   subject to  -s*I &lt;= I - L - (1/n)11' &lt;= s*I</span>
+<span class="comment">%</span>
+<span class="comment">% where the variables are edge weights w in R^m and s in R.</span>
+<span class="comment">% Here L is the weighted Laplacian defined by L = A*diag(w)*A'.</span>
+<span class="comment">% The optimal value is s, and is returned in the second output.</span>
+<span class="comment">%</span>
+<span class="comment">% For more details see the references:</span>
+<span class="comment">% "Fast linear iterations for distributed averaging" by L. Xiao and S. Boyd</span>
+<span class="comment">% "Convex Optimization of Graph Laplacian Eigenvalues" by S. Boyd</span>
+<span class="comment">%</span>
+<span class="comment">% Written for CVX by Almir Mutapcic 08/29/06</span>
+
+[n,m] = size(A);
+I = eye(n,n);
+J = I - (1/n) * ones(n,n);
+cvx_begin <span class="string">sdp</span>
+    variable <span class="string">w(m,1)</span>   <span class="comment">% edge weights</span>
+    variable <span class="string">s</span>        <span class="comment">% epigraph variable</span>
+    variable <span class="string">L(n,n)</span> <span class="string">symmetric</span>
+    minimize( s )
+    subject <span class="string">to</span>
+        L == A * diag(w) * A';
+        -s * I &lt;= J - L &lt;= s * I;
+cvx_end
+</pre>
+</div>
+</body>
+</html>

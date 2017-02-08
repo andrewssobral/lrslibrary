@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Weighted analytic center of a set of linear inequalities</title>
+<link rel="canonical" href="/Users/mcgrant/Projects/CVX/examples/log_exp/html/weighted_analytic_center.html">
+<link rel="stylesheet" href="../../examples.css" type="text/css">
+</head>
+<body>
+<div id="header">
+<h1>Weighted analytic center of a set of linear inequalities</h1>
+Jump to:&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#source">Source code</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#output">Text output</a>
+&nbsp;&nbsp;&nbsp;&nbsp;
+Plots
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../index.html">Library index</a>
+</div>
+<div id="content">
+<a id="source"></a>
+<pre class="codeinput">
+<span class="comment">% Jo&Atilde;&laquo;lle Skaf - 04/29/08</span>
+<span class="comment">%</span>
+<span class="comment">% The weighted analytic center of a set of linear inequalities:</span>
+<span class="comment">%           a_i^Tx &lt;= b_i   i=1,...,m,</span>
+<span class="comment">% is the solution of the unconstrained minimization problem</span>
+<span class="comment">%           minimize    -sum_{i=1}^m w_i*log(b_i-a_i^Tx),</span>
+<span class="comment">% where w_i&gt;0</span>
+
+<span class="comment">% Input data</span>
+randn(<span class="string">'state'</span>, 0);
+rand(<span class="string">'state'</span>, 0);
+n = 10;
+m = 50;
+tmp = randn(n,1);
+A = randn(m,n);
+b = A*tmp + 2*rand(m,1);
+w = rand(m,1);
+
+<span class="comment">% Analytic center</span>
+cvx_begin
+    variable <span class="string">x(n)</span>
+    minimize <span class="string">-sum(w.*log(b-A*x))</span>
+cvx_end
+
+disp(<span class="string">'The weighted analytic center of the set of linear inequalities is: '</span>);
+disp(x);
+</pre>
+<a id="output"></a>
+<pre class="codeoutput">
+ 
+Successive approximation method to be employed.
+   For improved efficiency, SDPT3 is solving the dual problem.
+   SDPT3 will be called several times to refine the solution.
+   Original size: 150 variables, 60 equality constraints
+   50 exponentials add 400 variables, 250 equality constraints
+-----------------------------------------------------------------
+ Cones  |             Errors              |
+Mov/Act | Centering  Exp cone   Poly cone | Status
+--------+---------------------------------+---------
+ 50/ 50 | 4.642e+00  1.215e+00  0.000e+00 | Solved
+ 50/ 50 | 9.246e-01  5.647e-02  0.000e+00 | Solved
+ 47/ 50 | 7.922e-02  4.134e-04  0.000e+00 | Solved
+ 35/ 44 | 8.288e-03  4.540e-06  0.000e+00 | Solved
+ 11/ 30 | 9.917e-04  6.459e-08  0.000e+00 | Solved
+  0/  5 | 1.158e-04  4.969e-10  0.000e+00 | Solved
+-----------------------------------------------------------------
+Status: Solved
+Optimal value (cvx_optval): +5.99254
+ 
+The weighted analytic center of the set of linear inequalities is: 
+   -0.5100
+   -1.4794
+    0.3397
+    0.1944
+   -1.0444
+    1.1956
+    1.3927
+   -0.2815
+    0.2862
+    0.3779
+
+</pre>
+</div>
+</body>
+</html>

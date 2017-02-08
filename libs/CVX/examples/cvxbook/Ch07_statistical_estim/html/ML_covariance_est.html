@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Section 7.1.1: Covariance estimation for Gaussian variables</title>
+<link rel="canonical" href="/Users/mcgrant/Projects/CVX/examples/cvxbook/Ch07_statistical_estim/html/ML_covariance_est.html">
+<link rel="stylesheet" href="../../../examples.css" type="text/css">
+</head>
+<body>
+<div id="header">
+<h1>Section 7.1.1: Covariance estimation for Gaussian variables</h1>
+Jump to:&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#source">Source code</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#output">Text output</a>
+&nbsp;&nbsp;&nbsp;&nbsp;
+Plots
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../../index.html">Library index</a>
+</div>
+<div id="content">
+<a id="source"></a>
+<pre class="codeinput">
+<span class="comment">% Boyd &amp; Vandenberghe "Convex Optimization"</span>
+<span class="comment">% Jo&Atilde;&laquo;lle Skaf - 04/24/08</span>
+<span class="comment">%</span>
+<span class="comment">% Suppose y \in\reals^n is a Gaussian random variable with zero mean and</span>
+<span class="comment">% covariance matrix R = \Expect(yy^T). We want to estimate the covariance</span>
+<span class="comment">% matrix R based on N independent samples y1,...,yN drawn from the</span>
+<span class="comment">% distribution, and using prior knowledge about R (lower and upper bounds</span>
+<span class="comment">% on R)</span>
+<span class="comment">%           L &lt;= R &lt;= U</span>
+<span class="comment">% Let S be R^{-1}. The maximum likelihood (ML) estimate of S is found</span>
+<span class="comment">% by solving the problem</span>
+<span class="comment">%           maximize    logdet(S) - tr(SY)</span>
+<span class="comment">%           subject to  U^{-1} &lt;= S &lt;= L^{-1}</span>
+<span class="comment">% where Y is the sample covariance of y1,...,yN.</span>
+
+<span class="comment">% Input data</span>
+randn(<span class="string">'state'</span>,0);
+n = 10;
+N = 1000;
+tmp = randn(n);
+L = tmp*tmp';
+tmp = randn(n);
+U = L + tmp*tmp';
+R = (L+U)/2;
+y_sample = sqrtm(R)*randn(n,N);
+Y = cov(y_sample');
+Ui = inv(U); Ui = 0.5*(Ui+Ui');
+Li = inv(L); Li = 0.5*(Li+Li');
+
+<span class="comment">% Maximum likelihood estimate of R^{-1}</span>
+cvx_begin <span class="string">sdp</span>
+    variable <span class="string">S(n,n)</span> <span class="string">symmetric</span>
+    maximize( log_det(S) - trace(S*Y) );
+    S &gt;= Ui;
+    S &lt;= Li;
+cvx_end
+R_hat = inv(S);
+</pre>
+<a id="output"></a>
+<pre class="codeoutput">
+ 
+Successive approximation method to be employed.
+   For improved efficiency, SDPT3 is solving the dual problem.
+   SDPT3 will be called several times to refine the solution.
+   Original size: 357 variables, 123 equality constraints
+   1 exponentials add 8 variables, 5 equality constraints
+-----------------------------------------------------------------
+ Cones  |             Errors              |
+Mov/Act | Centering  Exp cone   Poly cone | Status
+--------+---------------------------------+---------
+  1/  1 | 3.564e+00  7.339e-01  0.000e+00 | Solved
+  1/  1 | 4.992e-01  1.578e-02  0.000e+00 | Solved
+  1/  1 | 6.554e-03  2.691e-06  0.000e+00 | Solved
+  0/  1 | 1.506e-04  1.227e-09  0.000e+00 | Solved
+-----------------------------------------------------------------
+Status: Solved
+Optimal value (cvx_optval): -30.6698
+ 
+</pre>
+</div>
+</body>
+</html>

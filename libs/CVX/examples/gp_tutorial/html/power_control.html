@@ -1,0 +1,108 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Simple power control in communication systems via GP.</title>
+<link rel="canonical" href="/Users/mcgrant/Projects/CVX/examples/gp_tutorial/html/power_control.html">
+<link rel="stylesheet" href="../../examples.css" type="text/css">
+</head>
+<body>
+<div id="header">
+<h1>Simple power control in communication systems via GP.</h1>
+Jump to:&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#source">Source code</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#output">Text output</a>
+&nbsp;&nbsp;&nbsp;&nbsp;
+Plots
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../index.html">Library index</a>
+</div>
+<div id="content">
+<a id="source"></a>
+<pre class="codeinput">
+<span class="comment">% Boyd, Kim, Vandenberghe, and Hassibi, "A Tutorial on Geometric Programming"</span>
+<span class="comment">% Written for CVX by Almir Mutapcic 02/08/06</span>
+<span class="comment">% (a figure is generated)</span>
+<span class="comment">%</span>
+<span class="comment">% Solves the power control problem in communication systems, where</span>
+<span class="comment">% we want to minimize the total transmitter power for n transmitters,</span>
+<span class="comment">% subject to minimum SINR level, and lower and upper bounds on powers.</span>
+<span class="comment">% This results in a GP:</span>
+<span class="comment">%</span>
+<span class="comment">%   minimize   sum(P)</span>
+<span class="comment">%       s.t.   Pmin &lt;= P &lt;= Pmax</span>
+<span class="comment">%              SINR &gt;= SINR_min</span>
+<span class="comment">%</span>
+<span class="comment">% where variables are transmitter powers P.</span>
+<span class="comment">% Numerical data for the specific examples was made up.</span>
+
+<span class="comment">% problem constants</span>
+n = 5;                 <span class="comment">% number of transmitters and receivers</span>
+sigma = 0.5*ones(n,1); <span class="comment">% noise power at the receiver i</span>
+Pmin = 0.1*ones(n,1);  <span class="comment">% minimum power at the transmitter i</span>
+Pmax = 5*ones(n,1);    <span class="comment">% maximum power at the transmitter i</span>
+SINR_min = 2;          <span class="comment">% threshold SINR for each receiver</span>
+
+<span class="comment">% path gain matrix</span>
+G = [1.0  0.1  0.2  0.1  0.0
+     0.1  1.0  0.1  0.1  0.0
+     0.2  0.1  2.0  0.2  0.2
+     0.1  0.1  0.2  1.0  0.1
+     0.0  0.0  0.2  0.1  1.0];
+
+<span class="comment">% variables are power levels</span>
+cvx_begin <span class="string">gp</span>
+  variable <span class="string">P(n)</span>
+  <span class="comment">% objective function is the total transmitter power</span>
+  minimize( sum(P) )
+  subject <span class="string">to</span>
+    <span class="comment">% formulate the inverse SINR at each receiver using vectorize features</span>
+    Gdiag = diag(G);          <span class="comment">% the main diagonal of G matrix</span>
+    Gtilde = G - diag(Gdiag); <span class="comment">% G matrix without the main diagonal</span>
+    <span class="comment">% inverse SINR</span>
+    inverseSINR = (sigma + Gtilde*P)./(Gdiag.*P);
+    <span class="comment">% constraints are power limits and minimum SINR level</span>
+    Pmin &lt;= P &lt;= Pmax;
+    inverseSINR &lt;= (1/SINR_min);
+cvx_end
+
+fprintf(1,<span class="string">'\nThe minimum total transmitter power is %3.2f.\n'</span>,cvx_optval);
+disp(<span class="string">'Optimal power levels are: '</span>), P
+</pre>
+<a id="output"></a>
+<pre class="codeoutput">
+ 
+Successive approximation method to be employed.
+   For improved efficiency, SDPT3 is solving the dual problem.
+   SDPT3 will be called several times to refine the solution.
+   Original size: 98 variables, 36 equality constraints
+   26 exponentials add 208 variables, 130 equality constraints
+-----------------------------------------------------------------
+ Cones  |             Errors              |
+Mov/Act | Centering  Exp cone   Poly cone | Status
+--------+---------------------------------+---------
+ 21/ 21 | 3.753e+00  7.874e-01  0.000e+00 | Unbounded
+ 26/ 26 | 3.365e+00  6.758e-01  0.000e+00 | Solved
+ 26/ 26 | 6.728e-01  3.243e-02  0.000e+00 | Solved
+ 23/ 25 | 3.640e-02  9.118e-05  0.000e+00 | Solved
+  5/ 21 | 3.262e-03  7.326e-07  0.000e+00 | Solved
+  0/  5 | 2.875e-04  5.136e-09  0.000e+00 | Solved
+-----------------------------------------------------------------
+Status: Solved
+Optimal value (cvx_optval): +17.0014
+ 
+
+The minimum total transmitter power is 17.00.
+Optimal power levels are: 
+
+P =
+
+    3.6601
+    3.1623
+    2.9867
+    4.1647
+    3.0276
+
+</pre>
+</div>
+</body>
+</html>

@@ -1,5 +1,2 @@
-# Ignore everything in this directory
-*
-# Except these files
-!.gitignore
-!__INSTALL_CVX_HERE__
+doc/_build
+

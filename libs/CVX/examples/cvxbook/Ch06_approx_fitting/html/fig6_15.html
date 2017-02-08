@@ -1,0 +1,122 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Figure 6.15: A comparison of stochastic and worst-case robust approximation</title>
+<link rel="canonical" href="/Users/mcgrant/Projects/CVX/examples/cvxbook/Ch06_approx_fitting/html/fig6_15.html">
+<link rel="stylesheet" href="../../../examples.css" type="text/css">
+</head>
+<body>
+<div id="header">
+<h1>Figure 6.15: A comparison of stochastic and worst-case robust approximation</h1>
+Jump to:&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#source">Source code</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#output">Text output</a>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#plots">Plots</a>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../../index.html">Library index</a>
+</div>
+<div id="content">
+<a id="source"></a>
+<pre class="codeinput">
+<span class="comment">% Section 6.4.2</span>
+<span class="comment">% Boyd &amp; Vandenberghe "Convex Optimization"</span>
+<span class="comment">% Original by Lieven Vandenberghe</span>
+<span class="comment">% Adapted for CVX by Joelle Skaf - 10/03/05</span>
+<span class="comment">%</span>
+<span class="comment">% Consider the least-squares problem:</span>
+<span class="comment">%       minimize ||(A + tB)x - b||_2</span>
+<span class="comment">% where t is an uncertain parameter in [-1,1]</span>
+<span class="comment">% Three approximate solutions are found:</span>
+<span class="comment">%   1- nominal optimal (i.e. letting t=0)</span>
+<span class="comment">%   2- stochastic robust approximation:</span>
+<span class="comment">%           minimize E||(A+tB)x - b||_2</span>
+<span class="comment">%      assuming u is uniformly distributed on [-1,1] )</span>
+<span class="comment">%      (reduces to minimizing E ||(A+tB)x-b||^2 = ||A*x-b||^2  + x^TPx</span>
+<span class="comment">%        where P = E(t^2) B^TB = (1/3) B^TB )</span>
+<span class="comment">%   3- worst-case robust approximation:</span>
+<span class="comment">%           minimize sup{-1&lt;=u&lt;=1} ||(A+tB)x - b||_2)</span>
+<span class="comment">%      (reduces to minimizing max{||(A-B)x - b||_2, ||(A+B)x - b||_2} )</span>
+
+<span class="comment">% Input Data</span>
+randn(<span class="string">'seed'</span>,0);
+m=20;  n=10;
+A = randn(m,n);
+[U,S,V] = svd(A);
+S = diag(logspace(-1,1,n));
+A = U(:,1:n)*S*V';
+
+B = randn(m,n);
+B = B/norm(B);
+
+b = randn(m,1);
+
+<span class="comment">% Case 1: Nominal optimal solution</span>
+fprintf(1,<span class="string">'Computing the optimal solution for: \n'</span>);
+fprintf(1,<span class="string">'1) the nominal problem ... '</span>);
+
+cvx_begin <span class="string">quiet</span>
+    variable <span class="string">x_nom(n)</span>
+    minimize ( norm(A*x_nom - b) )
+cvx_end
+<span class="comment">%         (reduces to minimizing max{||(A-B)x - b||_2, ||(A+B)x - b||_2}</span>
+fprintf(1,<span class="string">'Done! \n'</span>);
+
+<span class="comment">% Case 2: Stochastic robust approximation</span>
+
+fprintf(1,<span class="string">'2) the stochastic robust approximation problem ... '</span>);
+
+P = (1/3)*B'*B;
+cvx_begin <span class="string">quiet</span>
+    variable <span class="string">x_stoch(n)</span>
+    minimize (  square_pos(norm(A*x_stoch - b)) + quad_form(x_stoch,P) )
+cvx_end
+
+fprintf(1,<span class="string">'Done! \n'</span>);
+
+<span class="comment">% Case 3: Worst-case robust approximation</span>
+
+fprintf(1,<span class="string">'3) the worst-case robust approximation problem ... '</span>);
+
+cvx_begin <span class="string">quiet</span>
+    variable <span class="string">x_wc(n)</span>
+    minimize ( max( norm((A-B)*x_wc - b), norm((A+B)*x_wc - b) ) )
+cvx_end
+
+fprintf(1,<span class="string">'Done! \n'</span>);
+
+<span class="comment">% plot residuals</span>
+novals = 100;
+parvals = linspace(-2,2,novals);
+
+errvals_ls = [];
+errvals_stoch = [];
+errvals_wc = [];
+<span class="keyword">for</span> k=1:novals
+   errvals_ls = [errvals_ls, norm((A+parvals(k)*B)*x_nom - b)];
+   errvals_stoch = [errvals_stoch, norm((A+parvals(k)*B)*x_stoch - b)];
+   errvals_wc = [errvals_wc, norm((A+parvals(k)*B)*x_wc - b)];
+<span class="keyword">end</span>;
+
+plot(parvals, errvals_ls, <span class="string">'-'</span>, parvals, errvals_stoch, <span class="string">'-'</span>, <span class="keyword">...</span>
+     parvals, errvals_wc, <span class="string">'-'</span>, [-1;-1], [0; 12], <span class="string">'k--'</span>, <span class="keyword">...</span>
+     [1;1], [0; 12], <span class="string">'k--'</span>);
+xlabel(<span class="string">'u'</span>);
+ylabel(<span class="string">'r(u) = ||A(u)x-b||_2'</span>);
+title(<span class="string">'Residual r(u) vs a parameter u for three approximate solutions'</span>);
+<span class="comment">% print -deps robappr.eps</span>
+</pre>
+<a id="output"></a>
+<pre class="codeoutput">
+Computing the optimal solution for: 
+1) the nominal problem ... Done! 
+2) the stochastic robust approximation problem ... Done! 
+3) the worst-case robust approximation problem ... Done! 
+</pre>
+<a id="plots"></a>
+<div id="plotoutput">
+<img src="fig6_15__01.png" alt=""> 
+</div>
+</div>
+</body>
+</html>

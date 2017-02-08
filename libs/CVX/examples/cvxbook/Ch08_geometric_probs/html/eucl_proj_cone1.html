@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Euclidean projection on the nonnegative orthant</title>
+<link rel="canonical" href="/Users/mcgrant/Projects/CVX/examples/cvxbook/Ch08_geometric_probs/html/eucl_proj_cone1.html">
+<link rel="stylesheet" href="../../../examples.css" type="text/css">
+</head>
+<body>
+<div id="header">
+<h1>Euclidean projection on the nonnegative orthant</h1>
+Jump to:&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#source">Source code</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#output">Text output</a>
+&nbsp;&nbsp;&nbsp;&nbsp;
+Plots
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../../index.html">Library index</a>
+</div>
+<div id="content">
+<a id="source"></a>
+<pre class="codeinput">
+<span class="comment">% Section 8.1.1, Boyd &amp; Vandenberghe "Convex Optimization"</span>
+<span class="comment">% Joelle Skaf - 10/07/05</span>
+<span class="comment">%</span>
+<span class="comment">% The projection of x0 on the proper cone K = R+^n is given by</span>
+<span class="comment">%           minimize || x - x0 ||^2</span>
+<span class="comment">%               s.t.    x &gt;= 0</span>
+<span class="comment">% It is also given by: P_K(x0)_k = max{x0_k,0}</span>
+
+<span class="comment">% Input data</span>
+randn(<span class="string">'seed'</span>,0);
+n  = 10;
+x0 = randn(n,1);
+
+fprintf(1,<span class="string">'Computing the analytical solution...'</span>);
+
+<span class="comment">% Analytical solution</span>
+pk_x0 = max(x0,0);
+
+fprintf(1,<span class="string">'Done! \n'</span>);
+
+<span class="comment">% Solution via CVX</span>
+fprintf(1,<span class="string">'Computing the solution via a QP...'</span>);
+
+cvx_begin <span class="string">quiet</span>
+    variable <span class="string">x(n)</span>
+    minimize ( norm(x - x0) )
+    x &gt;= 0;
+cvx_end
+
+fprintf(1,<span class="string">'Done! \n'</span>);
+
+<span class="comment">% Verification</span>
+disp(<span class="string">'-----------------------------------------------------------------'</span>);
+disp(<span class="string">'Verifying that the analytical solution and the solution obtained via QP are equal: '</span>);
+[pk_x0 x]
+disp(<span class="string">'They are equal as expected!'</span>);
+</pre>
+<a id="output"></a>
+<pre class="codeoutput">
+Computing the analytical solution...Done! 
+Computing the solution via a QP...Done! 
+-----------------------------------------------------------------
+Verifying that the analytical solution and the solution obtained via QP are equal: 
+
+ans =
+
+    1.1650    1.1650
+    0.6268    0.6268
+    0.0751    0.0751
+    0.3516    0.3516
+         0    0.0000
+    1.6961    1.6961
+    0.0591    0.0591
+    1.7971    1.7971
+    0.2641    0.2641
+    0.8717    0.8717
+
+They are equal as expected!
+</pre>
+</div>
+</body>
+</html>

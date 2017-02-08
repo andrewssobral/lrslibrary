@@ -1,0 +1,171 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Minimize order of a linear phase lowpass FIR filter</title>
+<link rel="canonical" href="/Users/mcgrant/Projects/CVX/examples/filter_design/html/fir_lin_phase_lowpass_min_order.html">
+<link rel="stylesheet" href="../../examples.css" type="text/css">
+</head>
+<body>
+<div id="header">
+<h1>Minimize order of a linear phase lowpass FIR filter</h1>
+Jump to:&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#source">Source code</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#output">Text output</a>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#plots">Plots</a>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../index.html">Library index</a>
+</div>
+<div id="content">
+<a id="source"></a>
+<pre class="codeinput">
+<span class="comment">% "Filter design" lecture notes (EE364) by S. Boyd</span>
+<span class="comment">% (figures are generated)</span>
+<span class="comment">%</span>
+<span class="comment">% Designs a linear phase FIR lowpass filter such that it:</span>
+<span class="comment">% - minimizes the filter order</span>
+<span class="comment">% - has a constraint on the maximum passband ripple</span>
+<span class="comment">% - has a constraint on the maximum stopband attenuation</span>
+<span class="comment">%</span>
+<span class="comment">% This is a quasiconvex problem and can be solved using a bisection.</span>
+<span class="comment">%</span>
+<span class="comment">%   minimize   filter order n</span>
+<span class="comment">%       s.t.   1/delta &lt;= H(w) &lt;= delta     for w in the passband</span>
+<span class="comment">%              |H(w)| &lt;= atten_level        for w in the stopband</span>
+<span class="comment">%</span>
+<span class="comment">% where H is the frequency response function and variable is</span>
+<span class="comment">% the filter impulse response h (and its order/length).</span>
+<span class="comment">% Data is delta (max passband ripple) and atten_level (max stopband</span>
+<span class="comment">% attenuation level).</span>
+<span class="comment">%</span>
+<span class="comment">% Written for CVX by Almir Mutapcic 02/02/06</span>
+
+<span class="comment">%********************************************************************</span>
+<span class="comment">% user's filter specifications</span>
+<span class="comment">%********************************************************************</span>
+<span class="comment">% filter order that is used to start the bisection (has to be feasible)</span>
+max_order = 20;
+
+wpass = 0.12*pi;        <span class="comment">% passband cutoff freq (in radians)</span>
+wstop = 0.24*pi;        <span class="comment">% stopband start freq (in radians)</span>
+delta = 0.5;            <span class="comment">% max (+/-) passband ripple in dB</span>
+atten = -35;      <span class="comment">% stopband attenuation level in dB</span>
+
+<span class="comment">%********************************************************************</span>
+<span class="comment">% create optimization parameters</span>
+<span class="comment">%********************************************************************</span>
+m = 30*max_order; <span class="comment">% freq samples (rule-of-thumb)</span>
+w = linspace(0,pi,m);
+
+<span class="comment">%*********************************************************************</span>
+<span class="comment">% use bisection algorithm to solve the problem</span>
+<span class="comment">%*********************************************************************</span>
+
+n_bot = 1;
+n_top = max_order;
+n = Inf;
+
+disp(<span class="string">'Rememeber that we are only considering filters with linear phase, i.e.,'</span>)
+disp(<span class="string">'filters that are symmetric around their midpoint and have order 2*n+1.'</span>)
+disp(<span class="string">' '</span>)
+
+<span class="keyword">while</span>( n_top - n_bot &gt; 1)
+    <span class="comment">% try to find a feasible design for given specs</span>
+    n_cur = ceil( (n_top + n_bot)/2 );
+
+    <span class="comment">% create optimization matrices (this is cosine matrix)</span>
+    A = [ones(m,1) 2*cos(kron(w',[1:n_cur]))];
+
+    <span class="comment">% passband 0 &lt;= w &lt;= w_pass</span>
+    ind = find((0 &lt;= w) &amp; (w &lt;= wpass));    <span class="comment">% passband</span>
+    Ap  = A(ind,:);
+
+    <span class="comment">% transition band is not constrained (w_pass &lt;= w &lt;= w_stop)</span>
+
+    <span class="comment">% stopband (w_stop &lt;= w)</span>
+    ind = find((wstop &lt;= w) &amp; (w &lt;= pi));   <span class="comment">% stopband</span>
+    As  = A(ind,:);
+
+    ptop = 10^(delta/20);
+
+    <span class="comment">% This is the feasibility problem:</span>
+    <span class="comment">% cvx_begin</span>
+    <span class="comment">%      variable h_cur(n_cur+1,1);</span>
+    <span class="comment">%      10^(-delta/20) &lt;= Ap * h_cur &lt;=  10^(+delta/20);</span>
+    <span class="comment">%      abs( As * h_cur ) &lt;= +10^(+atten/20);</span>
+    <span class="comment">% cvx_end</span>
+    <span class="comment">% Unfortunately, the solvers often struggle with this formulation. For</span>
+    <span class="comment">% this model, there is a logical optimization problem: minimize the</span>
+    <span class="comment">% stopband attenuation. If the minimum attenuation is below the target,</span>
+    <span class="comment">% then we know the original problem is feasible.</span>
+    cvx_begin <span class="string">quiet</span>
+         variable <span class="string">h_cur(n_cur+1,1)</span>;
+         minimize( max( abs( As * h_cur ) ) );
+         10^(-delta/20) &lt;= Ap * h_cur &lt;=  10^(+delta/20);
+    cvx_end
+
+    <span class="comment">% bisection</span>
+    <span class="keyword">if</span> isnan( cvx_optval ),
+        fprintf( 1, <span class="string">'Solver failed for n = %d taps, assuming infeasible\n'</span>, n_cur );
+        n_bot = n_cur;
+    <span class="keyword">elseif</span> cvx_optval &lt;= 10^(atten/20),
+        fprintf(1,<span class="string">'Problem is feasible for n = %d taps\n'</span>,n_cur);
+        n_top = n_cur;
+        <span class="keyword">if</span> n &gt; n_cur,
+            n = n_cur;
+            h = h_cur;
+        <span class="keyword">end</span>
+    <span class="keyword">else</span>
+        fprintf(1,<span class="string">'Problem not feasible for n = %d taps\n'</span>,n_cur);
+        n_bot = n_cur;
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+h = [ h(end:-1:2); h ];
+fprintf(1,<span class="string">'\nOptimum number of filter taps for given specs is 2n+1 = %d.\n'</span>, length(h));
+
+<span class="comment">%********************************************************************</span>
+<span class="comment">% plots</span>
+<span class="comment">%********************************************************************</span>
+figure(1)
+<span class="comment">% FIR impulse response</span>
+plot([-n:n],h',<span class="string">'o'</span>,[-n:n],h',<span class="string">'b:'</span>)
+xlabel(<span class="string">'t'</span>), ylabel(<span class="string">'h(t)'</span>)
+
+figure(2)
+<span class="comment">% frequency response</span>
+H = exp(-j*kron(w',[0:2*n]))*h;
+<span class="comment">% magnitude</span>
+subplot(2,1,1)
+plot(w,20*log10(abs(H)),<span class="keyword">...</span>
+    [wstop pi],[atten atten],<span class="string">'r--'</span>,<span class="keyword">...</span>
+    [0 wpass],[delta delta],<span class="string">'r--'</span>,<span class="keyword">...</span>
+    [0 wpass],[-delta -delta],<span class="string">'r--'</span>);
+axis([0,pi,-50,10])
+xlabel(<span class="string">'w'</span>), ylabel(<span class="string">'mag H(w) in dB'</span>)
+<span class="comment">% phase</span>
+subplot(2,1,2)
+plot(w,angle(H))
+axis([0,pi,-pi,pi])
+xlabel(<span class="string">'w'</span>), ylabel(<span class="string">'phase H(w)'</span>)
+</pre>
+<a id="output"></a>
+<pre class="codeoutput">
+Rememeber that we are only considering filters with linear phase, i.e.,
+filters that are symmetric around their midpoint and have order 2*n+1.
+ 
+Problem not feasible for n = 11 taps
+Problem is feasible for n = 16 taps
+Problem is feasible for n = 14 taps
+Problem is feasible for n = 13 taps
+Problem is feasible for n = 12 taps
+
+Optimum number of filter taps for given specs is 2n+1 = 25.
+</pre>
+<a id="plots"></a>
+<div id="plotoutput">
+<img src="fir_lin_phase_lowpass_min_order__01.png" alt=""> <img src="fir_lin_phase_lowpass_min_order__02.png" alt=""> 
+</div>
+</div>
+</body>
+</html>

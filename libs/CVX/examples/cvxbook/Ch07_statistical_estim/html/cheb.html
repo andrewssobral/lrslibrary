@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Computes Chebyshev lower bounds on probability vectors</title>
+<link rel="canonical" href="/Users/mcgrant/Projects/CVX/examples/cvxbook/Ch07_statistical_estim/html/cheb.html">
+<link rel="stylesheet" href="../../../examples.css" type="text/css">
+</head>
+<body>
+<div id="header">
+<h1>Computes Chebyshev lower bounds on probability vectors</h1>
+Jump to:&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#source">Source code</a>&nbsp;&nbsp;&nbsp;&nbsp;
+Text output
+&nbsp;&nbsp;&nbsp;&nbsp;
+Plots
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../../index.html">Library index</a>
+</div>
+<div id="content">
+<a id="source"></a>
+<pre class="codeinput">
+<span class="keyword">function</span> [cvx_optval,P,q,r,X,lambda] = cheb(A,b,Sigma);
+
+<span class="comment">% Calculates a lower bound on the probability that a random vector</span>
+<span class="comment">% x with mean zero and covariance Sigma satisfies A x &lt;= b</span>
+<span class="comment">%</span>
+<span class="comment">% Sigma must be positive definite</span>
+<span class="comment">%</span>
+<span class="comment">% output arguments:</span>
+<span class="comment">% - prob: lower bound on probability</span>
+<span class="comment">% - P,q,r: x'*P*x + 2*q'*x + r is a quadratic function</span>
+<span class="comment">%   that majorizes the 0-1 indicator function of the complement</span>
+<span class="comment">%   of the polyhedron,</span>
+<span class="comment">% - X, lambda:  a discrete distribution with mean zero, covariance</span>
+<span class="comment">%   Sigma and Prob(X not in C)  &gt;= 1-prob</span>
+
+<span class="comment">%</span>
+<span class="comment">% maximize  1 - Tr Sigma*P - r</span>
+<span class="comment">% s.t.      [ P  q     ]             [ 0      a_i/2 ]</span>
+<span class="comment">%           [ q' r - 1 ] &gt;= tau(i) * [ a_i'/2  -b_i ], i=1,...,m</span>
+<span class="comment">%           taui &gt;= 0</span>
+<span class="comment">%           [ P q  ]</span>
+<span class="comment">%           [ q' r ] &gt;= 0</span>
+<span class="comment">%</span>
+<span class="comment">% variables P in Sn, q in Rn, r in R</span>
+<span class="comment">%</span>
+
+[ m, n ] = size( A );
+cvx_begin <span class="string">sdp</span> <span class="string">quiet</span>
+    variable <span class="string">P(n,n)</span> <span class="string">symmetric</span>
+    variables <span class="string">q(n)</span> <span class="string">r</span> <span class="string">tau(m)</span>
+    dual <span class="string">variables</span> <span class="string">Z{m}</span>
+    maximize( 1 - trace( Sigma * P ) - r )
+    subject <span class="string">to</span>
+        <span class="keyword">for</span> i = 1 : m,
+            qadj = q - 0.5 * tau(i) * A(i,:)';
+            radj = r - 1 + tau(i) * b(i);
+            [ P, qadj ; qadj', radj ] &gt;= 0 : Z{i};
+        <span class="keyword">end</span>
+        [ P, q ; q', r ] &gt;= 0;
+        tau &gt;= 0;
+cvx_end
+
+<span class="keyword">if</span> nargout &lt; 4,
+    <span class="keyword">return</span>
+<span class="keyword">end</span>
+
+X = [];
+lambda = [];
+<span class="keyword">for</span> i=1:m
+   Zi = Z{i};
+   <span class="keyword">if</span> (abs(Zi(3,3)) &gt; 1e-4)
+      lambda = [lambda; Zi(3,3)];
+      X = [X Zi(1:2,3)/Zi(3,3)];
+   <span class="keyword">end</span>;
+<span class="keyword">end</span>;
+mu = 1-sum(lambda);
+<span class="keyword">if</span> (mu&gt;1e-5)
+   w = (-X*lambda)/mu;
+   W = (Sigma - X*diag(lambda)*X')/mu;
+   [v,d] = eig(W-w*w');
+   d = diag(d);
+   s = sum(d&gt;1e-5);
+   <span class="keyword">if</span> (d(1) &gt; 1e-5)
+      X = [X w+sqrt(s)*sqrt(d(1))*v(:,1) <span class="keyword">...</span>
+            w-sqrt(s)*sqrt(d(1))*v(:,1)];
+      lambda = [lambda; mu/(2*s); mu/(2*s)];
+   <span class="keyword">elseif</span> (d(2) &gt; 1e-5)
+      X = [X w+sqrt(s)*sqrt(d(2))*v(:,2) <span class="keyword">...</span>
+            w-sqrt(s)*sqrt(d(2))*v(:,2)];
+      lambda = [lambda; mu/(2*s); mu/(2*s)];
+   <span class="keyword">else</span>
+      X = [X w];
+      lambda = [lambda; mu];
+   <span class="keyword">end</span>;
+<span class="keyword">end</span>;
+</pre>
+</div>
+</body>
+</html>

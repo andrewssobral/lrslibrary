@@ -1,0 +1,98 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Example 6.3: Optimal input design</title>
+<link rel="canonical" href="/Users/mcgrant/Projects/CVX/examples/cvxbook/Ch06_approx_fitting/html/fig6_6.html">
+<link rel="stylesheet" href="../../../examples.css" type="text/css">
+</head>
+<body>
+<div id="header">
+<h1>Example 6.3: Optimal input design</h1>
+Jump to:&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#source">Source code</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#output">Text output</a>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#plots">Plots</a>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../../index.html">Library index</a>
+</div>
+<div id="content">
+<a id="source"></a>
+<pre class="codeinput">
+<span class="comment">% Section 6.3.2, Figure 6.6</span>
+<span class="comment">% Boyd &amp; Vandenberghe "Convex Optimization"</span>
+<span class="comment">% Original by Lieven Vandenberghe</span>
+<span class="comment">% Adapted for CVX by Joelle Skaf - 09/26/05</span>
+<span class="comment">%</span>
+<span class="comment">% Consider a dynamical system with scalar input sequence u(0),u(1),...,u(N)</span>
+<span class="comment">% and scalar output sequence y(0),y(1),...,y(N) related by the convolution</span>
+<span class="comment">% y = h*u where h = [h(0),h(1),...,h(N)] is the impulse response.</span>
+<span class="comment">% Our goal is to choose an input sequence to minimize the weighted sum:</span>
+<span class="comment">%           minimize J_track + delta*J_der + eta*J_mag</span>
+<span class="comment">% where J_track = 1/(N+1) sum_{t=0}^N (y(t) - y_des(t))^2</span>
+<span class="comment">%       J_mag   = 1/(N+1) sum_{t=0}^N u(t)^2</span>
+<span class="comment">%       J_der   = 1/N sum_{t=0}^{N-1} (u(t+1) - u(t))^2</span>
+
+<span class="comment">% Input data</span>
+m = 201;  n = 201;  N=200;
+t = [0:m-1]';
+h = (1/9)*((.9).^t) .* (1 - 0.4*cos(2*t));   <span class="comment">% sum(h) is approx. 1</span>
+
+H = toeplitz(h', [h(1) zeros(1,n-1)]);
+<span class="comment">% m1 = round(m/6); m2 = round(m/5); m3 = round(m/5);  m4 = m-m1-m2-m3;</span>
+m1 = round(m/5); m2 = round(m/4); m3 = round(m/4);  m4 = m-m1-m2-m3;
+y_des = [zeros(m1,1); ones(m2,1); -ones(m3,1); zeros(m4,1)];
+
+D = [-eye(n-1) zeros(n-1,1)];
+D = D + [zeros(n-1,1) eye(n-1)];
+
+delta = [0 0 0.3];
+eta = [0.005 0.05 0.05];
+disp(<span class="string">'Finding the optimal input for '</span>);
+<span class="keyword">for</span> i = 1:length(delta)
+    disp([<span class="string">'* delta = '</span> num2str(delta(i)) <span class="string">' and eta = '</span> num2str(eta(i))]);
+    cvx_begin <span class="string">quiet</span>
+    variable <span class="string">u(N+1)</span>
+    minimize ( square_pos(norm(H*u - y_des))/(N+1) + <span class="keyword">...</span>
+               eta(i)*square_pos(norm(u))/(N+1) + <span class="keyword">...</span>
+               delta(i)*square_pos(norm(D*u))/N )
+    cvx_end
+    <span class="keyword">switch</span>(i)
+        <span class="keyword">case</span> 1
+            figure(1); plot(t,u); xlabel(<span class="string">'t'</span>); ylabel(<span class="string">'u(t)'</span>);
+            title([<span class="string">'Input u(t) for \delta = '</span> num2str(delta(i)) <span class="string">' and  \eta = '</span> num2str(eta(i))]);
+            <span class="comment">%         print -deps smoothreg1u.eps</span>
+            figure(2); plot(t,H*u); xlabel(<span class="string">'t'</span>); ylabel(<span class="string">'y(t)'</span>);
+            title([<span class="string">'Output y(t) for \delta = '</span> num2str(delta(i)) <span class="string">' and  \eta = '</span> num2str(eta(i))]);
+            <span class="comment">%         print -deps smoothreg1y.eps</span>
+        <span class="keyword">case</span> 2
+            figure(3); plot(t,u); xlabel(<span class="string">'t'</span>); ylabel(<span class="string">'u(t)'</span>);
+            title([<span class="string">'Input u(t) for \delta = '</span> num2str(delta(i)) <span class="string">' and  \eta = '</span> num2str(eta(i))]);
+            <span class="comment">%         print -deps smoothreg2u.eps</span>
+            figure(4); plot(t,H*u); xlabel(<span class="string">'t'</span>); ylabel(<span class="string">'y(t)'</span>);
+            title([<span class="string">'Output y(t) for \delta = '</span> num2str(delta(i)) <span class="string">' and  \eta = '</span> num2str(eta(i))]);
+            <span class="comment">%         print -deps smoothreg2y.eps</span>
+        <span class="keyword">case</span> 3
+            figure(5); plot(t,u); xlabel(<span class="string">'t'</span>); ylabel(<span class="string">'u(t)'</span>);
+            title([<span class="string">'Input u(t) for \delta = '</span> num2str(delta(i)) <span class="string">' and  \eta = '</span> num2str(eta(i))]);
+            <span class="comment">%         print -deps smoothreg3u.eps</span>
+            figure(6); plot(t,H*u); xlabel(<span class="string">'t'</span>); ylabel(<span class="string">'y(t)'</span>);
+            title([<span class="string">'Output y(t) for \delta = '</span> num2str(delta(i)) <span class="string">' and  \eta = '</span> num2str(eta(i))]);
+            <span class="comment">%         print -deps smoothreg3y.eps</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre>
+<a id="output"></a>
+<pre class="codeoutput">
+Finding the optimal input for 
+* delta = 0 and eta = 0.005
+* delta = 0 and eta = 0.05
+* delta = 0.3 and eta = 0.05
+</pre>
+<a id="plots"></a>
+<div id="plotoutput">
+<img src="fig6_6__01.png" alt=""> <img src="fig6_6__02.png" alt=""> <img src="fig6_6__03.png" alt=""> <img src="fig6_6__04.png" alt=""> <img src="fig6_6__05.png" alt=""> <img src="fig6_6__06.png" alt=""> 
+</div>
+</div>
+</body>
+</html>

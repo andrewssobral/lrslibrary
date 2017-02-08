@@ -1,0 +1,224 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Minimize beamwidth of an array with arbitrary 2-D geometry</title>
+<link rel="canonical" href="/Users/mcgrant/Projects/CVX/examples/antenna_array_design/html/ant_array_min_beamwidth.html">
+<link rel="stylesheet" href="../../examples.css" type="text/css">
+</head>
+<body>
+<div id="header">
+<h1>Minimize beamwidth of an array with arbitrary 2-D geometry</h1>
+Jump to:&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#source">Source code</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#output">Text output</a>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#plots">Plots</a>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../index.html">Library index</a>
+</div>
+<div id="content">
+<a id="source"></a>
+<pre class="codeinput">
+<span class="comment">% "Convex optimization examples" lecture notes (EE364) by S. Boyd</span>
+<span class="comment">% "Antenna array pattern synthesis via convex optimization"</span>
+<span class="comment">% by H. Lebret and S. Boyd</span>
+<span class="comment">% (figures are generated)</span>
+<span class="comment">%</span>
+<span class="comment">% Designs an antenna array such that:</span>
+<span class="comment">% - it has unit sensitivity at some target direction</span>
+<span class="comment">% - it obeys a constraint on a minimum sidelobe level outside the beam</span>
+<span class="comment">% - it minimizes the beamwidth of the pattern</span>
+<span class="comment">%</span>
+<span class="comment">% This is a quasiconvex problem and can be solved using a bisection.</span>
+<span class="comment">%</span>
+<span class="comment">%   minimize   max |y(theta)|     for theta outside the beam</span>
+<span class="comment">%       s.t.   y(theta_tar) = 1</span>
+<span class="comment">%</span>
+<span class="comment">% where y is the antenna array gain pattern (complex function) and</span>
+<span class="comment">% variables are w (antenna array weights or shading coefficients).</span>
+<span class="comment">% Gain pattern is a linear function of w: y(theta) = w'*a(theta)</span>
+<span class="comment">% for some a(theta) describing antenna array configuration and specs.</span>
+<span class="comment">%</span>
+<span class="comment">% Written for CVX by Almir Mutapcic 02/02/06</span>
+
+<span class="comment">% select array geometry</span>
+ARRAY_GEOMETRY = <span class="string">'2D_RANDOM'</span>;
+<span class="comment">% ARRAY_GEOMETRY = '1D_UNIFORM_LINE';</span>
+<span class="comment">% ARRAY_GEOMETRY = '2D_UNIFORM_LATTICE';</span>
+
+<span class="comment">%********************************************************************</span>
+<span class="comment">% problem specs</span>
+<span class="comment">%********************************************************************</span>
+lambda = 1;           <span class="comment">% wavelength</span>
+theta_tar = 60;       <span class="comment">% target direction</span>
+min_sidelobe = -20;   <span class="comment">% maximum sidelobe level in dB</span>
+
+max_half_beam = 50;   <span class="comment">% starting half beamwidth (must be feasible)</span>
+
+<span class="comment">%********************************************************************</span>
+<span class="comment">% random array of n antenna elements</span>
+<span class="comment">%********************************************************************</span>
+<span class="keyword">if</span> strcmp( ARRAY_GEOMETRY, <span class="string">'2D_RANDOM'</span> )
+  <span class="comment">% set random seed to repeat experiments</span>
+  rand(<span class="string">'state'</span>,0);
+
+  <span class="comment">% (uniformly distributed on [0,L]-by-[0,L] square)</span>
+  n = 36;
+  L = 5;
+  loc = L*rand(n,2);
+
+<span class="comment">%********************************************************************</span>
+<span class="comment">% uniform 1D array with n elements with inter-element spacing d</span>
+<span class="comment">%********************************************************************</span>
+<span class="keyword">elseif</span> strcmp( ARRAY_GEOMETRY, <span class="string">'1D_UNIFORM_LINE'</span> )
+  <span class="comment">% (unifrom array on a line)</span>
+  n = 30;
+  d = 0.45*lambda;
+  loc = [d*[0:n-1]' zeros(n,1)];
+
+<span class="comment">%********************************************************************</span>
+<span class="comment">% uniform 2D array with m-by-m element with d spacing</span>
+<span class="comment">%********************************************************************</span>
+<span class="keyword">elseif</span> strcmp( ARRAY_GEOMETRY, <span class="string">'2D_UNIFORM_LATTICE'</span> )
+  m = 6; n = m^2;
+  d = 0.45*lambda;
+
+  loc = zeros(n,2);
+  <span class="keyword">for</span> x = 0:m-1
+    <span class="keyword">for</span> y = 0:m-1
+      loc(m*y+x+1,:) = [x y];
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+  loc = loc*d;
+
+<span class="keyword">else</span>
+  error(<span class="string">'Undefined array geometry'</span>)
+<span class="keyword">end</span>
+
+<span class="comment">%********************************************************************</span>
+<span class="comment">% construct optimization data</span>
+<span class="comment">%********************************************************************</span>
+<span class="comment">% build matrix A that relates w and y(theta), ie, y = A*w</span>
+theta = [1:360]';
+A = kron(cos(pi*theta/180), loc(:,1)') + kron(sin(pi*theta/180), loc(:,2)');
+A = exp(2*pi*i/lambda*A);
+
+<span class="comment">% target constraint matrix</span>
+[diff_closest, ind_closest] = min( abs(theta - theta_tar) );
+Atar = A(ind_closest,:);
+
+<span class="comment">%*********************************************************************</span>
+<span class="comment">% use bisection algorithm to solve the problem</span>
+<span class="comment">%*********************************************************************</span>
+
+halfbeam_bot = 1;
+halfbeam_top = max_half_beam;
+
+disp(<span class="string">'We are only considering integer values of the half beam-width'</span>)
+disp(<span class="string">'(since we are sampling the angle with 1 degree resolution).'</span>)
+disp(<span class="string">' '</span>)
+
+<span class="keyword">while</span>( halfbeam_top - halfbeam_bot &gt; 1)
+  <span class="comment">% try to find a feasible design for given specs</span>
+  halfbeam_cur = ceil( (halfbeam_top + halfbeam_bot)/2 );
+
+  <span class="comment">% create optimization matrices for the stopband</span>
+  ind = find(theta &lt;= (theta_tar-halfbeam_cur) | <span class="keyword">...</span>
+             theta &gt;= (theta_tar+halfbeam_cur) );
+  As = A(ind,:);
+
+  <span class="comment">% formulate and solve the feasibility antenna array problem</span>
+  cvx_begin <span class="string">quiet</span>
+    variable <span class="string">w(n)</span> <span class="string">complex</span>
+    <span class="comment">% feasibility problem</span>
+    Atar*w == 1;
+    abs(As*w) &lt;= 10^(min_sidelobe/20);
+  cvx_end
+
+  <span class="comment">% bisection</span>
+  <span class="keyword">if</span> strfind(cvx_status,<span class="string">'Solved'</span>) <span class="comment">% feasible</span>
+    fprintf(1,<span class="string">'Problem is feasible for half beam-width = %d degress\n'</span>,<span class="keyword">...</span>
+               halfbeam_cur);
+    halfbeam_top = halfbeam_cur;
+  <span class="keyword">else</span> <span class="comment">% not feasible</span>
+    fprintf(1,<span class="string">'Problem is not feasible for half beam-width = %d degress\n'</span>,<span class="keyword">...</span>
+               halfbeam_cur);
+    halfbeam_bot = halfbeam_cur;
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="comment">% optimal beamwidth</span>
+halfbeam = halfbeam_top;
+fprintf(1,<span class="string">'\nOptimum half beam-width for given specs is %d.\n'</span>,halfbeam);
+
+<span class="comment">% compute the minimum noise design for the optimal beamwidth</span>
+ind = find(theta &lt;= (theta_tar-halfbeam) | <span class="keyword">...</span>
+           theta &gt;= (theta_tar+halfbeam) );
+As = A(ind,:);
+cvx_begin <span class="string">quiet</span>
+  variable <span class="string">w(n)</span> <span class="string">complex</span>
+  minimize( norm( w ) )
+  subject <span class="string">to</span>
+    Atar*w == 1;
+    abs(As*w) &lt;= 10^(min_sidelobe/20);
+cvx_end
+
+<span class="comment">%********************************************************************</span>
+<span class="comment">% plots</span>
+<span class="comment">%********************************************************************</span>
+figure(1), clf
+plot(loc(:,1),loc(:,2),<span class="string">'o'</span>)
+title(<span class="string">'Antenna locations'</span>)
+
+<span class="comment">% plot array pattern</span>
+y = A*w;
+
+figure(2), clf
+ymin = -40; ymax = 0;
+plot([1:360], 20*log10(abs(y)), <span class="keyword">...</span>
+     [theta_tar theta_tar],[ymin ymax],<span class="string">'g--'</span>,<span class="keyword">...</span>
+     [theta_tar+halfbeam theta_tar+halfbeam],[ymin ymax],<span class="string">'r--'</span>,<span class="keyword">...</span>
+     [theta_tar-halfbeam theta_tar-halfbeam],[ymin ymax],<span class="string">'r--'</span>);
+xlabel(<span class="string">'look angle'</span>), ylabel(<span class="string">'mag y(theta) in dB'</span>);
+axis([0 360 ymin ymax]);
+
+<span class="comment">% polar plot</span>
+figure(3), clf
+zerodB = 50;
+dBY = 20*log10(abs(y)) + zerodB;
+plot(dBY.*cos(pi*theta/180), dBY.*sin(pi*theta/180), <span class="string">'-'</span>);
+axis([-zerodB zerodB -zerodB zerodB]), axis(<span class="string">'off'</span>), axis(<span class="string">'square'</span>)
+hold <span class="string">on</span>
+plot(zerodB*cos(pi*theta/180),zerodB*sin(pi*theta/180),<span class="string">'k:'</span>) <span class="comment">% 0 dB</span>
+plot( (min_sidelobe + zerodB)*cos(pi*theta/180), <span class="keyword">...</span>
+      (min_sidelobe + zerodB)*sin(pi*theta/180),<span class="string">'k:'</span>)  <span class="comment">% min level</span>
+text(-zerodB,0,<span class="string">'0 dB'</span>)
+text(-(min_sidelobe + zerodB),0,sprintf(<span class="string">'%0.1f dB'</span>,min_sidelobe));
+theta_1 = theta_tar+halfbeam;
+theta_2 = theta_tar-halfbeam;
+plot([0 55*cos(theta_tar*pi/180)], [0 55*sin(theta_tar*pi/180)], <span class="string">'k:'</span>)
+plot([0 55*cos(theta_1*pi/180)], [0 55*sin(theta_1*pi/180)], <span class="string">'k:'</span>)
+plot([0 55*cos(theta_2*pi/180)], [0 55*sin(theta_2*pi/180)], <span class="string">'k:'</span>)
+hold <span class="string">off</span>
+</pre>
+<a id="output"></a>
+<pre class="codeoutput">
+We are only considering integer values of the half beam-width
+(since we are sampling the angle with 1 degree resolution).
+ 
+Problem is feasible for half beam-width = 26 degress
+Problem is feasible for half beam-width = 14 degress
+Problem is not feasible for half beam-width = 8 degress
+Problem is feasible for half beam-width = 11 degress
+Problem is feasible for half beam-width = 10 degress
+Problem is not feasible for half beam-width = 9 degress
+
+Optimum half beam-width for given specs is 10.
+</pre>
+<a id="plots"></a>
+<div id="plotoutput">
+<img src="ant_array_min_beamwidth__01.png" alt=""> <img src="ant_array_min_beamwidth__02.png" alt=""> <img src="ant_array_min_beamwidth__03.png" alt=""> 
+</div>
+</div>
+</body>
+</html>

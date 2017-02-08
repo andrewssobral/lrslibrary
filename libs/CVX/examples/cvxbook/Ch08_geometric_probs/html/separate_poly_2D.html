@@ -1,0 +1,138 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Section 8.2.2: Separating polyhedra in 2D</title>
+<link rel="canonical" href="/Users/mcgrant/Projects/CVX/examples/cvxbook/Ch08_geometric_probs/html/separate_poly_2D.html">
+<link rel="stylesheet" href="../../../examples.css" type="text/css">
+</head>
+<body>
+<div id="header">
+<h1>Section 8.2.2: Separating polyhedra in 2D</h1>
+Jump to:&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#source">Source code</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#output">Text output</a>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#plots">Plots</a>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../../index.html">Library index</a>
+</div>
+<div id="content">
+<a id="source"></a>
+<pre class="codeinput">
+<span class="comment">% Boyd &amp; Vandenberghe "Convex Optimization"</span>
+<span class="comment">% Joelle Skaf - 10/09/05</span>
+<span class="comment">% (a figure is generated)</span>
+<span class="comment">%</span>
+<span class="comment">% If the two polyhedra C = {x | A1*x &lt;= b1} and D = {y | A2*y &lt;= b2} can be</span>
+<span class="comment">% separated by a hyperplane, it will be of the  form</span>
+<span class="comment">%           z'*x - z'*y &gt;= -lambda'*b1 - mu'*b2 &gt; 0</span>
+<span class="comment">% where z, lambda and mu are the optimal variables of the problem:</span>
+<span class="comment">%           maximize    -b1'*lambda - b2'*mu</span>
+<span class="comment">%               s.t.    A1'*lambda + z = 0</span>
+<span class="comment">%                       A2'*mu  - z = 0</span>
+<span class="comment">%                       norm*(z) &lt;= 1</span>
+<span class="comment">%                       lambda &gt;=0 , mu &gt;= 0</span>
+<span class="comment">% Note: here x is in R^2</span>
+
+<span class="comment">% Input data</span>
+randn(<span class="string">'seed'</span>,0);
+n  = 2;
+m = 2*n;
+A1 = [1 1; 1 -1; -1 1; -1 -1];
+A2 = [1 0; -1 0; 0 1; 0 -1];
+b1 = 2*ones(m,1);
+b2 = [5; -3; 4; -2];
+
+<span class="comment">% Solving with CVX</span>
+fprintf(1,<span class="string">'Finding a separating hyperplane between the 2 polyhedra...'</span>);
+
+cvx_begin
+    variables <span class="string">lam(m)</span> <span class="string">muu(m)</span> <span class="string">z(n)</span>
+    maximize ( -b1'*lam - b2'*muu)
+    A1'*lam + z == 0;
+    A2'*muu - z == 0;
+    norm(z) &lt;= 1;
+    -lam &lt;=0;
+    -muu &lt;=0;
+cvx_end
+
+fprintf(1,<span class="string">'Done! \n'</span>);
+
+<span class="comment">% Displaying results</span>
+disp(<span class="string">'------------------------------------------------------------------'</span>);
+disp(<span class="string">'The distance between the 2 polyhedra C and D is: '</span> );
+disp([<span class="string">'dist(C,D) = '</span> num2str(cvx_optval)]);
+
+<span class="comment">% Plotting</span>
+t = linspace(-3,6,100);
+p = -z(1)*t/z(2) + (muu'*b2 - lam'*b1)/(2*z(2));
+figure;
+fill([-2; 0; 2; 0],[0;2;0;-2],<span class="string">'b'</span>, [3;5;5;3],[2;2;4;4],<span class="string">'r'</span>)
+axis([-3 6 -3 6])
+axis <span class="string">square</span>
+hold <span class="string">on</span>;
+plot(t,p)
+title(<span class="string">'Separating 2 polyhedra by a hyperplane'</span>);
+</pre>
+<a id="output"></a>
+<pre class="codeoutput">
+Finding a separating hyperplane between the 2 polyhedra... 
+Calling SDPT3 4.0: 12 variables, 5 equality constraints
+------------------------------------------------------------
+
+ num. of constraints =  5
+ dim. of socp   var  =  3,   num. of socp blk  =  1
+ dim. of linear var  =  9
+*******************************************************************
+   SDPT3: Infeasible path-following algorithms
+*******************************************************************
+ version  predcorr  gam  expon  scale_data
+    NT      1      0.000   1        0    
+it pstep dstep pinfeas dinfeas  gap      prim-obj      dual-obj    cputime
+-------------------------------------------------------------------
+ 0|0.000|0.000|5.4e+00|3.1e+00|9.1e+02| 1.200000e+02  0.000000e+00| 0:0:00| chol  1  1 
+ 1|0.874|1.000|6.8e-01|3.5e-02|1.3e+02| 1.008522e+02 -1.099735e+01| 0:0:00| chol  1  1 
+ 2|0.967|1.000|2.2e-02|3.5e-03|6.6e+00| 8.670507e-01 -5.467940e+00| 0:0:00| chol  1  1 
+ 3|1.000|0.621|1.0e-06|6.0e-03|3.9e+00| 9.835878e-01 -2.862666e+00| 0:0:00| chol  1  1 
+ 4|0.993|0.923|4.2e-08|4.9e-04|2.4e-01|-1.944540e+00 -2.183296e+00| 0:0:00| chol  1  1 
+ 5|0.935|0.986|3.3e-09|1.1e-05|1.3e-02|-2.110100e+00 -2.122803e+00| 0:0:00| chol  1  1 
+ 6|0.907|1.000|2.2e-09|3.5e-07|1.5e-03|-2.119984e+00 -2.121525e+00| 0:0:00| chol  1  1 
+ 7|0.983|1.000|1.2e-09|3.5e-08|4.8e-05|-2.121281e+00 -2.121329e+00| 0:0:00| chol  1  1 
+ 8|0.979|0.987|1.4e-10|6.9e-10|9.3e-07|-2.121320e+00 -2.121320e+00| 0:0:00| chol  1  1 
+ 9|1.000|1.000|3.6e-11|2.9e-11|3.2e-08|-2.121320e+00 -2.121320e+00| 0:0:00|
+  stop: max(relative gap, infeasibilities) &lt; 1.49e-08
+-------------------------------------------------------------------
+ number of iterations   =  9
+ primal objective value = -2.12132032e+00
+ dual   objective value = -2.12132035e+00
+ gap := trace(XZ)       = 3.19e-08
+ relative gap           = 6.09e-09
+ actual relative gap    = 6.02e-09
+ rel. primal infeas (scaled problem)   = 3.58e-11
+ rel. dual     "        "       "      = 2.90e-11
+ rel. primal infeas (unscaled problem) = 0.00e+00
+ rel. dual     "        "       "      = 0.00e+00
+ norm(X), norm(y), norm(Z) = 1.9e+00, 3.9e+00, 6.9e+00
+ norm(A), norm(b), norm(C) = 5.2e+00, 2.0e+00, 9.1e+00
+ Total CPU time (secs)  = 0.11  
+ CPU time per iteration = 0.01  
+ termination code       =  0
+ DIMACS: 3.6e-11  0.0e+00  4.4e-11  0.0e+00  6.0e-09  6.1e-09
+-------------------------------------------------------------------
+ 
+------------------------------------------------------------
+Status: Solved
+Optimal value (cvx_optval): +2.12132
+ 
+Done! 
+------------------------------------------------------------------
+The distance between the 2 polyhedra C and D is: 
+dist(C,D) = 2.1213
+</pre>
+<a id="plots"></a>
+<div id="plotoutput">
+<img src="separate_poly_2D__01.png" alt=""> 
+</div>
+</div>
+</body>
+</html>

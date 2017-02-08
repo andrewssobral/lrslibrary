@@ -1,0 +1,886 @@
+/*****************************************************
+ * cloud.css_t
+ * ~~~~~~~~~~~
+ *
+ * stylesheet for "Cloud" theme for Sphinx.
+ *
+ * :copyright: Copyright 2011 by Assurance Technologies
+ * :license: BSD
+ *
+ *****************************************************/
+
+@import url("basic.css");
+
+/*****************************************************
+ * page layout
+ *****************************************************/
+
+body
+{
+    margin: 0; padding: 0;
+    background: hsl(213,75%,95%);
+    color: #000;
+    font-family: "Georgia", "Times New Roman", serif;
+    line-height: 1.25em;
+}
+pre, code, tt {
+    font-size: 0.9em;
+    line-height: 1.38888888889em;
+    font-family: monaco, monospace;
+}
+sup, sub {
+    line-height: 0;
+    position; relative;
+}
+sup { 
+	top: 0.25em; 
+}
+sub { 
+	bottom: 0.25em; 
+}
+em, cite, i { 
+	font-style: italic; 
+}
+strong, b { 
+	font-weight: bold; 
+}
+a, a > tt { 
+	color: hsl(213,75%,35%); 
+	text-decoration: none; 
+}
+a:hover { 
+	color: black; 
+	border-bottom: 1px gray dotted; 
+}
+h1 { 
+	font-size: 1.5em; 
+	line-height: 1em; 
+	padding: 1.25em 0 1.08333333333em 0; 
+}
+h2 { 
+	font-size: 1.25em; 
+	line-height: 1em; 
+	padding: 0.75em 0 0.25em 0; 
+}
+h3 { 
+	font-size: 1.125em; 
+	line-height: 1em; 
+	padding: 0 0 0.11111111111em 0; 
+}
+h4, h5, h6 { 
+	font-size: 1em; 
+	line-height: 1em; 
+	padding: 0em 0 0.25em 0; 
+}
+h1, h2, h3, h4, h5, h6 { 
+	font-weight: bold;
+	color: hsl(213,75%,35%); 
+	margin: 0; 
+}
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a,
+h1 tt, h2 tt, h3 tt, h4 tt, h5 tt, h6 tt { 
+	line-height: 1em; 
+}
+p, pre, ul, ol, dl, blockquote, div.highlight-none { 
+	margin: 1.25em 0; 
+}
+div.toctree-wrapper { 
+	margin: 1.25em 0; 
+}
+div.toctree-wrapper ul { 
+	margin: 0; list-style: disc; 
+}
+ul, ol { 
+	padding-left: 2em;   
+}
+dd { 
+	margin: 0 0 0 2.5em;  
+}
+.last {
+	margin-bottom: 0 !important;
+}
+dt { 
+	margin: 0; 
+}
+ul + ul,
+ul + div > ul:only-child,
+div.toctree-wrapper + ul
+{
+	margin-top: -1.25em;
+}
+dd ol { 
+	margin-bottom: 0; 
+}
+
+/*****************************************************
+ * page layout - relbars (top & bottom)
+ *****************************************************/
+
+div.related
+{
+    background-color: hsl(213,75%,35%);
+    color: #f8f8f8;
+    font-size: 1em;
+    line-height: 1.25em;
+}
+
+div.relbar-top {
+	height: 1.25em;
+    border-bottom: 2px solid #888;
+	position: fixed;
+	top: 0; left: 0; right: 0; bottom: "";
+	z-index: 1;
+}
+
+div.relbar-bottom {
+	display: none;
+}
+
+div.related a
+{
+    color: #f8f8f8;
+}
+
+div.related a:hover {
+	color: hsl(213,75%,80%);
+}
+
+div.related li {
+	margin: 0;
+}
+
+/*****************************************************
+ * page layout - document
+ *****************************************************/
+
+div.document
+{
+    /* note: relative used by div.sidebartoggle */
+    position: relative;
+    margin: 0;
+    background: hsl(213,75%,95%); /* F2F2F2; */
+}
+
+div.documentwrapper
+{
+    float: left;
+    width: 100%;
+    padding-top: 1.25em;
+}
+
+div.bodywrapper
+{
+    margin: 0 0 0 230px;
+}
+
+div.document.collapsed-sidebar div.bodywrapper { 
+	margin-left: 0; 
+}
+
+div.body
+{
+    min-height: 6in;
+    background-color: #fff;
+    color: #000;
+    padding: 0 1.25em 1.25em 1.25em;
+    border-bottom: 2px solid #888;
+}
+
+/*****************************************************
+ * page layout - sidebar
+ *****************************************************/
+
+div.sphinxsidebarwrapper {
+    padding: 0 0.5em;
+}
+
+div.sphinxsidebar
+{
+    /* it's nasty sometimes, but looks prettier than letting too-long module names break into document body*/
+    overflow: hidden;
+    border-right: 2px solid #888;
+    width: 230px;
+    font-size: 0.875em;
+    line-height: 1.42857142857em;
+    color: hsl(213,75%,35%);
+	z-index: 2;
+	position: fixed;
+	top: 1.42857142857em; bottom: 0; left: 0;
+	margin-left: 0;
+}
+
+div.document.collapsed-sidebar div.sphinxsidebar { display: none; }
+
+div.sphinxsidebar h3,
+div.sphinxsidebar h4
+{
+	font-size: 1em;
+	line-height: 1.42857142857em;
+    font-weight: bold;
+    color: #222;
+	border-bottom: 1px solid #aaa;
+	margin-top: 1.42857142857em;
+	margin-bottom: -1px;
+	padding: 0;
+}
+div.sphinxsidebar h3 a,
+div.sphinxsidebar h4 a
+{
+	line-height: 1.42857142857em;
+}	
+div.sphinxsidebar a
+{
+    color: hsl(213,75%,35%);
+    border: none;
+}
+div.sphinxsidebar a {
+	color: hsl(213,75%,35%);
+}
+div.sphinxsidebar p
+{
+    color: hsl(213,75%,35%);
+}
+div.sphinxsidebar p.topless
+{
+    margin: 0 0.5em;
+}
+div.sphinxsidebar ul
+{
+    margin: 0 0 0 0.5em;
+    padding: 0;
+}
+
+ul.sphinxtoclist li {
+	padding: 0; margin: 0;
+}
+
+div.sphinxsidebar a:hover
+{
+    color: black;
+}
+
+ul.sphinxtoclist a {
+	padding: 0;
+	display: block;
+}
+
+ul.sphinxtoclist a.current
+{
+	border-right: 2px solid #888;
+	margin-right: -2px;
+}
+
+ul.sphinxtoclist a tt {
+	font-weight: normal;
+	font-size: 80%;
+}
+
+div.sphinxsidebar input
+{
+    border: 1px solid #888;
+    font-family: sans-serif;
+    font-size: 1em;
+}
+
+div#searchbox {
+	margin-top: 1em;
+}
+
+div#searchbox input[type="submit"]
+{
+   -webkit-appearance: none;
+   border-radius: 0 0 .7em 0;
+   -webkit-border-radius: 0 0 .7em 0;
+   -moz-border-radius: 0 0 .7em 0;
+   padding-left: 0.25em;
+   text-align: left;
+   font-weight: bold;
+}
+
+div.sidebartoggle {
+    font-size: 100%;
+	z-index: 3;
+	margin-left: 0;
+	position: fixed;
+	width: 230px;
+	top: 24px; left: 0;
+}
+
+div.sphinxsidebar input[type="submit"]:hover,
+div.sidebartoggle button:hover
+{
+   background: black;
+   box-shadow: 0 1px 2px rgba(0,0,0,.2);
+   -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+   -moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+}
+
+div.sphinxsidebar input[type="submit"]:active,
+div.sidebartoggle button:active
+{
+   box-shadow: none;
+   -webkit-box-shadow: none;
+   -moz-box-shadow: none;
+}
+
+div.sphinxsidebar p.logo
+{
+    margin: 16px 0 0 9px;
+    text-align: left;
+}
+
+p.logo img {
+    width: 182px; height: 238px;
+}
+
+div.sphinxsidebar .searchtip
+{
+    color: #888;
+}
+
+/*--------------------------------------------------
+ * collapsible sidebar buttons
+ *--------------------------------------------------*/
+
+div.document.collapsed-sidebar div.sidebartoggle
+{
+ width: auto;
+}
+
+div.sidebartoggle button
+{
+   -webkit-appearance: none;
+   position: absolute;
+   right: 0;
+   top: 0;
+
+   margin: 0;
+   padding: 0 6px;
+
+   background: #F2F2F2;
+   border: 1px solid #C0C0C0;
+   border-top: 0;
+   color: #777777;
+
+   border-radius: 0 0 0 .7em;
+   -webkit-border-radius: 0 0 0 .7em;
+   -moz-border-radius: 0 0 0 .7em;
+
+   white-space: nowrap;
+}
+
+div.document.collapsed-sidebar div.sidebartoggle button
+{
+  right: auto;
+  left: 0;
+   border-radius: 0 0 .7em 0;
+   -webkit-border-radius: 0 0 .7em 0;
+   -moz-border-radius: 0 0 .7em 0;
+}
+
+
+/*****************************************************
+ * page layout - footer
+ *****************************************************/
+
+div.footer
+{
+    color: #888;
+    width: 100%;
+    padding: 0.25em 0;
+    text-align: right;
+    font-size: 75%;
+}
+
+div.footer button.link
+{
+ margin: 0 -1px;
+ padding: 0;
+ background: none;
+ border: none;
+ font-size: inherit;
+ font-family: inherit;
+}
+
+div.footer a,
+div.footer button.link
+{
+    color: #888;
+}
+
+div.footer a:hover,
+div.footer button.link:hover
+{
+   color: hsl(213,75%,35%);
+}
+
+/*****************************************************
+ * adaptive page layout - if too small, hide some things
+ *****************************************************/
+
+@media only screen and (max-width: 960px),
+       only screen and (max-width: 700px),
+       only screen and (max-device-width: 700px),
+       handheld
+{
+    div.admonition.floater { display: none; }
+}
+
+@media only screen and (max-width: 700px),
+       only screen and (max-device-width: 700px),
+       handheld
+{
+    div.sphinxsidebar { display: none; }
+    div.sidebartoggle { display: none; }
+    div.bodywrapper   { margin:  0; }
+    div.related > ul > li:not(.right) + li { display: none; }
+    div.body { padding: 0 1em; }
+}
+
+a.biglink
+{
+    font-size: 130%;
+}
+
+a.external:before
+{
+    content: "\21D7";
+    padding-right: .1em;
+}
+a.external.issue:before
+{
+    content: "\2727";
+}
+em.issue:before
+{
+    content: "\2727";
+    padding-right: .1em;
+}
+
+dt:target,
+.footnote:target,
+.highlighted
+{
+	background-color: hsl(213,75%,35%);
+	padding-left: 0.25em;
+	margin-left: -0.25em;
+	color: hsl(213,75%,95%);
+}
+div.body .highlighted {
+	padding-left: 0.25em;
+	padding-right: 0.25em;
+	margin-left: -0.25em;
+	margin-right: -0.25em;
+	color: hsl(213,75%,95%);
+    border-radius: 0 0 0 0.25em;
+    -webkit-border-radius: 0.25em;
+    -moz-border-radius: 0.25em;
+}
+
+/*****************************************************
+ * document - header styles
+ *****************************************************/
+
+div.body h1,
+div.body h2,
+div.body p.rubric,
+div.body h3,
+div.body h4,
+div.body h5,
+div.body h6
+{
+    text-shadow: 1px 1px 1px rgba(0,0,0,.1);
+}
+div.body h1 {
+	text-align: center;
+}
+div.body h2, div.body p.rubric, div.section.emphasized > h3 {
+	border-bottom: 1px solid #aaa;
+	margin-bottom: -1px; 
+}
+div.body h3 { 
+	border: none;
+}
+h2 + div.section {
+	margin-top: 1.25em;
+}
+div.body p.rubric,
+div.section.emphasized > h3
+{
+     background: #92BCDE;
+ 	 margin-left: 0; 
+	 margin-right: 0; 
+}
+a.headerlink
+{
+    color: hsl(213,75%,35%);
+    font-size: 0.75em;
+    line-height: 1em;
+    margin: 0 0 0 0.166666666667em;
+    padding: 0.166666666667em;
+    text-decoration: none;
+    border-radius: 0.25em;
+}
+a.headerlink:hover
+{
+    background-color: hsl(213,75%,35%);
+    color: #f8f8f8;
+    box-shadow: 2px 2px 2px rgba(0,0,0,.2);
+    -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,.2);
+    -moz-box-shadow: 2px 2px 2px rgba(0,0,0,.2);
+}
+
+/*****************************************************
+ * document - toggleable h1/h2 sections
+ *****************************************************/
+
+.html-toggle-button
+{
+    position: relative;
+}
+
+.html-toggle-button:hover
+{
+    /* give a little bit of hint that this is clickable */
+    cursor: pointer;
+    box-shadow: 2px 2px 2px hsl(213,75%,35%);
+    -moz-box-shadow: 2px 2px 2px hsl(213,75%,35%);
+    -webkit-box-shadow: 2px 2px 2px hsl(213,75%,35%);
+}
+
+div.body div.section:not(.emphasized) > h3.html-toggle-button:hover,
+div.body h4.html-toggle-button:hover
+{
+    background: #92BCDE;
+    box-shadow: 0 0  2px hsl(213,75%,35%);
+    -moz-box-shadow: 0 0 2px hsl(213,75%,35%);
+    -webkit-box-shadow: 0 0 2px hsl(213,75%,35%);
+}
+
+.html-toggle.collapsed > .html-toggle-button
+{
+    margin-bottom: 1em;
+}
+
+.html-toggle.collapsed > .html-toggle-button:after
+{
+    content: "[+ show section]";
+    margin: 0;
+    padding: .15em 0 0 0;
+    text-shadow: none;
+    color: inherit;
+    font-size: 65%;
+    font-style: italic;
+    font-weight: bold;
+}
+
+.html-toggle.expanded > .html-toggle-button:after
+{
+    content: "[- hide section]";
+    margin: 0;
+    padding: .15em 0 0 0;
+    text-shadow: none;
+    color: inherit;
+    font-size: 65%;
+    font-style: italic;
+    font-weight: bold;
+}
+
+.html-toggle-button:hover a.headerlink:not(:hover) { opacity: 0; }
+
+/*****************************************************
+ * document - admonitions
+ *****************************************************/
+
+div.admonition, p.deprecated
+{
+    background: #f2f2f2;
+    margin: 1.25em 1em;
+	padding: 1.25em;
+    border-radius: 0 1em 0 1em;
+    -webkit-border-radius: 0 1em 0 1em;
+    -moz-border-radius: 0 1em 0 1em;
+}
+
+div.note, div.seealso, div.warning, div.admonition-todo, p.deprecated
+{
+    background-position: 8px 8px;
+    background-repeat: no-repeat;
+    padding-left: 38px;
+}
+
+div.note { background-color: #E7F0FE; background-image: url(icon-note.png); }
+div.seealso { background-color: #FFF7E0; background-image: url(icon-seealso.png); }
+div.topic { background-color: #eee; }
+div.warning { background-color: #ffe4e4; background-image: url(icon-warning.png); }
+div.admonition-todo { background-color: #FFF7E0; background-image: url(icon-todo.png); }
+p.deprecated { background-color: #fbece0; background-image: url(icon-deprecated.png); }
+
+div.admonition.caution { background-color: green; }
+
+div.admonition p,
+div.admonition pre,
+div.admonition ul,
+div.admonition ol
+{
+    margin-bottom: 5px;
+}
+
+div.admonition.floater
+{
+    float: right;
+    max-width: 40%;
+    margin: 1em 0 1.5em 1.5em;
+}
+
+/* next 3 rules merge the title into the first paragraph */
+p.admonition-title
+{
+    display: inline;
+    margin-right: 0;
+}
+
+p.admonition-title + p
+{
+    display: inline;
+}
+
+p.admonition-title:after
+{
+    content: ":";
+}
+
+p.admonition-title + ul
+{
+  margin-top: 0;
+}
+
+/* don't indent admonitions inside definitions */
+dl div.admonition
+{
+  margin-left: 0;
+}
+
+/*****************************************************
+ * document - misc body styles
+ *****************************************************/
+
+div.body hr {
+    margin: 0 10px;
+    background: none;
+    border: 1px dashed #C0C0C0;
+    border-width: 1px 0 0 0;
+}
+
+div.body p,
+div.body dd,
+div.body li
+{
+    text-align: justify;
+}
+
+    /*------------------------------------
+     * footnotes
+     *------------------------------------*/
+
+a.footnote-reference
+{
+    font-size: 70%;
+    position: relative;
+    top: -.75em;
+}
+
+table.docutils p, table.docutils tt { 
+	padding: 0; 
+	margin: 0; 
+	text-align: left;
+}
+
+tr.row-even td { white-space: nowrap; }
+tr.row-odd td { white-space: nowrap; }
+
+table.docutils.footnote {  margin: 1em 0 0 1em; }
+table.docutils.citation { border: none; }
+
+table.docutils { margin: 0.75em auto; }
+table.docutils th { border: 0; margin: 0; padding: 5px 10px 5px 5px; }
+table.docutils td { border: 0; margin: 0; padding: 5px; }
+table.docutils tr.row-odd th { background: #fff; }
+table.docutils tr.row-odd td { background: #f8f8f8; }
+table.docutils.html-plain-table tr.row-odd > * { background: none; }
+
+dl.docutils dd { margin-bottom: 1.25em; }
+
+/*****************************************************
+ * document - quoted text
+ *****************************************************/
+ 
+blockquote {
+	background: #ffe;
+	padding: 1.25em 1em;
+	margin: -1px 2em;
+    border: 1px solid #aaaaaa;
+    border-width: 1px 3px;
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    display: block;
+}
+
+div.highlight
+{
+    background: none;
+}
+
+div.highlight pre,
+div.highlight-python pre
+{
+    padding: 1.5625em 1.25em;
+    margin: -1px 2em;
+
+    /* background-color: hsl(213,75%,95%)fcc; */
+    background-color: #f8f8f8;
+    border: 1px solid #aaaaaa;
+    border-width: 1px 3px;
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+
+    font-family: "Monaco", monospace;
+    font-size: 0.8em;
+    line-height: 1.5625em;
+}
+
+table.highlighttable td { padding: 0; }
+table.highlighttable td.code { width: 100%; }
+table.highlighttable div.linenodiv pre
+{
+    background: none;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    padding-right: .5em;
+    opacity: 0.3;
+}
+
+/*
+tt.literal
+{
+    background-color: #f8f8f8;
+    border: 1px solid #aaaaaa;
+    padding: 1px 4px;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+} */
+
+tt.descname { font-size: 100%; }
+
+p tt.literal { white-space: nowrap; }
+
+tt.samp.literal > em
+{
+    font-family: "Droid Sans Mono", monospace;
+    padding: 0 1px;
+}
+
+tt.samp.literal > em:before { content: "<"; }
+tt.samp.literal > em:after { content: ">"; }
+
+h1 tt.literal, h2 tt.literal, h3 tt.literal, td tt.literal
+{
+    background-color: transparent;
+    border: 0;
+}
+
+h1 tt.samp.literal > em
+{
+    font-weight: normal;
+}
+
+div.sphinxsidebar tt.literal,
+a.reference tt.literal,
+div.related a tt.literal,
+tt.literal.xref
+{
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+th
+{
+    background-color: #ede;
+}
+
+.viewcode-back
+{
+    font-family: "Noticia Text", serif;
+}
+
+div.viewcode-block:target
+{
+    background-color: #f4debf;
+    border-top: 1px solid #ac9;
+    border-bottom: 1px solid #ac9;
+}
+
+.math {
+	margin: 1.25em 0;
+}
+
+/*****************************************************
+ * index page - category colorization
+ * (requires css classes set by astdoc.ext.index_styles extension)
+ *****************************************************/
+
+table.indextable span.category
+{
+    font-size: 80%;
+    color: #84ADBE;
+}
+
+table.indextable span.category.function,
+table.indextable span.category.classmethod,
+table.indextable span.category.method
+{ color: #9AB9CE; }
+
+table.indextable span.category.attribute { color: #8BC38B; }
+table.indextable span.category.class { color: #9996c2; }
+
+table.indextable span.location
+{
+    font-weight: bold;
+}
+
+table.indextable td > dl > dt
+{
+    margin-bottom: .5em;
+}
+
+table.indextable td > dl > dd > dl
+{
+    margin-top: -.5em;
+    margin-bottom: .5em;
+}
+
+/*****************************************************
+ * EOF
+ *****************************************************/
+ 
+ /**
+ * Grid
+ */
+ 
+#grid{
+    width: 100%;
+    position: absolute;
+    z-index: 999;
+    top: 0;
+    left: 0;
+}
+#grid div.horiz {
+    height: 19px;
+    border-bottom: 1px dotted darkgray;
+}

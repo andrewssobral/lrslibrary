@@ -1,0 +1,129 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Exercise 4.60: Log-optimal investment strategy</title>
+<link rel="canonical" href="/Users/mcgrant/Projects/CVX/examples/cvxbook/Ch04_cvx_opt_probs/html/logopt_investment.html">
+<link rel="stylesheet" href="../../../examples.css" type="text/css">
+</head>
+<body>
+<div id="header">
+<h1>Exercise 4.60: Log-optimal investment strategy</h1>
+Jump to:&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#source">Source code</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#output">Text output</a>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#plots">Plots</a>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../../index.html">Library index</a>
+</div>
+<div id="content">
+<a id="source"></a>
+<pre class="codeinput">
+<span class="comment">% Boyd &amp; Vandenberghe "Convex Optimization"</span>
+<span class="comment">% Jo&Atilde;&laquo;lle Skaf - 04/24/08</span>
+<span class="comment">% (a figure is generated)</span>
+<span class="comment">%</span>
+<span class="comment">% The investment strategy x that maximizes the long term growth rate</span>
+<span class="comment">%           R = sum_{j=1}^m pi_j*log(p_j^Tx)</span>
+<span class="comment">% is called the log-optimal investment strategy, and can be found by</span>
+<span class="comment">% solving the optimization problem</span>
+<span class="comment">%           maximize    sum_{j=1}^m pi_j log(p_j^Tx)</span>
+<span class="comment">%           subject to  x &gt;= 0, sum(x) = 1,</span>
+<span class="comment">% where p_ij is the return of asset i over one period in scenario j and</span>
+<span class="comment">% pi_j is the probability of scenario j. There are n assets and m scenarios.</span>
+<span class="comment">% We consider the case of equiprobable scenarios.</span>
+<span class="comment">%</span>
+<span class="comment">% The log-optimal long term growth rate is found and compared to the one</span>
+<span class="comment">% obtained with a uniform allocation strategy, i.e., x_i=(1/n).</span>
+<span class="comment">% Sample trajectories ofthe accumulated wealth for the optimal strategy and</span>
+<span class="comment">% the uniform one are plotted.</span>
+
+
+<span class="comment">% Input data</span>
+P = [3.5000    1.1100    1.1100    1.0400    1.0100;
+     0.5000    0.9700    0.9800    1.0500    1.0100;
+     0.5000    0.9900    0.9900    0.9900    1.0100;
+     0.5000    1.0500    1.0600    0.9900    1.0100;
+     0.5000    1.1600    0.9900    1.0700    1.0100;
+     0.5000    0.9900    0.9900    1.0600    1.0100;
+     0.5000    0.9200    1.0800    0.9900    1.0100;
+     0.5000    1.1300    1.1000    0.9900    1.0100;
+     0.5000    0.9300    0.9500    1.0400    1.0100;
+     3.5000    0.9900    0.9700    0.9800    1.0100];
+
+[m,n] = size(P);
+Pi = ones(m,1)/m;
+x_unif = ones(n,1)/n; <span class="comment">% uniform resource allocation</span>
+
+<span class="comment">% Find the log-optimal investment policy</span>
+cvx_begin
+    variable <span class="string">x_opt(n)</span>
+    maximize <span class="string">sum(Pi.*log(P*x_opt))</span>
+    sum(x_opt) == 1
+    x_opt &gt;= 0
+cvx_end
+
+<span class="comment">% Long-term growth rates</span>
+R_opt = sum(Pi.*log(P*x_opt));
+R_unif = sum(Pi.*log(P*x_unif));
+display(<span class="string">'The long term growth rate of the log-optimal strategy is: '</span>);
+disp(R_opt);
+display(<span class="string">'The long term growth rate of the uniform strategy is: '</span>);
+disp(R_unif);
+
+<span class="comment">% Generate random event sequences</span>
+rand(<span class="string">'state'</span>,10);
+N = 10;  <span class="comment">% number of random trajectories</span>
+T = 200; <span class="comment">% time horizon</span>
+w_opt = []; w_unif = [];
+<span class="keyword">for</span> i = 1:N
+    events = ceil(rand(1,T)*m);
+    P_event = P(events,:);
+    w_opt = [w_opt [1; cumprod(P_event*x_opt)]];
+    w_unif = [w_unif [1; cumprod(P_event*x_unif)]];
+<span class="keyword">end</span>
+
+<span class="comment">% Plot wealth versus time</span>
+figure
+semilogy(w_opt,<span class="string">'g'</span>)
+hold <span class="string">on</span>
+semilogy(w_unif,<span class="string">'r--'</span>)
+grid
+axis <span class="string">tight</span>
+xlabel(<span class="string">'time'</span>)
+ylabel(<span class="string">'wealth'</span>)
+</pre>
+<a id="output"></a>
+<pre class="codeoutput">
+ 
+Successive approximation method to be employed.
+   For improved efficiency, SDPT3 is solving the dual problem.
+   SDPT3 will be called several times to refine the solution.
+   Original size: 36 variables, 15 equality constraints
+   10 exponentials add 80 variables, 50 equality constraints
+-----------------------------------------------------------------
+ Cones  |             Errors              |
+Mov/Act | Centering  Exp cone   Poly cone | Status
+--------+---------------------------------+---------
+ 10/ 10 | 1.166e+00  9.529e-02  0.000e+00 | Solved
+ 10/ 10 | 1.083e-01  9.046e-04  0.000e+00 | Solved
+ 10/ 10 | 2.870e-03  6.340e-07  0.000e+00 | Solved
+  0/  0 | 0.000e+00  0.000e+00  0.000e+00 | Solved
+-----------------------------------------------------------------
+Status: Solved
+Optimal value (cvx_optval): +0.0230783
+ 
+The long term growth rate of the log-optimal strategy is: 
+    0.0231
+
+The long term growth rate of the uniform strategy is: 
+    0.0114
+
+</pre>
+<a id="plots"></a>
+<div id="plotoutput">
+<img src="logopt_investment__01.png" alt=""> 
+</div>
+</div>
+</body>
+</html>

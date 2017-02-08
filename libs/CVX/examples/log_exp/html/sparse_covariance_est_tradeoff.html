@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Sparse covariance estimation for Gaussian variables</title>
+<link rel="canonical" href="/Users/mcgrant/Projects/CVX/examples/log_exp/html/sparse_covariance_est_tradeoff.html">
+<link rel="stylesheet" href="../../examples.css" type="text/css">
+</head>
+<body>
+<div id="header">
+<h1>Sparse covariance estimation for Gaussian variables</h1>
+Jump to:&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#source">Source code</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#output">Text output</a>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#plots">Plots</a>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../index.html">Library index</a>
+</div>
+<div id="content">
+<a id="source"></a>
+<pre class="codeinput">
+<span class="comment">% Jo&Atilde;&laquo;lle Skaf - 04/24/08</span>
+<span class="comment">% (a figure is generated)</span>
+<span class="comment">%</span>
+<span class="comment">% Suppose y \in\reals^n is a Gaussian random variable with zero mean and</span>
+<span class="comment">% covariance matrix R = \Expect(yy^T), with sparse inverse S = R^{-1}</span>
+<span class="comment">% (S_ij = 0 means that y_i and y_j are conditionally independent).</span>
+<span class="comment">% We want to estimate the covariance matrix R based on N independent</span>
+<span class="comment">% samples y1,...,yN drawn from the distribution, and using prior knowledge</span>
+<span class="comment">% that S is sparse</span>
+<span class="comment">% A good heuristic for estimating R is to solve the problem</span>
+<span class="comment">%           maximize    logdet(S) - tr(SY) - lambda*sum(sum(abs(S)))</span>
+<span class="comment">%           subject to  S &gt;= 0</span>
+<span class="comment">% where Y is the sample covariance of y1,...,yN, and lambda is a sparsity</span>
+<span class="comment">% parameter to be chosen or tuned.</span>
+<span class="comment">% A figure showing the sparsity (number of nonzeros) of S versus lambda</span>
+<span class="comment">% is generated.</span>
+
+<span class="comment">% Input data</span>
+randn(<span class="string">'state'</span>,0);
+n = 10;
+N = 100;
+Strue = sprandsym(n,0.5,0.01,1);
+nnz_true = sum(Strue(:)&gt;1e-4);
+R = inv(full(Strue));
+y_sample = sqrtm(R)*randn(n,N);
+Y = cov(y_sample');
+Nlambda = 20;
+lambda = logspace(-2, 3, Nlambda);
+nnz = zeros(1,Nlambda);
+
+<span class="keyword">for</span> i=1:Nlambda
+    disp([<span class="string">'i = '</span> num2str(i) <span class="string">', lambda(i) = '</span> num2str(lambda(i))]);
+    <span class="comment">% Maximum likelihood estimate of R^{-1}</span>
+    cvx_begin <span class="string">sdp</span> <span class="string">quiet</span>
+        variable <span class="string">S(n,n)</span> <span class="string">symmetric</span>
+        maximize <span class="string">log_det(S)</span> <span class="string">-</span> <span class="string">trace(S*Y)</span> <span class="string">-</span> <span class="string">lambda(i)*sum(sum(abs(S)))</span>
+        S &gt;= 0
+    cvx_end
+    nnz(i) = sum(S(:)&gt;1e-4);
+<span class="keyword">end</span>
+
+figure;
+semilogx(lambda, nnz);
+hold <span class="string">on</span>;
+semilogx(lambda, nnz_true*ones(1,Nlambda),<span class="string">'r'</span>);
+xlabel(<span class="string">'\lambda'</span>);
+legend(<span class="string">'nonzeros in S'</span>, <span class="string">'nonzeros in R^{-1}'</span>);
+</pre>
+<a id="output"></a>
+<pre class="codeoutput">
+i = 1, lambda(i) = 0.01
+i = 2, lambda(i) = 0.01833
+i = 3, lambda(i) = 0.033598
+i = 4, lambda(i) = 0.061585
+i = 5, lambda(i) = 0.11288
+i = 6, lambda(i) = 0.20691
+i = 7, lambda(i) = 0.37927
+i = 8, lambda(i) = 0.69519
+i = 9, lambda(i) = 1.2743
+i = 10, lambda(i) = 2.3357
+i = 11, lambda(i) = 4.2813
+i = 12, lambda(i) = 7.8476
+i = 13, lambda(i) = 14.3845
+i = 14, lambda(i) = 26.3665
+i = 15, lambda(i) = 48.3293
+i = 16, lambda(i) = 88.5867
+i = 17, lambda(i) = 162.3777
+i = 18, lambda(i) = 297.6351
+i = 19, lambda(i) = 545.5595
+i = 20, lambda(i) = 1000
+</pre>
+<a id="plots"></a>
+<div id="plotoutput">
+<img src="sparse_covariance_est_tradeoff__01.png" alt=""> 
+</div>
+</div>
+</body>
+</html>

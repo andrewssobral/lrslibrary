@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Example 8.7: Floorplan generation test script</title>
+<link rel="canonical" href="/Users/mcgrant/Projects/CVX/examples/cvxbook/Ch08_geometric_probs/html/test_floorplan.html">
+<link rel="stylesheet" href="../../../examples.css" type="text/css">
+</head>
+<body>
+<div id="header">
+<h1>Example 8.7: Floorplan generation test script</h1>
+Jump to:&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#source">Source code</a>&nbsp;&nbsp;&nbsp;&nbsp;
+Text output
+&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#plots">Plots</a>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../../index.html">Library index</a>
+</div>
+<div id="content">
+<a id="source"></a>
+<pre class="codeinput">
+<span class="comment">% Section 8.8.1/2, Boyd &amp; Vandenberghe "Convex Optimization"</span>
+<span class="comment">% Joelle Skaf 12/04/05</span>
+<span class="comment">%</span>
+<span class="comment">% Rectangles aligned with the axes need to be place in the smallest</span>
+<span class="comment">% possible bounding box. No overlap is allowed. Each rectangle to be placed</span>
+<span class="comment">% can be reconfigured, within some limits.</span>
+<span class="comment">% In the current problem, 60 rectangles are to be place. We are given 2</span>
+<span class="comment">% acyclic graphs H and V (for horizontal and vertical) that specify the</span>
+<span class="comment">% relative positioning constraints of those rectangles.</span>
+<span class="comment">% We are also given minimal areas for the rectangles and aspect ratio</span>
+<span class="comment">% constraints</span>
+
+<span class="comment">% input data</span>
+load <span class="string">data_floorplan_60</span>;
+rho = 1;
+Amin = 100*ones(1,n);
+
+[W, H, w, h, x, y] = floorplan(adj_H, adj_V, rho, Amin,ones(60,1)*0.5,ones(60,1)*2);
+fill([0; W; W; 0],[0;0;H;H],[1 1 1]);           <span class="comment">% bounding box</span>
+hold <span class="string">on</span>
+<span class="keyword">for</span> i=1:n
+    fill([x(i); x(i)+w(i); x(i)+w(i); x(i)],[y(i);y(i);y(i)+h(i);y(i)+h(i)],0.90*[1 1 1]);
+    hold <span class="string">on</span>;
+    text(x(i)+w(i)/2, y(i)+h(i)/2,[int2str(i)]);
+<span class="keyword">end</span>
+axis([0 W 0 H]);
+axis <span class="string">equal</span>; axis <span class="string">off</span>;
+</pre>
+<a id="plots"></a>
+<div id="plotoutput">
+<img src="test_floorplan__01.png" alt=""> 
+</div>
+</div>
+</body>
+</html>

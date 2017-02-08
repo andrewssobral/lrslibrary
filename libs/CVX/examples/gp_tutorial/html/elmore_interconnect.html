@@ -1,0 +1,191 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Elmore delay sizing for an interconnect network.</title>
+<link rel="canonical" href="/Users/mcgrant/Projects/CVX/examples/gp_tutorial/html/elmore_interconnect.html">
+<link rel="stylesheet" href="../../examples.css" type="text/css">
+</head>
+<body>
+<div id="header">
+<h1>Elmore delay sizing for an interconnect network.</h1>
+Jump to:&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#source">Source code</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#output">Text output</a>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#plots">Plots</a>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../index.html">Library index</a>
+</div>
+<div id="content">
+<a id="source"></a>
+<pre class="codeinput">
+<span class="comment">% Boyd, Kim, Vandenberghe, and Hassibi, "A Tutorial on Geometric Programming"</span>
+<span class="comment">% Boyd, Kim, Patil, and Horowitz, "Digital circuit optimization via geometric programming"</span>
+<span class="comment">% Written for CVX by Almir Mutapcic 02/08/06</span>
+<span class="comment">% (a figure is generated)</span>
+<span class="comment">%</span>
+<span class="comment">% We consider the problem of finding optimal wire widths w_i</span>
+<span class="comment">% of N wire segments in an interconnect network, which will</span>
+<span class="comment">% minimize the critical Elmore delay, subject to limits on</span>
+<span class="comment">% wire widths and the total circuit area. We use a pi-model</span>
+<span class="comment">% for each wire segment. Problem can be formulated as GP:</span>
+<span class="comment">%</span>
+<span class="comment">%   minimize   D</span>
+<span class="comment">%       s.t.   w_min &lt;= w &lt;= w_max</span>
+<span class="comment">%              area  &lt;= Amax</span>
+<span class="comment">%</span>
+<span class="comment">% where variables are widths w (and arrival times T that are used</span>
+<span class="comment">% to formulate the overall delay D expression).</span>
+<span class="comment">%</span>
+<span class="comment">% Important: We label root node as 1, and all the other nodes as</span>
+<span class="comment">%            node_label_in_the_paper + 1 (due to Matlab's convention).</span>
+<span class="comment">%            Also label nodes with increasing numbers downstream.</span>
+
+<span class="comment">%********************************************************************</span>
+<span class="comment">% user supplied data (problem constants and tree topology)</span>
+<span class="comment">%********************************************************************</span>
+N = 6; <span class="comment">% number of nodes (including the root node which is labeled as 1)</span>
+
+<span class="comment">% parent node array</span>
+<span class="comment">% specifies which node is a unique parent for node i (always have a tree)</span>
+parent(1) = 0; <span class="comment">% root node does not have a valid parent</span>
+parent(2) = 1;
+parent(3) = 2;
+parent(4) = 3;
+parent(5) = 2;
+parent(6) = 5;
+
+<span class="comment">% problem constants</span>
+Rsource = 0.1;
+l = 1*ones(N-1,1);
+alpha = 1*ones(N-1,1);
+beta  = 1*ones(N-1,1);
+gamma = 1*ones(N-1,1);
+
+<span class="comment">% load capacitance at each node</span>
+C1 = 10; C2 = 10; C3 = 10; C4 = 10; C5 = 10;
+Cload = [0 C1 C2 C3 C4 C5];
+
+<span class="comment">% minimum and maximum width and area specification</span>
+Wmin = 1;
+Wmax = 10;
+Amax = 15;
+
+<span class="comment">%********************************************************************</span>
+<span class="comment">% derived data (computed from user's data)</span>
+<span class="comment">%********************************************************************</span>
+<span class="comment">% compute children cell array (evaluate who are children for each node)</span>
+children = cell(N,1);
+leafs = [];
+<span class="keyword">for</span> node = [1:N]
+  children{node} = find(parent == node);
+  <span class="keyword">if</span> isempty(children{node})
+    leafs(end+1) = node; <span class="comment">% leafs have no children</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="comment">%********************************************************************</span>
+<span class="comment">% optimization (generating optimal tradeoff curve)</span>
+<span class="comment">%********************************************************************</span>
+disp(<span class="string">'Generating the tradeoff curve...'</span>)
+
+Darray = [];
+<span class="keyword">for</span> Amax = [5.05 5.25 5.5 5.75 6:25]
+  <span class="comment">% formulate the GP problem and solve it</span>
+  cvx_begin <span class="string">gp</span> <span class="string">quiet</span>
+    <span class="comment">% optimization variables</span>
+    variable <span class="string">w(N-1)</span>     <span class="comment">% wire width</span>
+    variable <span class="string">T(N)</span>       <span class="comment">% arrival time (Elmore delay to node i)</span>
+
+    <span class="comment">% area definition</span>
+    area = sum(w.*l);
+
+    <span class="comment">% wire segment resistance is inversely proportional to widths</span>
+    R = alpha.*l./w;
+    R = [Rsource; R];
+
+    <span class="comment">% wire segment capacitance is an affine function of widths</span>
+    C_bar = beta.*l.*w + gamma.*l;
+    C_bar = [0; C_bar];
+
+    <span class="comment">% compute common capacitances for each node (C_tilde in GP tutorial)</span>
+    C_tilde = cvx( zeros(N,1) );
+    <span class="keyword">for</span> node = [1:N]
+      C_tilde(node,1) = Cload(node);
+      <span class="keyword">for</span> k = parent(node)
+        <span class="keyword">if</span> k &gt; 0; C_tilde(node,1) = C_tilde(node,1) + C_bar(k); <span class="keyword">end</span>;
+      <span class="keyword">end</span>
+      <span class="keyword">for</span> k = children{node}
+        C_tilde(node,1) = C_tilde(node,1) + C_bar(k);
+      <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">% now compute total downstream capacitances</span>
+    C_total = C_tilde;
+    <span class="keyword">for</span> node = N:-1:1
+      <span class="keyword">for</span> k = children{node}
+        C_total(node,1) = C_total(node,1) + C_total(k,1);
+      <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">% objective is the critical Elmore delay</span>
+    minimize( max( T(leafs) ) )
+    subject <span class="string">to</span>
+      <span class="comment">% generate Elmore delay constraints</span>
+      R(1)*C_total(1) &lt;= T(1,1);
+      <span class="keyword">for</span> node = 2:N
+        R(node)*C_total(node) + T(parent(node),1) &lt;= T(node,1);
+      <span class="keyword">end</span>
+
+      <span class="comment">% area and width constraints</span>
+      area &lt;= Amax;
+      w &gt;= Wmin;
+      w &lt;= Wmax;
+  cvx_end
+
+  <span class="comment">% display and store computed values</span>
+  fprintf(1,<span class="string">'  Amax = %5.2f   delay = %3.2f\n'</span>,Amax,cvx_optval);
+  Darray = [Darray cvx_optval];
+<span class="keyword">end</span>
+
+<span class="comment">% plot the tradeoff curve</span>
+figure, clf
+Amax = [5.05 5.25 5.5 5.75 6:25];
+plot(Darray,Amax);
+xlabel(<span class="string">'Elmore delay D'</span>); ylabel(<span class="string">'Amax'</span>);
+</pre>
+<a id="output"></a>
+<pre class="codeoutput">
+Generating the tradeoff curve...
+  Amax =  5.05   delay = 107.82
+  Amax =  5.25   delay = 98.33
+  Amax =  5.50   delay = 90.12
+  Amax =  5.75   delay = 84.35
+  Amax =  6.00   delay = 80.10
+  Amax =  7.00   delay = 69.64
+  Amax =  8.00   delay = 62.95
+  Amax =  9.00   delay = 58.10
+  Amax = 10.00   delay = 54.27
+  Amax = 11.00   delay = 51.17
+  Amax = 12.00   delay = 48.62
+  Amax = 13.00   delay = 46.50
+  Amax = 14.00   delay = 44.71
+  Amax = 15.00   delay = 43.19
+  Amax = 16.00   delay = 41.88
+  Amax = 17.00   delay = 40.76
+  Amax = 18.00   delay = 39.78
+  Amax = 19.00   delay = 38.92
+  Amax = 20.00   delay = 38.18
+  Amax = 21.00   delay = 37.52
+  Amax = 22.00   delay = 36.94
+  Amax = 23.00   delay = 36.43
+  Amax = 24.00   delay = 35.98
+  Amax = 25.00   delay = 35.59
+</pre>
+<a id="plots"></a>
+<div id="plotoutput">
+<img src="elmore_interconnect__01.png" alt=""> 
+</div>
+</div>
+</body>
+</html>

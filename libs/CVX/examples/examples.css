@@ -1,0 +1,130 @@
+html { 
+	margin: 0; margin: 0;
+	background: transparent;
+}
+body { 
+	margin: 4em 0 0 0;
+	line-height: 1.375em; 
+	font-family: "Book Antiqua", Palatino, "Palatino Linotype", "Palatino LT STD", Georgia, serif;
+	position: relative;
+}
+div#header { 
+        font-family: Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif;
+	margin: 0; padding: 0.5em;
+	position: absolute; top:0; left:0; 
+	width: 100%; height: 3em;
+	border-bottom: 1px solid silver;
+        -moz-border-radius-topleft: 1em;
+        border-top-left-radius: 1em;
+	line-height: 1;
+	background: white;
+	overflow: hidden;
+	white-space: nowrap;
+}
+#exnav {
+	display: inline;
+	margin: 0 0 0 1em;
+	padding: 0;
+}
+#exnav li {
+	display: inline;
+	margin: 0 0.5em;
+	list-style-type: none;
+}
+@media screen { 
+	body > div#header { position: fixed; } 
+}
+div#content { 
+	height: 100%; 
+	margin: 0; padding: 1em;
+}
+a#source, a#output, a#plots { 
+	margin: -4.5em 0 0 0; 
+	padding: 4.5em 0 0 0; 
+	height: 0; width: 1px;
+	display: block; 
+}
+p, pre { 
+	margin: 0 0 1em 0; 
+}
+h1 { 
+	font-size: 1.5em;
+	color: #1c5193;
+	margin-top: 0;
+	margin-bottom: 0.25em;
+	font-weight: bold;
+}
+pre { 
+	font-size: 75%; 
+	line-height: 1.375em; 
+	font-family: Consolas, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", Monaco, "Courier New", Courier, monospace;
+}
+sup, sub { line-height: 0; position: relative; }
+sup { top: 0.25em; }
+sub { bottom: -0.25em; }
+em, cite, i { font-style: italic; }
+strong, b { font-weight: bold; }
+
+a { color: #1c5193; text-decoration: none; }
+a:hover { color: #000; text-decoration: underline; }
+
+span.keyword      { color: #00f; }
+span.comment      { color: #282; }
+span.string       { color: #92e; }
+span.untermstring { color: #a00; }
+span.syscmd       { color: #a80; }
+pre.codeinput     { overflow: hidden; background: #eee; padding: 0.5em; border: 1px solid silver; }
+pre.codeoutput    { overflow: hidden; color: #444; padding: 0.5em; border: 1px solid silver; }
+pre.error         { color: red; }
+
+ul.mktree li { 
+	list-style: none; 
+}
+ul.mktree li p { 
+	display: inline; 
+}
+ul.mktree,
+ul.mktree ul,
+ul.mktree li { 
+	margin: 0;
+	padding: 0;
+}
+ul.mktree ul li { 
+	padding-left: 1.5em;
+}
+ul.mktree li .bullet { 
+	padding-left: 1.25em; 
+}
+ul.mktree li.liOpen .bullet { 
+	cursor: pointer;
+	background: url(minus.gif) center left no-repeat; 
+}
+ul.mktree li.liClosed .bullet { 
+	cursor: pointer;
+	background: url(plus.gif) center left no-repeat; 
+}
+ul.mktree li.liBullet .bullet { 
+	cursor: default; 
+	background: url(bullet.gif) center left no-repeat; 
+}
+@media print {
+	font-size: 80%;
+    .jsonly, .jsmenu, .jshide { display: none; }
+}
+@media screen { 
+	.jsonly, .jsmenu         { display: none;  }
+	.jshide                  { display: block; }
+	ul.mktree li.liOpen   ul { display: block; }
+	ul.mktree li.liClosed ul { display: none;  }
+}
+.jsframe {
+	display: none;
+}
+body.no_iframe .jsframe {
+    display: inline;
+}
+body.no_iframe > div#header {
+    -moz-border-radius-topleft: 0;
+    border-top-left-radius: 0;
+}
+

@@ -1,0 +1,193 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Elmore delay sizing for a straight wire (GP)</title>
+<link rel="canonical" href="/Users/mcgrant/Projects/CVX/examples/circuit_design/html/elmore_straight_wire.html">
+<link rel="stylesheet" href="../../examples.css" type="text/css">
+</head>
+<body>
+<div id="header">
+<h1>Elmore delay sizing for a straight wire (GP)</h1>
+Jump to:&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#source">Source code</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#output">Text output</a>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#plots">Plots</a>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../index.html">Library index</a>
+</div>
+<div id="content">
+<a id="source"></a>
+<pre class="codeinput">
+<span class="comment">% Boyd, "Problems in VLSI design" (Lecture)</span>
+<span class="comment">% Written for CVX by Almir Mutapcic 02/08/06</span>
+<span class="comment">%</span>
+<span class="comment">% We consider the problem of finding optimal width profile</span>
+<span class="comment">% for a straight wire segmented into N parts. We want to</span>
+<span class="comment">% minimize the Elmore delay, subject to limits on wire width</span>
+<span class="comment">% and the total area. We use a pi-model for each wire segment.</span>
+<span class="comment">% Problem can be formulated as GP:</span>
+<span class="comment">%</span>
+<span class="comment">%   minimize   D</span>
+<span class="comment">%       s.t.   w_min &lt;= w &lt;= w_max</span>
+<span class="comment">%              area  &lt;= Amax</span>
+<span class="comment">%</span>
+<span class="comment">% where variables are widths w (and arrival times T that are used</span>
+<span class="comment">% to formulate the overall delay D expression).</span>
+<span class="comment">%</span>
+<span class="comment">% Important: We label root node as 1, and all the other nodes as</span>
+<span class="comment">%            node_label_in_the_paper + 1 (due to Matlab's convention).</span>
+<span class="comment">%            Also label nodes with increasing numbers downstream.</span>
+
+<span class="comment">%********************************************************************</span>
+<span class="comment">% user supplied data (problem constants and tree topology)</span>
+<span class="comment">%********************************************************************</span>
+N = 10+1; <span class="comment">% number of segments (including the root node which is labeled as 1)</span>
+
+<span class="comment">% parent node array for the straight wire</span>
+<span class="comment">% specifies which node is a unique parent for node i (always have a tree)</span>
+parent = [0:N-1];
+
+<span class="comment">% problem constants</span>
+Rsource = 0.1;
+l = 1*ones(N-1,1);
+alpha = 1*ones(N-1,1);
+beta  = 1*ones(N-1,1);
+gamma = 1*ones(N-1,1);
+
+<span class="comment">% load capacitance at each node</span>
+Cload = [0; ones(N-1,1)];
+
+<span class="comment">% minimum and maximum width and area specification</span>
+Wmin = 1;
+Wmax = 10;
+Amax = 50;
+
+<span class="comment">%********************************************************************</span>
+<span class="comment">% derived data (computed from user's data)</span>
+<span class="comment">%********************************************************************</span>
+<span class="comment">% compute children cell array (evaluate who are children for each node)</span>
+children = cell(N,1);
+leafs = [];
+<span class="keyword">for</span> node = [1:N]
+  children{node} = find(parent == node);
+  <span class="keyword">if</span> isempty(children{node})
+    leafs(end+1) = node; <span class="comment">% leafs have no children</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="comment">%********************************************************************</span>
+<span class="comment">% optimization</span>
+<span class="comment">%********************************************************************</span>
+
+disp(<span class="string">'Generating the tradeoff curve...'</span>)
+Darray = []; widths = [];
+<span class="keyword">for</span> Amax = [10.05 10.5 11 12:2:20 22.5 25:5:60]
+    fprintf( <span class="string">'Amax = %5.2f: '</span>, Amax );
+    cvx_begin <span class="string">gp</span> <span class="string">quiet</span>
+        <span class="comment">% optimization variables</span>
+        variable <span class="string">w(N-1)</span>     <span class="comment">% wire width</span>
+        variable <span class="string">T(N)</span>       <span class="comment">% arrival time (Elmore delay to node i)</span>
+
+        <span class="comment">% objective is the critical Elmore delay</span>
+        minimize( max( T(leafs) ) )
+        subject <span class="string">to</span>
+
+          <span class="comment">% wire segment resistance is inversely proportional to widths</span>
+          R = alpha.*l./w;
+          R = [Rsource; R];
+
+          <span class="comment">% wire segment capacitance is an affine function of widths</span>
+          C_bar = beta.*l.*w + gamma.*l;
+          C_bar = [0; C_bar];
+
+          <span class="comment">% compute common capacitances for each node (C_tilde in GP tutorial)</span>
+          C_tilde = cvx( zeros(N,1) );
+          <span class="keyword">for</span> node = [1:N]
+            C_tilde(node,1) = Cload(node);
+            <span class="keyword">for</span> k = parent(node)
+              <span class="keyword">if</span> k &gt; 0; C_tilde(node,1) = C_tilde(node,1) + C_bar(k); <span class="keyword">end</span>;
+            <span class="keyword">end</span>
+            <span class="keyword">for</span> k = children{node}
+              C_tilde(node,1) = C_tilde(node,1) + C_bar(k);
+            <span class="keyword">end</span>
+          <span class="keyword">end</span>
+
+          <span class="comment">% now compute total downstream capacitances</span>
+          C_total = C_tilde;
+          <span class="keyword">for</span> node = N:-1:1
+            <span class="keyword">for</span> k = children{node}
+              C_total(node,1) = C_total(node,1) + C_total(k,1);
+            <span class="keyword">end</span>
+          <span class="keyword">end</span>
+
+        <span class="comment">% generate Elmore delay constraints</span>
+        R(1)*C_total(1) &lt;= T(1,1);
+        <span class="keyword">for</span> node = 2:N
+          R(node)*C_total(node) + T(parent(node),1) &lt;= T(node,1);
+        <span class="keyword">end</span>
+
+        <span class="comment">% collect all the constraints</span>
+        sum(w.*l) &lt;= Amax;
+        Wmin &lt;= w &lt;= Wmax;
+    cvx_end
+    <span class="comment">% display and store computed values</span>
+    fprintf(<span class="string">'delay = %3.2f\n'</span>,cvx_optval);
+    Darray = [Darray cvx_optval];
+    widths = [widths w];
+<span class="keyword">end</span>
+
+<span class="comment">% indices of four taper designs on the tradeoff curve</span>
+Amax = [10.05 10.5 11 12:2:20 22.5 25:5:60];
+A11ind = find(Amax == 11);
+A20ind = find(Amax == 20);
+A35ind = find(Amax == 35);
+A50ind = find(Amax == 50);
+
+<span class="comment">% plot the tradeoff curve</span>
+figure, clf
+plot(Darray,Amax, <span class="keyword">...</span>
+     Darray(A11ind),Amax(A11ind),<span class="string">'ro'</span>,<span class="keyword">...</span>
+     Darray(A20ind),Amax(A20ind),<span class="string">'ro'</span>,<span class="keyword">...</span>
+     Darray(A35ind),Amax(A35ind),<span class="string">'ro'</span>,<span class="keyword">...</span>
+     Darray(A50ind),Amax(A50ind),<span class="string">'ro'</span>);
+xlabel(<span class="string">'Elmore delay D'</span>); ylabel(<span class="string">'Amax'</span>);
+disp(<span class="string">'Optimal tradeoff curve plotted.'</span>)
+
+<span class="comment">% plot four taper designs</span>
+figure, clf
+w1 = widths(:,A50ind);
+w2 = widths(:,A35ind);
+w3 = widths(:,A20ind);
+w4 = widths(:,A11ind);
+plot_four_tapers(w1,w2,w3,w4);
+</pre>
+<a id="output"></a>
+<pre class="codeoutput">
+Generating the tradeoff curve...
+Amax = 10.05: delay = 255.72
+Amax = 10.50: delay = 241.04
+Amax = 11.00: delay = 228.67
+Amax = 12.00: delay = 209.98
+Amax = 14.00: delay = 184.90
+Amax = 16.00: delay = 168.19
+Amax = 18.00: delay = 156.01
+Amax = 20.00: delay = 146.74
+Amax = 22.50: delay = 137.78
+Amax = 25.00: delay = 130.82
+Amax = 30.00: delay = 120.77
+Amax = 35.00: delay = 113.95
+Amax = 40.00: delay = 109.06
+Amax = 45.00: delay = 105.43
+Amax = 50.00: delay = 102.96
+Amax = 55.00: delay = 101.76
+Amax = 60.00: delay = 101.60
+Optimal tradeoff curve plotted.
+</pre>
+<a id="plots"></a>
+<div id="plotoutput">
+<img src="elmore_straight_wire__01.png" alt=""> <img src="elmore_straight_wire__02.png" alt=""> 
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Examples 5.6,5.8: An l_p norm approximation problem</title>
+<link rel="canonical" href="/Users/mcgrant/Projects/CVX/examples/cvxbook/Ch05_duality/html/norm_approx.html">
+<link rel="stylesheet" href="../../../examples.css" type="text/css">
+</head>
+<body>
+<div id="header">
+<h1>Examples 5.6,5.8: An l_p norm approximation problem</h1>
+Jump to:&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#source">Source code</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#output">Text output</a>
+&nbsp;&nbsp;&nbsp;&nbsp;
+Plots
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../../index.html">Library index</a>
+</div>
+<div id="content">
+<a id="source"></a>
+<pre class="codeinput">
+<span class="comment">% Boyd &amp; Vandenberghe "Convex Optimization"</span>
+<span class="comment">% Jo&euml;lle Skaf - 08/23/05</span>
+<span class="comment">%</span>
+<span class="comment">% The goal is to show the following problem formulations give all the same</span>
+<span class="comment">% optimal residual norm ||Ax - b||:</span>
+<span class="comment">% 1)        minimize    ||Ax - b||</span>
+<span class="comment">% 2)        minimize    ||y||</span>
+<span class="comment">%               s.t.    Ax - b = y</span>
+<span class="comment">% 3)        maximize    b'v</span>
+<span class="comment">%               s.t.    ||v||* &lt;= 1  , A'v = 0</span>
+<span class="comment">% 4)        minimize    1/2 ||y||^2</span>
+<span class="comment">%               s.t.    Ax - b = y</span>
+<span class="comment">% 5)        maximize    -1/2||v||*^2 + b'v</span>
+<span class="comment">%               s.t.    A'v = 0</span>
+<span class="comment">% where ||.||* denotes the dual norm of ||.||</span>
+
+<span class="comment">% Input data</span>
+randn(<span class="string">'state'</span>,0);
+n = 4;
+m = 2*n;
+A = randn(m,n);
+b = randn(m,1);
+p = 2;
+q = p/(p-1);
+
+<span class="comment">% Original problem</span>
+fprintf(1,<span class="string">'Computing the optimal solution of problem 1... '</span>);
+
+cvx_begin <span class="string">quiet</span>
+    variable <span class="string">x(n)</span>
+    minimize ( norm ( A*x - b , p) )
+cvx_end
+
+fprintf(1,<span class="string">'Done! \n'</span>);
+opt1 = cvx_optval;
+
+<span class="comment">% Reformulation 1</span>
+fprintf(1,<span class="string">'Computing the optimal solution of problem 2... '</span>);
+
+cvx_begin <span class="string">quiet</span>
+    variables <span class="string">x(n)</span> <span class="string">y(m)</span>
+    minimize ( norm ( y , p ) )
+    A*x - b == y;
+cvx_end
+
+fprintf(1,<span class="string">'Done! \n'</span>);
+opt2 = cvx_optval;
+
+<span class="comment">% Dual of reformulation 1</span>
+fprintf(1,<span class="string">'Computing the optimal solution of problem 3... '</span>);
+
+cvx_begin <span class="string">quiet</span>
+    variable <span class="string">nu(m)</span>
+    maximize ( b'*nu )
+    norm( nu , q ) &lt;= 1;
+    A'*nu == 0;
+cvx_end
+
+fprintf(1,<span class="string">'Done! \n'</span>);
+opt3 = cvx_optval;
+
+<span class="comment">% Reformulation 2</span>
+fprintf(1,<span class="string">'Computing the optimal solution of problem 4... '</span>);
+
+cvx_begin <span class="string">quiet</span>
+    variables <span class="string">x(n)</span> <span class="string">y(m)</span>
+    minimize ( 0.5 * square_pos ( norm ( y , p ) ) )
+    A*x - b == y;
+cvx_end
+
+fprintf(1,<span class="string">'Done! \n'</span>);
+opt4 = (2*cvx_optval).^(.5);
+
+<span class="comment">% Dual of reformulation 2</span>
+fprintf(1,<span class="string">'Computing the optimal solution of problem 5... '</span>);
+
+cvx_begin <span class="string">quiet</span>
+    variable <span class="string">nu(m)</span>
+    maximize ( -0.5 * square_pos ( norm ( nu , q ) ) + b'*nu )
+    A'*nu == 0;
+cvx_end
+
+fprintf(1,<span class="string">'Done! \n'</span>);
+opt5 = (2*cvx_optval).^(0.5);
+
+<span class="comment">% Displaying results</span>
+disp(<span class="string">'------------------------------------------------------------------------'</span>);
+disp(<span class="string">'The optimal residual values for problems 1,2,3,4 and 5 are respectively:'</span>);
+[ opt1 opt2 opt3 opt4 opt5 ]'
+disp(<span class="string">'They are equal as expected!'</span>);
+</pre>
+<a id="output"></a>
+<pre class="codeoutput">
+Computing the optimal solution of problem 1... Done! 
+Computing the optimal solution of problem 2... Done! 
+Computing the optimal solution of problem 3... Done! 
+Computing the optimal solution of problem 4... Done! 
+Computing the optimal solution of problem 5... Done! 
+------------------------------------------------------------------------
+The optimal residual values for problems 1,2,3,4 and 5 are respectively:
+
+ans =
+
+    1.8371
+    1.8371
+    1.8371
+    1.8371
+    1.8371
+
+They are equal as expected!
+</pre>
+</div>
+</body>
+</html>

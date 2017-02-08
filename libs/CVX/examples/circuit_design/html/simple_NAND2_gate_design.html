@@ -1,0 +1,181 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Two-input NAND gate sizing (GP)</title>
+<link rel="canonical" href="/Users/mcgrant/Projects/CVX/examples/circuit_design/html/simple_NAND2_gate_design.html">
+<link rel="stylesheet" href="../../examples.css" type="text/css">
+</head>
+<body>
+<div id="header">
+<h1>Two-input NAND gate sizing (GP)</h1>
+Jump to:&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#source">Source code</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#output">Text output</a>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#plots">Plots</a>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../index.html">Library index</a>
+</div>
+<div id="content">
+<a id="source"></a>
+<pre class="codeinput">
+<span class="comment">% Boyd, Kim, Patil, and Horowitz, "Digital circuit optimization</span>
+<span class="comment">% via geometric programming"</span>
+<span class="comment">% Written for CVX by Almir Mutapcic 02/08/06</span>
+<span class="comment">% (a figure is generated)</span>
+<span class="comment">%</span>
+<span class="comment">% This is an example taken directly from the paper:</span>
+<span class="comment">%</span>
+<span class="comment">%   Digital circuit optimization via geometrical programming</span>
+<span class="comment">%   by Boyd, Kim, Patil, and Horowitz</span>
+<span class="comment">%   Operations Research 53(6): 899-932, 2005.</span>
+<span class="comment">%</span>
+<span class="comment">% Solves the problem of choosing device widths w_i for the given</span>
+<span class="comment">% NAND2 gate in order to achive minimum Elmore delay for different</span>
+<span class="comment">% gate transitions, subject to limits on the device widths,</span>
+<span class="comment">% gate area, power, and so on. The problem is a GP:</span>
+<span class="comment">%</span>
+<span class="comment">%   minimize   D = max( D_1, ..., D_k )  for k transitions</span>
+<span class="comment">%       s.t.   w_min &lt;= w &lt;= w_max</span>
+<span class="comment">%              A &lt;= Amax, etc.</span>
+<span class="comment">%</span>
+<span class="comment">% where variables are widths w.</span>
+<span class="comment">%</span>
+<span class="comment">% This code is specific to the NAND2 gate shown in figure 19</span>
+<span class="comment">% (page 926) of the paper. All the constraints and the objective</span>
+<span class="comment">% are hard-coded for this particular circuit.</span>
+
+<span class="comment">%********************************************************************</span>
+<span class="comment">% problem data and hard-coded GP specs (evaluate all transitions)</span>
+<span class="comment">%********************************************************************</span>
+N = 4;       <span class="comment">% number of devices</span>
+Cload = 12;  <span class="comment">% load capacitance</span>
+Vdd = 1.5;   <span class="comment">% voltage</span>
+
+<span class="comment">% device specs</span>
+NMOS = struct(<span class="string">'R'</span>,0.4831, <span class="string">'Cdb'</span>,0.6, <span class="string">'Csb'</span>,0.6, <span class="string">'Cgb'</span>,1, <span class="string">'Cgs'</span>,1);
+PMOS = struct(<span class="string">'R'</span>,2*0.4831, <span class="string">'Cdb'</span>,0.6, <span class="string">'Csb'</span>,0.6, <span class="string">'Cgb'</span>,1, <span class="string">'Cgs'</span>,1);
+
+<span class="comment">% maximum area and power specification</span>
+Amax = 24;
+wmin = 1;
+
+<span class="comment">% varying parameters for the tradeoff curve</span>
+Npoints = 25;
+Amax = linspace(5,45,Npoints);
+Dopt = [];
+
+disp(<span class="string">'Generating the optimal tradeoff curve...'</span>)
+need_sedumi = strncmpi(cvx_solver,<span class="string">'sdpt'</span>,4);
+<span class="keyword">if</span> need_sedumi,
+    warning(<span class="string">'This model does not converge with SDPT3... switching to SeDuMi.'</span>);
+<span class="keyword">end</span>
+<span class="keyword">for</span> k = 1:Npoints
+    fprintf(1,<span class="string">'  Amax = %5.2f:'</span>, Amax(k));
+    cvx_begin <span class="string">gp</span> <span class="string">quiet</span>
+        <span class="keyword">if</span> need_sedumi,
+            cvx_solver <span class="string">sedumi</span>
+        <span class="keyword">end</span>
+
+        <span class="comment">% device width variables</span>
+        variable <span class="string">w(N)</span>
+
+        <span class="comment">% device specs</span>
+        device(1:2) = PMOS; device(3:4) = NMOS;
+
+        <span class="keyword">for</span> num = 1:N
+            device(num).R   = device(num).R/w(num);
+            device(num).Cdb = device(num).Cdb*w(num);
+            device(num).Csb = device(num).Csb*w(num);
+            device(num).Cgb = device(num).Cgb*w(num);
+            device(num).Cgs = device(num).Cgs*w(num);
+        <span class="keyword">end</span>
+
+        <span class="comment">% capacitances</span>
+        C1 = sum([device(1:3).Cdb]) + Cload;
+        C2 = device(3).Csb + device(4).Cdb;
+
+        <span class="comment">% input capacitances</span>
+        Cin_A = sum([ device([2 3]).Cgb ]) + sum([ device([2 3]).Cgs ]);
+        Cin_B = sum([ device([1 4]).Cgb ]) + sum([ device([1 4]).Cgs ]);
+
+        <span class="comment">% resistances</span>
+        R = [device.R]';
+
+        <span class="comment">% area definition</span>
+        area = sum(w);
+
+        <span class="comment">% delays and dissipated energies for all six possible transitions</span>
+        <span class="comment">% transition 1 is A: 1-&gt;1, B: 1-&gt;0, Z: 0-&gt;1</span>
+        D1 = R(1)*(C1 + C2);
+        E1 = (C1 + C2)*Vdd^2/2;
+        <span class="comment">% transition 2 is A: 1-&gt;0, B: 1-&gt;1, Z: 0-&gt;1</span>
+        D2 = R(2)*C1;
+        E2 = C1*Vdd^2/2;
+        <span class="comment">% transition 3 is A: 1-&gt;0, B: 1-&gt;0, Z: 0-&gt;1</span>
+        <span class="comment">% D3 = C1*R(1)*R(2)/(R(1) + R(2)); % not a posynomial</span>
+        E3 = C1*Vdd^2/2;
+        <span class="comment">% transition 4 is A: 1-&gt;1, B: 0-&gt;1, Z: 1-&gt;0</span>
+        D4 = C1*R(3) + R(4)*(C1 + C2);
+        E4 = (C1 + C2)*Vdd^2/2;
+        <span class="comment">% transition 5 is A: 0-&gt;1, B: 1-&gt;1, Z: 1-&gt;0</span>
+        D5 = C1*(R(3) + R(4));
+        E5 = (C1 + C2)*Vdd^2/2;
+        <span class="comment">% transition 6 is A: 0-&gt;1, B: 0-&gt;1, Z: 1-&gt;0</span>
+        D6 = C1*R(3) + R(4)*(C1 + C2);
+        E6 = (C1 + C2)*Vdd^2/2;
+
+        <span class="comment">% objective is the worst-case delay</span>
+        minimize( max( [D1 D2 D4] ) )
+        subject <span class="string">to</span>
+            area &lt;= Amax(k);
+            w &gt;= wmin;
+    cvx_end
+    <span class="comment">% display and store computed values</span>
+    fprintf(1,<span class="string">' delay = %3.2f\n'</span>,cvx_optval);
+    Dopt = [Dopt cvx_optval];
+<span class="keyword">end</span>
+
+<span class="comment">% plot the tradeoff curve</span>
+plot(Dopt,Amax);
+xlabel(<span class="string">'Dmin'</span>); ylabel(<span class="string">'Amax'</span>);
+disp(<span class="string">'Optimal tradeoff curve plotted.'</span>)
+</pre>
+<a id="output"></a>
+<pre class="codeoutput">
+Generating the optimal tradeoff curve...
+Warning: This model does not converge with SDPT3... switching to SeDuMi. 
+  Amax =  5.00: delay = 11.56
+  Amax =  6.67: delay = 9.23
+  Amax =  8.33: delay = 7.84
+  Amax = 10.00: delay = 6.90
+  Amax = 11.67: delay = 6.23
+  Amax = 13.33: delay = 5.73
+  Amax = 15.00: delay = 5.34
+  Amax = 16.67: delay = 5.03
+  Amax = 18.33: delay = 4.77
+  Amax = 20.00: delay = 4.55
+  Amax = 21.67: delay = 4.37
+  Amax = 23.33: delay = 4.22
+  Amax = 25.00: delay = 4.08
+  Amax = 26.67: delay = 3.96
+  Amax = 28.33: delay = 3.86
+  Amax = 30.00: delay = 3.76
+  Amax = 31.67: delay = 3.68
+  Amax = 33.33: delay = 3.60
+  Amax = 35.00: delay = 3.54
+  Amax = 36.67: delay = 3.47
+  Amax = 38.33: delay = 3.42
+  Amax = 40.00: delay = 3.36
+  Amax = 41.67: delay = 3.32
+  Amax = 43.33: delay = 3.27
+  Amax = 45.00: delay = 3.23
+Optimal tradeoff curve plotted.
+</pre>
+<a id="plots"></a>
+<div id="plotoutput">
+<img src="simple_NAND2_gate_design__01.png" alt=""> 
+</div>
+</div>
+</body>
+</html>

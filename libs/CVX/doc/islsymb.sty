@@ -1,0 +1,98 @@
+% math symbols and operators
+\RequirePackage{amsthm,amsmath,amssymb,xspace,fancyvrb,url}
+
+\def\cvx{\texttt{cvx}\xspace}
+\DefineVerbatimEnvironment{code}{Verbatim}{tabsize=0,xleftmargin=0.5in}
+\DefineVerbatimEnvironment{fcode}{Verbatim}{tabsize=0,xleftmargin=0in,baselinestretch=1}
+
+\def\cA{\ensuremath{\mathcal{A}}\xspace}
+\def\cC{\ensuremath{\mathcal{C}}\xspace}
+\def\cD{\ensuremath{\mathcal{D}}\xspace}
+\def\cF{\ensuremath{\mathcal{F}}\xspace}
+\def\cH{\ensuremath{\mathcal{H}}\xspace}
+\def\cP{\ensuremath{\mathcal{P}}\xspace}
+\def\cK{\ensuremath{\mathcal{K}}\xspace}
+\def\cQ{\ensuremath{\mathcal{Q}}\xspace}
+\def\cS{\ensuremath{\mathcal{S}}\xspace}
+\def\cKs{\ensuremath{\mathcal{K}^*}\xspace}
+\def\cZ{\ensuremath{\mathcal{Z}}\xspace}
+\def\cY{\ensuremath{\mathcal{Y}}\xspace}
+
+\def\maximize{\operatorname*{maximize}}
+\def\minimize{\operatorname*{minimize}}
+\def\subjto{\operatorname{\text{subject to}}}
+
+\addtolength\abovecaptionskip{-12pt}
+
+\def\etal{\emph{et.al.}\xspace}                % et. al.
+\def\reals{\mathbf{R}}\let\R=\reals         % real numbers
+\def\integers{\mathbf{Z}}\let\Z=\integers
+\def\complex{\mathbf{C}}\let\C=\complex         % complex numbers
+\newcommand{\Rn}[1][n]{\ensuremath{\reals^{#1}}}    % real vector
+\newcommand{\Rm}[1][m]{\ensuremath{\reals^{#1}}}    % real vector
+\newcommand{\Rmn}[2]{\Rn[{#1}\times{#2}]}       % real non-sq matix
+\newcommand{\Rnn}[1][n]{\Rmn{#1}{#1}}           % real square matrix
+\newcommand{\Cn}[1][n]{\ensuremath{\complex^{#1}}}  % complex vector
+\newcommand{\Cmn}[2]{\Cn[{#1}\times{#2}]}       % complex non-sq matrix
+\newcommand{\Cnn}[1][n]{\Cmn{#1}{#1}}           % complex sq matrix
+\def\argmin{\operatorname*{arg\,min}}           % arg min
+\def\argmax{\operatorname*{arg\,max}}           % arg max
+\def\arginf{\operatorname*{arg\,inf}}           % arg min
+\def\argsup{\operatorname*{arg\,sup}}           % arg max
+\def\eqbydef{\triangleq}                % defined to be
+\def\vecone{\vec{1}}                 % ones vector
+\def\veczero{\vec{0}}                % zeros vector
+\def\diag{\operatorname{\textbf{diag}}}         % diagonal matrix
+\def\inprod#1{\left\langle #1\right\rangle}     % inner product
+\def\Prob{\operatorname{\textbf{Prob}}}         % probability
+\def\ExpV{\operatorname{\textbf{E}}}                % expected value
+\def\Conv{\operatorname{\textbf{Conv}}}                % convex hull
+\def\cl{\operatorname{\textbf{cl}}}
+\def\int{\operatorname{\textbf{int}}}
+\def\rank{\operatorname{rank}}
+\def\epi{\operatorname{\textbf{epi}}}
+\def\hypo{\operatorname{\textbf{hypo}}}
+\def\graph{\operatorname{graph}}
+\def\dom{\operatorname{\mathbf{dom}}}
+\def\sign{\operatorname{\textrm{sign}}}
+\def\relint{\operatorname{\textbf{relint}}}
+\def\Tr{\operatorname{\textbf{Tr}}}
+\def\Span{\operatorname{Span}}
+\def\Nullspace{\operatorname{Nullspace}}
+\def\Var{\operatorname{Var}}
+\def\Int{\operatorname{Int}}                    % interior
+\def\half{\frac{1}{2}}                  % one over two
+\def\thalf{\frac{T}{2}}                 % T over two
+\def\third{\frac{1}{3}}                 % one over three
+
+\def\ie{\textit{i.e.}}                  % that is
+\def\eg{\textit{e.g.}}                  % for example
+\def\cf{\textit{c.f.}}                  % refer to
+\def\etc{\textit{etc.}}                 % et cetera
+
+\let\DS=\displaystyle
+\let\TS=\textstyle
+\let\SS=\scriptstyle
+
+% If an equation has too much space below it at a paragraph break try this
+\def\eqcorr{\vspace{-\parskip}\vspace{-\belowdisplayskip}}
+
+% Automatic matrix commands: assume a centered environment. Of course,
+% if you want right-justified numbers just specify it in an optional argument
+% bmat -- [], mat = none
+\def\c@DefMatrixCols{*\c@MaxMatrixCols c}
+\renewcommand{\matrix}[1][*\c@MaxMatrixCols c]{\hskip -\arraycolsep\array{#1}}
+\renewcommand{\bmatrix}[1][*\c@MaxMatrixCols c]{\left[\matrix[#1]}
+\newcommand{\smallbmat}[1]{\left[\begin{smallmatrix} #1 \end{smallmatrix}\right]}
+\newcommand{\smallpmat}[1]{\left(\begin{smallmatrix} #1 \end{smallmatrix}\right)}
+\newcommand{\mat}[2][*\c@MaxMatrixCols c]{\begin{matrix}[#1] #2 \end{matrix}}
+\newcommand{\pmat}[2][*\c@MaxMatrixCols c]{\begin{pmatrix}[#1] #2 \end{pmatrix}}
+\newcommand{\bmat}[2][*\c@MaxMatrixCols c]{\begin{bmatrix}[#1] #2 \end{bmatrix}}
+% in-text vectors
+\newcommand{\bvec}[2][*\c@MaxMatrixCols c]{[\begin{matrix}[#1] #2 \end{matrix}]}
+
+% multiple cases
+\newcommand{\Cases}[1]{\begin{cases} #1 \end{cases}}
+
+% conditional set
+\newcommand{\Condset}[3][~|~]{\left\{\,#2\,#1\,#3\,\right\}}

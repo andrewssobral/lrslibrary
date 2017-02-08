@@ -1,0 +1,177 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Example 8.4: One free point localization</title>
+<link rel="canonical" href="/Users/mcgrant/Projects/CVX/examples/cvxbook/Ch08_geometric_probs/html/ex_8_4.html">
+<link rel="stylesheet" href="../../../examples.css" type="text/css">
+</head>
+<body>
+<div id="header">
+<h1>Example 8.4: One free point localization</h1>
+Jump to:&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#source">Source code</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#output">Text output</a>
+&nbsp;&nbsp;&nbsp;&nbsp;
+Plots
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../../index.html">Library index</a>
+</div>
+<div id="content">
+<a id="source"></a>
+<pre class="codeinput">
+<span class="comment">% Section 8.7.1, Boyd &amp; Vandenberghe "Convex Optimization"</span>
+<span class="comment">% Joelle Skaf - 10/23/05</span>
+<span class="comment">%</span>
+<span class="comment">% K fixed points (u1,v1),..., (uK,vK) in R^2 are given and the goal is to place</span>
+<span class="comment">% one additional point (u,v) such that:</span>
+<span class="comment">% 1) the L1-norm is minimized, i.e.</span>
+<span class="comment">%           minimize    sum_{i=1}^K ( |u - u_i| + |v - v_i| )</span>
+<span class="comment">%    the solution in this case is any median of the fixed points</span>
+<span class="comment">% 2) the L2-norm is minimized, i.e.</span>
+<span class="comment">%           minimize    sum_{i=1}^K ( |u - u_i|^2 + |v - v_i|^2 )^.5</span>
+<span class="comment">%    the solution in this case is the Weber point of the fixed points</span>
+
+<span class="comment">% Data generation</span>
+n = 2;
+K = 11;
+randn(<span class="string">'state'</span>,0);
+P = randn(n,K);
+
+<span class="comment">% L1 - norm</span>
+fprintf(1,<span class="string">'Minimizing the L1-norm of the sum of the distances to fixed points...'</span>);
+
+cvx_begin
+    variable <span class="string">x1(2)</span>
+    minimize ( sum(norms(x1*ones(1,K) - P,1)) )
+cvx_end
+
+fprintf(1,<span class="string">'Done! \n'</span>);
+
+<span class="comment">% L2 - norm</span>
+fprintf(1,<span class="string">'Minimizing the L2-norm of the sum of the distances to fixed points...'</span>);
+
+cvx_begin
+    variable <span class="string">x2(2)</span>
+    minimize ( sum(norms(x2*ones(1,K) - P,2)) )
+cvx_end
+
+fprintf(1,<span class="string">'Done! \n'</span>);
+
+<span class="comment">% Displaying results</span>
+disp(<span class="string">'------------------------------------------------------------------'</span>);
+disp(<span class="string">'The optimal point location for the L1-norm case is: '</span>);
+disp(x1);
+disp(<span class="string">'The optimal point location for the L2-norm case is: '</span>);
+disp(x2);
+</pre>
+<a id="output"></a>
+<pre class="codeoutput">
+Minimizing the L1-norm of the sum of the distances to fixed points... 
+Calling SDPT3 4.0: 44 variables, 20 equality constraints
+------------------------------------------------------------
+
+ num. of constraints = 20
+ dim. of socp   var  = 44,   num. of socp blk  = 22
+*******************************************************************
+   SDPT3: Infeasible path-following algorithms
+*******************************************************************
+ version  predcorr  gam  expon  scale_data
+    NT      1      0.000   1        0    
+it pstep dstep pinfeas dinfeas  gap      prim-obj      dual-obj    cputime
+-------------------------------------------------------------------
+ 0|0.000|0.000|8.8e-01|3.9e+00|3.6e+02| 6.248756e+01  0.000000e+00| 0:0:00| chol  1  1 
+ 1|1.000|0.876|1.2e-07|5.5e-01|8.0e+01| 5.455840e+01  1.131909e+01| 0:0:00| chol  1  1 
+ 2|1.000|1.000|1.1e-07|8.2e-03|6.9e+00| 1.759114e+01  1.082797e+01| 0:0:00| chol  1  1 
+ 3|0.853|0.904|1.5e-07|1.5e-03|1.1e+00| 1.447923e+01  1.337235e+01| 0:0:00| chol  1  1 
+ 4|0.808|0.968|2.6e-07|1.3e-04|2.2e-01| 1.401801e+01  1.380170e+01| 0:0:00| chol  1  1 
+ 5|1.000|0.923|7.8e-09|1.8e-05|2.4e-02| 1.388024e+01  1.385605e+01| 0:0:00| chol  1  1 
+ 6|0.987|0.987|7.2e-10|1.1e-06|3.3e-04| 1.386826e+01  1.386795e+01| 0:0:00| chol  1  1 
+ 7|0.989|0.989|4.2e-11|1.2e-08|3.6e-06| 1.386810e+01  1.386810e+01| 0:0:00| chol  1  1 
+ 8|0.991|0.993|5.4e-13|9.3e-11|4.8e-08| 1.386810e+01  1.386810e+01| 0:0:00|
+  stop: max(relative gap, infeasibilities) &lt; 1.49e-08
+-------------------------------------------------------------------
+ number of iterations   =  8
+ primal objective value =  1.38681000e+01
+ dual   objective value =  1.38681000e+01
+ gap := trace(XZ)       = 4.81e-08
+ relative gap           = 1.67e-09
+ actual relative gap    = 1.62e-09
+ rel. primal infeas (scaled problem)   = 5.43e-13
+ rel. dual     "        "       "      = 9.31e-11
+ rel. primal infeas (unscaled problem) = 0.00e+00
+ rel. dual     "        "       "      = 0.00e+00
+ norm(X), norm(y), norm(Z) = 5.8e+00, 4.2e+00, 6.5e+00
+ norm(A), norm(b), norm(C) = 7.3e+00, 8.3e+00, 5.7e+00
+ Total CPU time (secs)  = 0.09  
+ CPU time per iteration = 0.01  
+ termination code       =  0
+ DIMACS: 9.2e-13  0.0e+00  2.6e-10  0.0e+00  1.6e-09  1.7e-09
+-------------------------------------------------------------------
+ 
+------------------------------------------------------------
+Status: Solved
+Optimal value (cvx_optval): +13.8681
+ 
+Done! 
+Minimizing the L2-norm of the sum of the distances to fixed points... 
+Calling SDPT3 4.0: 33 variables, 13 equality constraints
+   For improved efficiency, SDPT3 is solving the dual problem.
+------------------------------------------------------------
+
+ num. of constraints = 13
+ dim. of socp   var  = 33,   num. of socp blk  = 11
+*******************************************************************
+   SDPT3: Infeasible path-following algorithms
+*******************************************************************
+ version  predcorr  gam  expon  scale_data
+    NT      1      0.000   1        0    
+it pstep dstep pinfeas dinfeas  gap      prim-obj      dual-obj    cputime
+-------------------------------------------------------------------
+ 0|0.000|0.000|5.6e-01|3.4e+00|9.8e+01| 0.000000e+00  0.000000e+00| 0:0:00| chol  1  1 
+ 1|1.000|0.930|1.3e-07|3.0e-01|1.1e+01|-6.474954e+00 -1.154705e+01| 0:0:00| chol  1  1 
+ 2|0.926|0.859|2.5e-07|4.7e-02|1.4e+00|-1.077944e+01 -1.129839e+01| 0:0:00| chol  1  1 
+ 3|0.861|0.969|8.0e-08|2.1e-03|1.7e-01|-1.137189e+01 -1.150434e+01| 0:0:00| chol  1  1 
+ 4|0.954|0.965|9.5e-08|1.4e-04|7.4e-03|-1.147883e+01 -1.148379e+01| 0:0:00| chol  1  1 
+ 5|0.948|0.981|2.3e-08|8.9e-06|3.1e-04|-1.148369e+01 -1.148385e+01| 0:0:00| chol  1  1 
+ 6|0.919|0.963|6.5e-09|3.4e-07|2.3e-05|-1.148391e+01 -1.148393e+01| 0:0:00| chol  1  1 
+ 7|0.871|0.977|1.7e-09|9.0e-09|3.4e-06|-1.148393e+01 -1.148393e+01| 0:0:00| chol  2  2 
+ 8|0.824|0.992|4.6e-10|4.0e-10|5.1e-07|-1.148393e+01 -1.148393e+01| 0:0:00| chol  2  2 
+ 9|0.955|0.984|4.2e-11|9.9e-11|3.2e-08|-1.148393e+01 -1.148393e+01| 0:0:00|
+  stop: max(relative gap, infeasibilities) &lt; 1.49e-08
+-------------------------------------------------------------------
+ number of iterations   =  9
+ primal objective value = -1.14839292e+01
+ dual   objective value = -1.14839293e+01
+ gap := trace(XZ)       = 3.22e-08
+ relative gap           = 1.34e-09
+ actual relative gap    = 1.27e-09
+ rel. primal infeas (scaled problem)   = 4.16e-11
+ rel. dual     "        "       "      = 9.93e-11
+ rel. primal infeas (unscaled problem) = 0.00e+00
+ rel. dual     "        "       "      = 0.00e+00
+ norm(X), norm(y), norm(Z) = 4.7e+00, 4.1e+00, 5.8e+00
+ norm(A), norm(b), norm(C) = 6.7e+00, 4.3e+00, 5.2e+00
+ Total CPU time (secs)  = 0.08  
+ CPU time per iteration = 0.01  
+ termination code       =  0
+ DIMACS: 9.0e-11  0.0e+00  1.7e-10  0.0e+00  1.3e-09  1.3e-09
+-------------------------------------------------------------------
+ 
+------------------------------------------------------------
+Status: Solved
+Optimal value (cvx_optval): +11.4839
+ 
+Done! 
+------------------------------------------------------------------
+The optimal point location for the L1-norm case is: 
+   -0.0956
+    0.1139
+
+The optimal point location for the L2-norm case is: 
+    0.1252
+    0.1716
+
+</pre>
+</div>
+</body>
+</html>

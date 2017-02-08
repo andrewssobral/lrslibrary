@@ -1,0 +1,124 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>One free point localization</title>
+<link rel="canonical" href="/Users/mcgrant/Projects/CVX/examples/cvxbook/Ch08_geometric_probs/html/ex_8_5.html">
+<link rel="stylesheet" href="../../../examples.css" type="text/css">
+</head>
+<body>
+<div id="header">
+<h1>One free point localization</h1>
+Jump to:&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#source">Source code</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#output">Text output</a>
+&nbsp;&nbsp;&nbsp;&nbsp;
+Plots
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../../index.html">Library index</a>
+</div>
+<div id="content">
+<a id="source"></a>
+<pre class="codeinput">
+<span class="comment">% Section 8.7.3, Boyd &amp; Vandenberghe "Convex Optimization"</span>
+<span class="comment">% Joelle Skaf - 10/24/05</span>
+<span class="comment">%</span>
+<span class="comment">% K fixed points x_1,...,x_K in R^2 are given and the goal is to place</span>
+<span class="comment">% one additional point x such that the sum of the squares of the</span>
+<span class="comment">% Euclidean distances to fixed points is minimized:</span>
+<span class="comment">%           minimize    sum_{i=1}^K  ||x - x_i||^2</span>
+<span class="comment">% The optimal point is the average of the given fixed points</span>
+
+<span class="comment">% Data generation</span>
+n = 2;
+K = 11;
+randn(<span class="string">'state'</span>,0);
+P = randn(n,K);
+
+<span class="comment">% minimizing the sum of Euclidean distance</span>
+fprintf(1,<span class="string">'Minimizing the sum of the squares the distances to fixed points...'</span>);
+
+cvx_begin
+    variable <span class="string">x(2)</span>
+    minimize ( sum( square_pos( norms(x*ones(1,K) - P,2) ) ) )
+cvx_end
+
+fprintf(1,<span class="string">'Done! \n'</span>);
+
+<span class="comment">% Displaying results</span>
+disp(<span class="string">'------------------------------------------------------------------'</span>);
+disp(<span class="string">'The optimal point location is: '</span>);
+disp(x);
+disp(<span class="string">'The average location of the fixed points is'</span>);
+disp(sum(P,2)/K);
+disp(<span class="string">'They are the same as expected!'</span>);
+</pre>
+<a id="output"></a>
+<pre class="codeoutput">
+Minimizing the sum of the squares the distances to fixed points... 
+Calling SDPT3 4.0: 88 variables, 42 equality constraints
+------------------------------------------------------------
+
+ num. of constraints = 42
+ dim. of sdp    var  = 22,   num. of sdp  blk  = 11
+ dim. of socp   var  = 33,   num. of socp blk  = 11
+ dim. of linear var  = 22
+*******************************************************************
+   SDPT3: Infeasible path-following algorithms
+*******************************************************************
+ version  predcorr  gam  expon  scale_data
+   HKM      1      0.000   1        0    
+it pstep dstep pinfeas dinfeas  gap      prim-obj      dual-obj    cputime
+-------------------------------------------------------------------
+ 0|0.000|0.000|1.8e+01|1.5e+01|7.3e+03| 1.100000e+02  0.000000e+00| 0:0:00| chol  1  1 
+ 1|0.637|0.756|6.7e+00|3.8e+00|3.5e+03| 1.418911e+02 -6.667195e+01| 0:0:00| chol  1  1 
+ 2|0.763|0.990|1.6e+00|4.6e-02|9.9e+02| 2.987271e+02 -1.488760e+02| 0:0:00| chol  1  1 
+ 3|1.000|1.000|5.9e-07|1.0e-03|1.6e+02| 1.005763e+02 -6.360729e+01| 0:0:00| chol  1  1 
+ 4|1.000|1.000|9.4e-08|1.0e-04|4.9e+01| 4.828646e+01 -8.200827e-01| 0:0:00| chol  1  1 
+ 5|0.885|1.000|1.2e-08|1.0e-05|8.6e+00| 2.267532e+01  1.408310e+01| 0:0:00| chol  1  1 
+ 6|1.000|0.967|1.5e-09|1.3e-06|2.3e+00| 1.824747e+01  1.593419e+01| 0:0:00| chol  1  1 
+ 7|0.906|0.979|4.2e-10|1.3e-07|2.6e-01| 1.688821e+01  1.662966e+01| 0:0:00| chol  1  1 
+ 8|1.000|0.982|6.2e-10|1.2e-08|5.5e-02| 1.672161e+01  1.666619e+01| 0:0:00| chol  1  1 
+ 9|0.970|0.978|1.4e-10|1.4e-09|1.8e-03| 1.668444e+01  1.668266e+01| 0:0:00| chol  1  1 
+10|0.976|0.983|3.2e-12|5.1e-11|3.9e-05| 1.668315e+01  1.668311e+01| 0:0:00| chol  1  1 
+11|0.926|1.000|1.5e-11|1.0e-12|7.0e-06| 1.668312e+01  1.668312e+01| 0:0:00| chol  2  1 
+12|1.000|1.000|4.9e-11|1.5e-12|8.0e-07| 1.668312e+01  1.668312e+01| 0:0:00| chol  1  2 
+13|0.994|1.000|1.5e-12|2.3e-12|1.6e-08| 1.668312e+01  1.668312e+01| 0:0:00|
+  stop: max(relative gap, infeasibilities) &lt; 1.49e-08
+-------------------------------------------------------------------
+ number of iterations   = 13
+ primal objective value =  1.66831189e+01
+ dual   objective value =  1.66831189e+01
+ gap := trace(XZ)       = 1.55e-08
+ relative gap           = 4.52e-10
+ actual relative gap    = 4.51e-10
+ rel. primal infeas (scaled problem)   = 1.54e-12
+ rel. dual     "        "       "      = 2.25e-12
+ rel. primal infeas (unscaled problem) = 0.00e+00
+ rel. dual     "        "       "      = 0.00e+00
+ norm(X), norm(y), norm(Z) = 1.1e+01, 1.3e+01, 1.9e+01
+ norm(A), norm(b), norm(C) = 1.0e+01, 9.0e+00, 4.3e+00
+ Total CPU time (secs)  = 0.25  
+ CPU time per iteration = 0.02  
+ termination code       =  0
+ DIMACS: 2.9e-12  0.0e+00  4.9e-12  0.0e+00  4.5e-10  4.5e-10
+-------------------------------------------------------------------
+ 
+------------------------------------------------------------
+Status: Solved
+Optimal value (cvx_optval): +16.6831
+ 
+Done! 
+------------------------------------------------------------------
+The optimal point location is: 
+    0.0379
+    0.0785
+
+The average location of the fixed points is
+    0.0379
+    0.0785
+
+They are the same as expected!
+</pre>
+</div>
+</body>
+</html>

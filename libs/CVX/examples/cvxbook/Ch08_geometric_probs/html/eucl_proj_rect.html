@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Euclidean projection on a rectangle</title>
+<link rel="canonical" href="/Users/mcgrant/Projects/CVX/examples/cvxbook/Ch08_geometric_probs/html/eucl_proj_rect.html">
+<link rel="stylesheet" href="../../../examples.css" type="text/css">
+</head>
+<body>
+<div id="header">
+<h1>Euclidean projection on a rectangle</h1>
+Jump to:&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#source">Source code</a>&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="#output">Text output</a>
+&nbsp;&nbsp;&nbsp;&nbsp;
+Plots
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../../../index.html">Library index</a>
+</div>
+<div id="content">
+<a id="source"></a>
+<pre class="codeinput">
+<span class="comment">% Section 8.1.1, Boyd &amp; Vandenberghe "Convex Optimization"</span>
+<span class="comment">% Joelle Skaf - 10/07/05</span>
+<span class="comment">%</span>
+<span class="comment">% The projection of x0 on a rectangle C = {x | l &lt;= x &lt;= u} is given by</span>
+<span class="comment">%           minimize || x - x0 ||^2</span>
+<span class="comment">%               s.t.    l &lt;= x &lt;= u</span>
+<span class="comment">% It is also given by P_C(x0)_k = l_k       if  x0_k &lt;= l_k</span>
+<span class="comment">%                                 x0_k      if  l_k &lt;= x0_k &lt;= u_k</span>
+<span class="comment">%                                 u_k       if  x0_k &gt;= u_k</span>
+
+<span class="comment">% Input data: generate vectors l and u such that l &lt; 0 &lt; u</span>
+n  = 10;
+l  = -rand(n,1);
+u  = rand(n,1);
+x0 = randn(n,1);
+
+<span class="comment">% Analytical solution</span>
+fprintf(1,<span class="string">'Computing the analytical solution ...'</span>);
+pc_x0 = x0;
+pc_x0(find(x0&lt;=l)) = l(find(x0&lt;=l));
+pc_x0(find(x0&gt;=u)) = u(find(x0&gt;=u));
+fprintf(1,<span class="string">'Done! \n'</span>);
+
+<span class="comment">% Solution via QP</span>
+fprintf(1,<span class="string">'Computing the optimal solution by solving a QP ...'</span>);
+
+cvx_begin <span class="string">quiet</span>
+    variable <span class="string">x(n)</span>
+    minimize ( norm(x-x0) )
+    x &lt;= u;
+    x &gt;= l;
+cvx_end
+
+fprintf(1,<span class="string">'Done! \n'</span>);
+
+<span class="comment">% Verification</span>
+disp(<span class="string">'-----------------------------------------------------------------'</span>);
+disp(<span class="string">'Verifying that the analytical solution and the solution obtained via QP are equal: '</span>);
+[pc_x0 x]
+</pre>
+<a id="output"></a>
+<pre class="codeoutput">
+Computing the analytical solution ...Done! 
+Computing the optimal solution by solving a QP ...Done! 
+-----------------------------------------------------------------
+Verifying that the analytical solution and the solution obtained via QP are equal: 
+
+ans =
+
+    0.4186    0.4186
+    0.2316    0.2316
+   -0.6038   -0.6038
+    0.2026    0.2026
+    0.2895    0.2895
+    0.8381    0.8381
+    0.0196    0.0196
+   -0.4451   -0.4451
+   -0.9318   -0.9318
+   -0.0729   -0.0729
+
+</pre>
+</div>
+</body>
+</html>
