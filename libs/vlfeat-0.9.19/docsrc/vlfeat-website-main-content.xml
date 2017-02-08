@@ -1,0 +1,57 @@
+<!DOCTYPE group PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<group>
+
+<page id="home" name="index" title="Home"> <include src="index.html"/>
+  <page id="about" name="about" title="About">
+    <page id="roadmap" name="roadmap" title="PASCAL Harvest Roadmap" hide="yes">
+      <include src="roadmap.html"/>
+    </page>
+    <include src="about.html"/>
+  </page>
+  <page id="license" name="license" title="License"><include src="license.html"/></page>
+</page>
+
+<page id="download" name="download" title="Download"><include src="download.html"/>
+  <page id="install.matlab" name="install-matlab" title="Using from MATLAB">
+    <include src="install-matlab.html"/>
+  </page>
+  <page id="install.octave" name="install-octave" title="Using from Octave">
+    <include src="install-octave.html"/>
+  </page>
+  <page id="install.shell" name="install-shell" title="Using from the command line">
+    <include src="install-shell.html"/>
+  </page>
+  <page id="install.c" name="install-c" title="Using from C">
+    <include src="install-c.html"/>
+    <page id="xcode" name="xcode" title="Xcode"><include src="using-xcode.html"/></page>
+    <page id="vsexpress" name="vsexpress" title="Visual C++"><include src="using-vsexpress.html"/></page>
+    <page id="gcc" name="gcc" title="g++"><include src="using-gcc.html"/></page>
+  </page>
+  <page id="compiling" name="compiling" title="Compiling">
+    <include src="compiling.html"/>
+  </page>
+</page>
+
+<dir name="overview">
+  <page id="tut" name="tut" title="Tutorials">
+    <include src="tutorials.html"/>
+  </page>
+</dir>
+
+<dir name="applications">
+  <page id="apps" name="apps" title="Applications">
+    <include src="apps.html"/>
+  </page>
+</dir>
+
+<!-- 404 page -->
+<page id="notfound" name="notfound" title="404 - Page not found" hide="yes">
+  <include src="notfound.html"/>
+</page>
+
+<!-- Generate an additional page to hold search results -->
+<page name="search" id="search" title="Search" hide="yes">
+  <gcse:searchresults-only></gcse:searchresults-only>
+</page>
+
+</group>

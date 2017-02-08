@@ -1,0 +1,279 @@
+<!DOCTYPE group PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<group>
+  <pagestyle>
+   #content p.widePar {
+     padding-right: 1em ;
+   }
+   #changes dd {
+     margin-bottom: 1em ;
+   }
+   .award {
+     margin: 1em 0em ;
+     margin-left: 2em ;
+     width: 10em ;
+     font-size: 0.9em ;
+     text-align:center ;
+     float: right ;
+     border: 1px solid #DDD ;
+     background-color: #f6f6f6 ;
+   }
+   #changes .date {
+     font-weight: normal ;
+     font-style: italic ;
+     width: 10em ;
+   }
+  </pagestyle>
+
+  <div class="award">
+    <a href="http://acmmm10.unifi.it/2010/10/open-source-software-competition-winners/"
+    style="text-decoration:none">ACM OpenSource Award</a>
+  </div>
+
+  <p>The <b>VLFeat</b> <a href="%pathto:license;">open source</a>
+  library implements popular computer vision algorithms specializing
+  in image understanding and local featurexs extraction and
+  matching. Algorithms incldue Fisher Vector, VLAD, SIFT, MSER,
+  k-means, hierarchical k-means, agglomerative information bottleneck,
+  SLIC superpixes, quick shift superpixels, large scale SVM training,
+  and many others. It is written in C for efficiency and
+  compatibility, with interfaces in MATLAB for ease of use, and
+  detailed documentation throughout. It supports Windows, Mac OS X,
+  and Linux. The latest version of VLFeat
+  is <code>%env:VERSION;</code>.</p>
+
+ <table class="boxes twocols">
+ <tr>
+   <td>
+     <h1>Download</h1>
+     <ul>
+       <li><b>
+           <a href="%pathto:root;download/vlfeat-%env:VERSION;-bin.tar.gz"
+              onClick="javascript:pageTracker._trackPageview('/download/vlfeat-%env:VERSION;-bin.tar.gz');">VLFeat
+             %env:VERSION;</a></b> (Windows, Mac, Linux)</li>
+       <li><a href="%pathto:download;">Source code and installation</a></li>
+       <li><img src="%pathto:root;images/git.png" style="height:1em;"></img>
+         <a href="https://github.com/vlfeat/vlfeat">repository,</a>
+         <a href="http://github.com/vlfeat/vlfeat/issues">bug tracking</a>.
+       </li>
+     </ul>
+   </td>
+   <td>
+     <h1>Documentation</h1>
+     <ul>
+       <li><a href="%pathto:matlab;">MATLAB commands</a></li>
+       <li><a href="%pathto:api;">C API</a> with algorithm descriptions</li>
+       <li><a href="%pathto:man;">Command line tools</a></li>
+     </ul>
+   </td>
+ </tr>
+ <tr>
+   <td>
+     <h1>Tutorials</h1>
+     <ul>
+       <li>Features:
+         <a href="%pathto:tut.covdet;">Covariant detectors</a>,
+         <a href="%pathto:tut.hog;">HOG</a>,
+         <a href="%pathto:tut.sift;">SIFT</a>,
+         <a href="%pathto:tut.mser;">MSER</a>,
+         <a href="%pathto:tut.qs;">Quick shift</a>,
+         <a href="%pathto:tut.slic;">SLIC</a></li>
+       <li>Clustering:
+         <a href="%pathto:tut.ikm;">IKM</a>,
+         <a href="%pathto:tut.hikm;">HIKM</a>,
+         <a href="%pathto:tut.aib;">AIB</a></li>
+       <li>Matching:
+         <a href="%pathto:tut.kdtree;">Randomized kd-trees</a></li>
+       <li><a href="%pathto:tut;">All tutorials</a></li>
+     </ul>
+     <h1>Example applications</h1>
+     <ul>
+       <li><a href="%pathto:apps.caltech-101;">Caltech-101 classification</a></li>
+       <li><a href="%pathto:apps.sift-mosaic;">SIFT matching for auto-stitching</a></li>
+       <li><a href="%pathto:apps;">All example applications</a></li>
+     </ul>
+   </td>
+   <td>
+     <h1>Citing</h1>
+<pre style="color: black; margin-top: 0.5em ; margin-bottom: 1.1em; line-height:1.1em;">
+@misc{vedaldi08vlfeat,
+ Author = {A. Vedaldi and B. Fulkerson},
+ Title = {{VLFeat}: An Open and Portable Library
+          of Computer Vision Algorithms},
+ Year  = {2008},
+ Howpublished = {\url{http://www.vlfeat.org/}}
+</pre>
+<h1>Acknowledgments</h1>
+     <p>
+
+       <a shape="rect"
+          href="http://www.pascal-network.org/"><img src="images/PASCAL2.png"
+                                                     style="height:2em;" alt="PASCAL2 credits"></img></a>
+
+       <a shape="rect"
+          href="http://company.yandex.com/">
+         <img src="images/yandex.png" style="height:2em;" alt="Yandex
+                                                               credits"></img></a>
+
+       <a shape="rect"  href="http://vision.ucla.edu">UCLA Vision
+         Lab</a>
+
+       <a shape="rect" href="http://www.robots.ox.ac.uk/~vgg/">Oxford
+         VGG</a>.</p>
+ </td>
+ </tr>
+ </table>
+
+ <h2 style="clear:left;">News</h2>
+
+ <div class="clear">&nsbp;</div>
+ <dl id="changes">
+
+   <dt><span class="date">12/9/1014</span>
+   <span class="standout">MatConvNet</span></dt>
+   <dd>Looking for an easy-to-use package to work with deep
+   convolutional neural networks in MATLAB? Check out our
+   new <a href="http://www.vlfeat.org/matconvnet">MatConvNet
+   toolbox</a>!</dd>
+
+   <dt><span class="date">12/9/2014</span> VLFeat 0.9.19 released</dt>
+   <dd>Maintenance release. Minor bugfixes and fixes compilation with
+   MATLAB 2014a.</dd>
+
+   <dt><span class="date">29/01/2014</span> VLFeat 0.9.18 released</dt>
+   <dd>Several bugfixes. Improved documentation, particularly of the
+   covariant detectors. Minor enhancements of the Fisher vectors.
+   [<a href="http://github.com/vlfeat/vlfeat/commits/v0.9.18">Details</a>]
+   </dd>
+
+   <dt><span class="date">22/06/2013</span> VLFeat 0.9.17 released</dt>
+   <dd>Rewritten SVM implementation, adding support for SGD and SDCA
+   optimizers and various loss functions (hinge, squared hinge,
+   logistic, etc.) and improving the interface. Added infrastructure
+   to support multi-core computations using OpenMP. Added OpenMP
+   support to KD-trees and KMeans. Added new Gaussian Mixture Models,
+   VLAD encoding, and Fisher Vector encodings (also with OpenMP
+   support). Added LIOP feature descriptors. Added new object category
+   recognition example code, supporting several standard benchmarks
+   off-the-shelf. This is the third point update supported by
+   the <a shape="rect" href="roadmap.html"><b>PASCAL Harvest
+   programme</b></a>.
+   [<a href="http://github.com/vlfeat/vlfeat/commits/v0.9.17">Details</a>]
+   </dd>
+
+   <dt><span class="date">01/10/2012</span>
+     <a href="http://www.vlfeat.org/benchmarks/index.html">VLBenchmarks
+       1.0-beta</a> released.</dt>
+   <dd>This new project provides simple to use benchmarking code for
+   feature detectors and descriptors. Its development was supported by
+   the <a shape="rect" href="roadmap.html"><b>PASCAL Harvest
+   programme</b></a>.
+   [<a href="http://github.com/vlfeat/vlfeat/commits/v0.9.16">Details</a>]</dd>
+
+   <dt><span class="date">01/10/2012</span> VLFeat 0.9.16 released</dt>
+   <dd>Added VL_COVDET() (covariant feature detector). This function
+   implements the following detectors: DoG, Hessian, Harris Laplace,
+   Hessian Laplace, Multiscale Hessian, Multiscale Harris. It also
+   implements affine adaptation, estiamtion of feature orientation,
+   computation of descriptors on the affine patches (including raw
+   patches), and sourcing of custom feature frame. Addet the auxiliary
+   function VL_PLOTSS(). This is the second point update supported by
+   the <a shape="rect" href="roadmap.html"><b>PASCAL Harvest
+   programme</b></a>.
+   [<a href="http://github.com/vlfeat/vlfeat/commits/v0.9.16">Details</a>]</dd>
+
+   <dt><span class="date">11/9/2012</span> VLFeat 0.9.15 released</dt>
+   <dd>Added VL_HOG() (HOG features). Added VL_SVMPEGASOS() and a
+   vastly improved SVM implementation. Added IHASHSUM (hashed
+   counting). Improved INTHIST (integral histogram). Added
+   VL_CUMMAX(). Improved the implementation of VL_ROC() and
+   VL_PR(). Added VL_DET() (Detection Error Trade-off (DET)
+   curves). Improved the verbosity control to AIB. Added support for
+   Xcode 4.3, improved support for past and future Xcode
+   versions. Completed the migration of the old test code in
+   toolbox/test, moving the functionality to the new unit tests
+   toolbox/xtest. Improved credits. This is the first point update
+   supported by the <a shape="rect" href="roadmap.html"><b>PASCAL
+   Harvest</b></a> (several more to come shortly). A big thank to our
+   sponsor!
+   [<a href="http://github.com/vlfeat/vlfeat/commits/v0.9.15">Details</a>].
+   </dd>
+   <dt><span class="date">10/1/2012</span>
+     <span style="color:red;">PASCAL2 Harvest funding</span></dt>
+   <dd>In the upcoming months many new functionalities will be added
+     to VLFeat thanks to the <a shape="rect"
+     href="http://www.pascal-network.org/?q=node/19">PASCAL
+     Harvest</a>! See <a href='%pathto:about;'>here</a> for details.
+   </dd>
+   <!--
+   <dt><span class="date">24/12/2011</span> VLFeat 0.9.14 released</dt>
+   <dd>VLFeat 0.9.14 adds SLIC superpixels, improves the
+     documentation, and contains other improvements and
+     bugfixes. Furthermore, starting from this release VLFeat is
+     distributed under the <a href="%pathto:license;">BSD license</a>.
+     [<a href="http://github.com/vlfeat/vlfeat/commits/v0.9.14">Details</a>].
+   </dd>
+   <dt><span class="date">12/7/2011</span> VLFeat 0.9.13 released</dt>
+   <dd>VLFeat 0.9.13 fixes the Windows binary package.
+     [<a href="http://github.com/vlfeat/vlfeat/commits/v0.9.13">Details</a>].
+   </dd>
+   <dt><span class="date">5/7/2011</span> VLFeat 0.9.12 released</dt>
+   <dd>VLFeat 0.9.12 contains minor bugfixes.
+     [<a href="http://github.com/vlfeat/vlfeat/commits/v0.9.12">Details</a>].
+   </dd>
+   <dt><span class="date">19/6/2011</span> VLFeat 0.9.11 released</dt>
+   <dd>VLFeat 0.9.11 solves a compatibility issue with old versions of
+     Mac OS X and brings other minor bug fixes as well.
+     [<a href="http://github.com/vlfeat/vlfeat/commits/v0.9.11">Details</a>].
+   </dd>
+   <dt><span class="date">11/6/2011</span> VLFeat 0.9.10 released</dt>
+   <dd>VLFeat 0.9.10 rolls out numerous bug fixes
+     and improvements, especially to the
+     homogeneous kernel map implementation.
+     [<a href="http://github.com/vlfeat/vlfeat/commits/v0.9.10">Details</a>].
+   </dd>
+   <dt><span class="date">28/10/2010</span> VLFeat wins the ACM Multimedia Open Source Awards!</dt>
+   <dd>VLFeat 0.9.9 was awarded
+   the <a href="http://www.acmmm10.org/2010/10/open-source-software-competition-winners/">ACM
+   Multimedia Open Source Award</a>.
+   </dd>
+   <dt><span class="date">14/6/2010</span> VLFeat 0.9.9 released</dt>
+   <dd>VLFeat 0.9.9 adds a new sample application (SIFT matching) and
+     minor refinements.
+     [<a href="http://github.com/vlfeat/vlfeat/commits/v0.9.9">Details</a>].
+   </dd>
+   <dt><span class="date">14/6/2010</span> Open Source Vision Software Tutorial</dt>
+   <dd>VLFeat presented at the CVPR 2010 Open Source Vision Software
+Tutorial. Slides of the presentation are available from
+the <a href="http://www.vlfeat.org/cvpr10">tutorial web page</a>.</dd>
+   <dt><span class="date">10/5/2010</span> VLFeat 0.9.8 released</dt>
+   <dd>VLFeat 0.9.8 adds new tutorials, (hierarchical) k-means support for
+     floating point data, homogeneous kernel maps, a basic implementation
+     of PEGASOS for SVM learning, and many other improvements.
+     [<a href="http://github.com/vlfeat/vlfeat/commits/v0.9.8">Details</a>].
+   </dd>
+   <dt><span class="date">16/01/2010</span> VLFeat 0.9.7 released</dt>
+   <dd>VLFeat 0.9.7 updates the binary distribution to be backward
+     compatible with Mac OS X 10.5 (Leopard).
+     [<a href="http://github.com/vlfeat/vlfeat/commits/v0.9.7">Details</a>].
+   </dd>
+   <dt><span class="date">10/01/2010</span> VLFeat 0.9.6 released</dt>
+   <dd>VLFeat 0.9.6 contains minor improvements to the binary
+   distribution. Specifically, it makes VLFeat GNU/Linux distribution
+   compatible with the older GLIBC version 2.3.
+   [<a href="http://github.com/vlfeat/vlfeat/commits/v0.9.6">Details</a>].
+   </dd>
+   <dt><span class="date">30/11/2009</span> VLFeat 0.9.5 released</dt>
+   <dd>VLFeat 0.9.5 adds a fast kd-tree implementation and
+   SSE-acelerated vector/histogram comparison. The dense SIFT (dsift)
+   implementation has also been improved. Binaries and compilation
+   support for Mac OS 10.6 (Snow Leopard) and MATLAB R2009b (32 and 64
+   bit) have been added
+   [<a href="http://github.com/vlfeat/vlfeat/commits/v0.9.5">Details</a>].
+   <blockquote>
+     <b>MATLAB 7.0</b> and earlier require recompling the MEX files by
+     the provided <code>vl_compile</code> command.
+   </blockquote>
+   </dd>
+   -->
+ </dl>
+</group>

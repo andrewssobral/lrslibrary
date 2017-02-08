@@ -1,0 +1,103 @@
+<!DOCTYPE group PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<group>
+
+%tableofcontents;
+
+<p><b>VLFeat</b> includes a basic implementation of k-means clustering
+and hierarchical k-means clustering. They are designed to be
+lightweight in order to work on large datasets. In particular, they
+assume that the data are vectors of unsigned chars (one byte). While
+this is limiting for some application, it works well for clustering
+image descriptors, where very high precision is usually unnecessary.
+For more details, see the
+<a href="%pathto:root;api/ikmeans_8h.html">Integer k-means API
+  reference</a>.</p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h1 id="tut.ikm.usage">Usage</h1>
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<p>Integer k-means (IKM) is run by the command
+<code>vl_ikmeans</code>. In order to demonstrate the usage of this
+command, we sample 1000 random points in the <code>[0,255]^2</code>
+integer square and use <code>vl_ikmeans</code> to get k=3
+clusters:</p>
+
+<precode type='matlab'>
+K = 3 ;
+data = uint8(rand(2,1000) * 255) ;
+[C,A] = vl_ikmeans(data,K) ;
+</precode>
+
+<p>The program returns both the cluster centers <code>C</code> and the
+data-to-cluster assignments <code>A</code>. By means of the cluster
+centers
+<code>C</code> we can project more data on the same clusters</p>
+
+<precode type='matlab'>
+datat = uint8(rand(2,10000) * 255) ;
+AT = vl_ikmeanspush(datat,C) ;
+</precode>
+
+<p>In order to visualize the results, we associate to each cluster a
+color and we plot the points:</p>
+
+<precode type='matlab'>
+cl = get(gca,'ColorOrder') ;
+ncl = size(cl,1) ;
+for k=1:K
+  sel  = find(A  == k) ;
+  selt = find(AT == k) ;
+  plot(data(1,sel),  data(2,sel),  '.',...
+       'Color',cl(mod(k,ncl)+1,:)) ;
+  hold on ;
+  plot(datat(1,selt),datat(2,selt),'+',...
+       'Color',cl(mod(k,ncl)+1,:)) ;
+end
+</precode>
+
+<div class="figure">
+<image src="%pathto:root;demo/ikmeans_lloyd.jpg"/>
+<div class="caption">
+<span class="content">
+<b>Integer k-means.</b> We show clusters of 2-D points obtained by
+integer k-means.  There are <code>k=3</code> clusters represented with
+different colors. The clusters have been estimated from 1000 points
+(displayed as dots). Then 10000 different points have been projected on
+the same clusters (displayed as crosses). The three big markers
+represent the cluster centers.
+</span>
+</div>
+</div>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h1 id="tut.ikm.elkan">Elkan</h1>
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<p>VLFeat supports two different implementations of k-means. While
+they produce identical output, the Elkan method requires fewer
+distance computations.  The <code>method</code> parameters controls
+which method is used. Consider the case when <code>K=100</code> and our
+data is now 128 dimensional (e.g. SIFT descriptors):</p>
+
+<precode type='matlab'>
+K=100;
+data = uint8(rand(128,10000) * 255);
+tic;
+[C,A] = vl_ikmeans(data,K,'method', 'lloyd') ; % default
+t_lloyd = toc
+tic;
+[C,A] = vl_ikmeans(data,K,'method', 'elkan') ;
+t_elkan = toc
+
+t_lloyd =
+
+   10.2884
+
+t_elkan =
+
+    5.1405
+</precode>
+
+
+</group>

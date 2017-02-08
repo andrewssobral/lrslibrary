@@ -1,0 +1,246 @@
+<!DOCTYPE group PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<group>
+
+%tableofcontents;
+
+<p><em>Maximally Stable Extremal Regions (MSER)</em> is a feature
+detector; Like the <a href="tut.sift">SIFT detector</a>, the MSER
+algorithm extracts from an image <code>I</code> a number of co-variant
+regions, called MSERs. An MSER is a <em>stable</em> connected
+component of some level sets of the image <code>I</code>. Optionally,
+elliptical frames are attached to the MSERs by fitting ellipses to the
+regions. For a more in-depth explanation of the MSER detector, see
+our <a href="%pathto:root;api/mser_8h.html">API reference for
+MSER</a></p>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h1 id="tut.mser.extract">Extracting MSERs</h1>
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<p>Each MSERs can be identified uniquely by (at least) one of its
+pixels <code>x</code>, as the connected component of the level set at
+level <code>I(x)</code> which contains <code>x</code>. Such a pixel is
+called <em>seed</em> of the region.</p>
+
+<p>To demonstrate the usage of the MATLAB command <code>vl_mser</code>
+we open MATLAB and load a test image</p>
+
+<precode type='matlab'>
+pfx = fullfile(vl_root,'data','spots.jpg') ;
+I = imread(pfx) ;
+image(I) ;
+</precode>
+
+<div class="figure">
+<image src="%pathto:root;demo/mser_basic_0.jpg"/>
+<div class="caption">
+<span class="content">
+A test image.
+</span>
+</div>
+</div>
+
+<p>We then convert the image to a format that is suitable for the
+<code>vl_mser</code> command.</p>
+
+<precode type='matlab'>
+I = uint8(rgb2gray(I)) ;
+</precode>
+
+<p>We compute the region seeds and the elliptical frames by</p>
+
+<precode type='matlab'>
+[r,f] = vl_mser(I,'MinDiversity',0.7,...
+                'MaxVariation',0.2,...
+                'Delta',10) ;
+</precode>
+
+<p>We plot the region frames by</p>
+
+<precode type='matlab'>
+f = vl_ertr(f) ;
+vl_plotframe(f) ;
+</precode>
+
+<p><code>vl_ertr</code> transposes the elliptical frame and is
+required here because the <code>vl_mser</code> code assumes that the row index
+is the first index, but the normal image convention assumes that this is the
+<code>x</code> (column) index.</p>
+
+<p>Plotting the MSERs themselves is a bit more involved as they have
+arbitrary shape.  To this end, we exploit two
+functions: <code>vl_erfill</code>, which, given an image and a region
+seed, returns a list of the pixels belonging to that region, and
+the MATLAB built-in <code>contour</code>, which draws the contour lines
+of a function. We start by</p>
+
+<precode type='matlab'>
+M = zeros(size(I)) ;
+for x=r'
+ s = vl_erfill(I,x) ;
+ M(s) = M(s) + 1;
+end
+</precode>
+
+<p>which computes a matrix <code>M</code> whose value are equal to the
+number of overlapping extremal regions. Next, we use <code>M</code>
+and <code>contour</code> to display the region boundaries:</p>
+
+<precode type='matlab'>
+figure(2) ;
+clf ; imagesc(I) ; hold on ; axis equal off; colormap gray ;
+[c,h]=contour(M,(0:max(M(:)))+.5) ;
+set(h,'color','y','linewidth',3) ;
+</precode>
+
+<div class="figure">
+<image src="%pathto:root;demo/mser_basic_contours.jpg"/>
+<image src="%pathto:root;demo/mser_basic_frames.jpg"/>
+<div class="caption">
+<span class="content">
+Extracted MSERs (left) and fitted ellipses (right).
+</span>
+</div>
+</div>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h1 id="tut.mser.param">MSER parameters</h1>
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+<p>In the original formulation, MSERs are controlled by a single
+parameter <code>&Delta;</code>, which controls how the stability is
+calculated. Its effect is shown in the figure below.</p>
+
+<div class="figure">
+<image src="%pathto:root;demo/mser_delta_0.jpg"/>
+<image src="%pathto:root;demo/mser_delta_1.jpg"/>
+<image src="%pathto:root;demo/mser_delta_2.jpg"/>
+<image src="%pathto:root;demo/mser_delta_3.jpg"/>
+<image src="%pathto:root;demo/mser_delta_4.jpg"/>
+<div class="caption">
+<span class="content">
+  <b>Effect of <code>&Delta;</code>.</b> We start with a synthetic
+  image which has an intensity profile as shown.  The bumps have
+  heights equal to 32, 64, 96, 128 and 160. As we increase
+  <code>&Delta;</code>, fewer and fewer regions are detected until
+  finally at <code>&Delta;=160</code> there is no region
+  <code>R</code> which is stable at <code>R(+&Delta;)</code>.
+</span>
+</div>
+</div>
+
+<p>The stability of an extremal region <code>R</code> is the inverse
+of the relative area variation of the region <code>R</code> when the
+intensity level is increased by <code>&Delta;</code>. Formally, the
+variation is defined as:</p>
+
+<precode type='matlab'>
+|R(+&Delta;) - R|
+-----------
+    |R|
+</precode>
+
+<p>where <code>|R|</code> denotes the area of the extremal region
+<code>R</code>, <code>R(+&Delta;)</code> is the extremal region
+<code>+&Delta;</code> levels up which contains <code>R</code> and
+<code>|R(+&Delta;) - R|</code> is the area difference of the two
+regions. </p>
+
+<p>A stable region has a small variation. The algorithm finds regions which
+are "maximally stable", meaning that they have a lower variation
+than the regions one level below or above. Note that due to the
+discrete nature of the image, the region below / above may be
+coincident with the actual region, in which case the region is still
+deemed maximal.</p>
+
+<p>However, even if an extremal region is maximally stable, it might be
+rejected if:</p>
+
+<ul>
+<li>it is too big (see the parameter <code>MaxArea</code>);</li>
+<li>it is too small (see the parameter <code>MinArea</code>);</li>
+<li>it is too unstable (see the parameter <code>MaxVariation</code>);</li>
+<li>it is too similar to its parent MSER (see the
+parameter <code>MinDiversity</code>).</li>
+</ul>
+
+<p>By default, MSERs are extracted for both dark-on-bright regions and bright-on-dark regions. To control this, parmeters <code>BrightOnDark</code> and <code>DarkOnBright</code> which take values 0 or 1 to enable or disable the regions. For example:
+</p>
+
+<precode type='matlab'>
+[r,f] = vl_mser(I,'MinDiversity',0.7,...
+                'MaxVariation',0.2,...
+                'Delta',10,...
+                'BrightOnDark',1,'DarkOnBright',0) ;
+</precode>
+
+<p>computes the regions in green in the figure below.</p>
+
+<div class="figure">
+<image src="%pathto:root;demo/mser_basic_contours_both.jpg"/>
+<image src="%pathto:root;demo/mser_basic_frames_both.jpg"/>
+<div class="caption">
+<span class="content">
+Extracted MSERs (left) and fitted ellipses (right) for both bright-on-dark
+(green) and dark-on-bright (yellow).
+</span>
+</div>
+</div>
+
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+<h1 id="tut.mser.conventions">Conventions</h1>
+<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+
+<p>As mentioned in the introduction, <code>vl_mser</code> uses
+matrix indices as image coordinates. Compared to the usual MATLAB
+convention for images, this means that the <code>x</code>
+and <code>y</code> axis are swapped (this has been done to make the
+convention consistent with images with three or more dimensions). Thus
+the frames computed by the program may need to be "transposed" as
+in:</p>
+
+<precode type='matlab'>
+[r,f] = vl_mser(I) ;
+f = vl_ertr(f) ;
+</precode>
+
+<p>On the other hand, the region seeds <code>r</code> are already in
+row major format, which is the standard MATLAB format for pixel
+indices.</p>
+
+<p>Instead of transposing the frames, one can start by transposing
+the image. In this case, the frames <code>f</code> have the standard
+image convention, but the region seeds are in column-major format and
+may need to be "transposed" as in:</p>
+
+<precode type='matlab'>
+[r,f] = vl_mser(I') ;
+[i,j] = sub2ind(size(I'),r) ;
+r  = ind2sub(size(I),j,i) ;
+</precode>
+
+<p>The command line utility <code>mser</code> uses the normal image
+convention (because images are rasterized in column-major
+order). Therefore the image frames are in the standard format, and the
+region seeds are in column major format.</p>
+
+<p>In order to convert from the command line utility convention to
+the MATLAB convention one needs also to recall that MATLAB coordinates
+starts from (1,1), but the command line utility uses the more common
+convention (0,0). For instance, let the files <code>image.frame</code>
+and <code>image.seed</code> contain the feature frames and seeds in
+ASCII format as generated by the command line utility. Then</p>
+
+<precode type='matlab'>
+r_ = load('image.seed')' + 1 ;
+f_ = load('image.frame')' ;
+f_(1:2,:) = f_(1:2,:) + 1 ;
+[r,f] = vl_mser(I') ; % notice the transpose
+</precode>
+
+<p>produces identical (up to numerical noise) region
+seeds <code>r</code> and <code>r_</code> and frames <code>f</code>
+and <code>f_</code>.</p>
+
+</group>
