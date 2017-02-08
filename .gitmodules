@@ -1,5 +1,5 @@
-[submodule "libs/CVX"]
-	path = libs/CVX
+[submodule "libs/cvx"]
+	path = libs/cvx
 	url = https://github.com/cvxr/CVX.git
 [submodule "libs/vlfeat"]
 	path = libs/vlfeat
