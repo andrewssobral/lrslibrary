@@ -1,0 +1,58 @@
+LANSVD  Compute a few singular values and singular vectors.
+   LANSVD computes singular triplets (u,v,sigma) such that
+   A*u = sigma*v and  A'*v = sigma*u. Only a few singular values 
+   and singular vectors are computed  using the Lanczos 
+   bidiagonalization algorithm with partial reorthogonalization (BPRO). 
+
+   S = LANSVD(A) 
+   S = LANSVD('Afun','Atransfun',M,N)  
+
+   The first input argument is either a  matrix or a
+   string containing the name of an M-file which applies a linear
+   operator to the columns of a given matrix.  In the latter case,
+   the second input must be the name of an M-file which applies the
+   transpose of the same operator to the columns of a given matrix,  
+   and the third and fourth arguments must be M and N, the dimensions 
+   of the problem.
+
+   [U,S,V] = LANSVD(A,K,'L',...) computes the K largest singular values.
+
+   [U,S,V] = LANSVD(A,K,'S',...) computes the K smallest singular values.
+
+   The full calling sequence is
+
+   [U,S,V] = LANSVD(A,K,SIGMA,OPTIONS) 
+   [U,S,V] = LANSVD('Afun','Atransfun',M,N,K,SIGMA,OPTIONS)
+
+   where K is the number of singular values desired and 
+   SIGMA is 'L' or 'S'.
+
+   The OPTIONS structure specifies certain parameters in the algorithm.
+    Field name      Parameter                              Default
+   
+    OPTIONS.tol     Convergence tolerance                  16*eps
+    OPTIONS.lanmax  Dimension of the Lanczos basis.
+    OPTIONS.p0      Starting vector for the Lanczos        rand(n,1)-0.5
+                    iteration.
+    OPTIONS.delta   Level of orthogonality among the       sqrt(eps/K)
+                    Lanczos vectors.
+    OPTIONS.eta     Level of orthogonality after           10*eps^(3/4)
+                    reorthogonalization. 
+    OPTIONS.cgs     reorthogonalization method used        0
+                    '0' : iterated modified Gram-Schmidt 
+                    '1' : iterated classical Gram-Schmidt
+    OPTIONS.elr     If equal to 1 then extended local      1
+                    reorthogonalization is enforced. 
+
+   See also LANBPRO, SVDS, SVD
+
+ References: 
+ R.M. Larsen, Ph.D. Thesis, Aarhus University, 1998.
+
+ B. N. Parlett, ``The Symmetric Eigenvalue Problem'', 
+ Prentice-Hall, Englewood Cliffs, NJ, 1980.
+
+ H. D. Simon, ``The Lanczos algorithm with partial reorthogonalization'',
+ Math. Comp. 42 (1984), no. 165, 115--142.
+
+ Rasmus Munk Larsen, DAIMI, 1998
