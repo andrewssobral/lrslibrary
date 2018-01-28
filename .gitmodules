@@ -16,3 +16,6 @@
 [submodule "libs/PROPACK"]
 	path = libs/PROPACK
 	url = https://github.com/andrewssobral/PROPACK.git
+[submodule "libs/cvx"]
+	path = libs/cvx
+	url = https://github.com/andrewssobral/CVX.git
