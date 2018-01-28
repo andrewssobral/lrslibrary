@@ -16,3 +16,9 @@
 [submodule "libs/YALL1"]
 	path = libs/YALL1
 	url = https://github.com/andrewssobral/YALL1.git
+[submodule "libs/TFOCS"]
+	path = libs/TFOCS
+	url = https://github.com/andrewssobral/TFOCS.git
+[submodule "libs/vlfeat"]
+	path = libs/vlfeat
+	url = https://github.com/andrewssobral/vlfeat.git
