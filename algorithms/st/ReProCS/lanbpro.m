@@ -86,7 +86,7 @@ function [U,B_k,V,p,ierr,work] = lanbpro(varargin)
 % Rasmus Munk Larsen, DAIMI, 1998.
 
 % Check input arguments.
-addpath('PROPACK');
+%addpath('PROPACK');
 
 global LANBPRO_TRUTH
 LANBPRO_TRUTH=0;

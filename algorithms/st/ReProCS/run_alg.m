@@ -14,8 +14,8 @@
 %clc;
 %close all
 
-addpath('YALL1_v1.4/');
-addpath('PROPACK/');
+%addpath('YALL1_v1.4/');
+%addpath('PROPACK/');
 
 %load('Data/Curtain.mat');
 %I = M;

@@ -6,7 +6,7 @@
 %clc;
 %close all
 
-addpath('YALL1_v1.4/');
+%addpath('YALL1_v1.4/');
 
 %load('Data/Curtain.mat');
 %I = M;
