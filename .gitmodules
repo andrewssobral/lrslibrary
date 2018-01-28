@@ -19,3 +19,6 @@
 [submodule "libs/cvx"]
 	path = libs/cvx
 	url = https://github.com/andrewssobral/CVX.git
+[submodule "libs/YALL1"]
+	path = libs/YALL1
+	url = https://github.com/andrewssobral/YALL1.git
