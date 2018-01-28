@@ -1,12 +1,12 @@
-Last Page Update: **07/02/2017**
+Last Page Update: **28/01/2018**
 
-Latest Library Version: **1.0.9** (see Release Notes for more info)
+Latest Library Version: **1.0.10** (see Release Notes for more info)
 
 LRSLibrary
 ----------
 *Low-Rank and Sparse* tools for Background Modeling and Subtraction in Videos.
 
-The *LRSLibrary* provides a collection of **low-rank and sparse decomposition** algorithms in MATLAB. The library was designed for motion segmentation in videos, but it can be also used or adapted for other computer vision problems (for more information, please see this [page](http://perception.csl.illinois.edu/matrix-rank/applications.html)). Currently the LRSLibrary contains a total of **104** *matrix-based* and *tensor-based* algorithms. The LRSLibrary was tested successfully in MATLAB R2013, R2014, R2015, and R2016 both x86 and x64 versions.
+The *LRSLibrary* provides a collection of **low-rank and sparse decomposition** algorithms in MATLAB. The library was designed for motion segmentation in videos, but it can be also used (or adapted) for other computer vision problems (for more information, please see this [page](http://perception.csl.illinois.edu/matrix-rank/applications.html)). Currently the LRSLibrary offers more than **100** algorithms based on *matrix* and *tensor* methods. The LRSLibrary was tested successfully in several MATLAB versions (e.g. R2013, R2014, R2015, R2016 and R2017, for both x86 and x64 versions).
 
 <p align="center"><img src="https://sites.google.com/site/andrewssobral/lrs_results2.png" /></p>
 
@@ -45,6 +45,20 @@ year      = {2015},
 url       = {http://arxiv.org/abs/1511.01245}
 }
 ```
+
+Install
+---
+Just do the following steps:
+
+* First, clone the repository: 
+
+```$ git clone --recursive https://github.com/andrewssobral/lrslibrary.git```
+
+* Then, open your MATLAB and run the following setup script: 
+
+```>> lrs_setup```
+
+That's all!
 
 GUI
 ---
@@ -159,6 +173,10 @@ List of the algorithms available in LRSLibrary
 * * GOSUS: Grassmannian Online Subspace Updates with Structured-sparsity [(Xu et al. 2013)](http://pages.cs.wisc.edu/~jiaxu/projects/gosus/gosus-iccv2013.pdf) [website](http://pages.cs.wisc.edu/~jiaxu/projects/gosus/)
 
 * * pROST: Robust PCA and subspace tracking from incomplete observations using L0-surrogates [(Hage and Kleinsteuber, 2013)](http://arxiv.org/abs/1210.0805) [website](http://www.gol.ei.tum.de/index.php?id=37&L=1)
+
+* * ReProCS: Provable Dynamic Robust PCA or Robust Subspace Tracking [(Narayanamurthy and Vaswani, 2017a)](https://arxiv.org/abs/1705.08948)
+
+* * MEDRoP: Memory Efficient Dynamic Robust PCA [(Narayanamurthy and Vaswani, 2017b)](https://arxiv.org/abs/1712.06061)
 
 * MC: Matrix Completion (15)
 * * PG-RMC: Nearly Optimal Robust matrix Completion [(Cherapanamjeri et al. 2016)](https://arxiv.org/abs/1606.07315)
@@ -419,6 +437,8 @@ If you have any problems or questions, please contact the author: Andrews Sobral
 
 Release Notes:
 --------------
+* Version 1.0.10: Added ReProCS (Narayanamurthy and Vaswani, 2017a) and MEDRoP (Narayanamurthy and Vaswani, 2017b). Thanks to Praneeth Narayanamurthy.
+
 * Version 1.0.9: Fixed some issues for matrix completion methods.
 
 * Version 1.0.8: Added PG-RMC (Cherapanamjeri et al. 2016) and fixed some small issues.

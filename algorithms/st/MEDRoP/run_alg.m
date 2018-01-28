@@ -14,7 +14,7 @@
 
 %% Training data processing
 %%option 1 -- init using batch RPCA
-t_train = 400;
+t_train = 10; %400;
 TrainData = M(:, 1 : t_train);
 rank_init = 40;
 

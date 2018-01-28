@@ -23,6 +23,7 @@ lrs_conf.pro_path = fullfile(lib_path,'PROPACK');
 lrs_conf.svd_path = fullfile(lib_path,'SVD');
 lrs_conf.vl_path = fullfile(lib_path,'vlfeat','toolbox','vl_setup');
 lrs_conf.tfocs_path = fullfile(lib_path,'TFOCS');
+lrs_conf.yall1_path = fullfile(lib_path,'YALL1');
 lrs_conf.cvx_path = fullfile(lib_path,'cvx');
 lrs_conf.tensor_toolbox_path = fullfile(lib_path,'tensor_toolbox');
 lrs_conf.mtt_path = fullfile(lib_path,'mtt');
@@ -30,7 +31,7 @@ lrs_conf.nway_path = fullfile(lib_path,'nway');
 lrs_conf.poblano_toolbox_path = fullfile(lib_path,'poblano_toolbox');
 %lrs_conf.lightspeed_path = fullfile(lib_path,'lightspeed');
 %lrs_conf.tensorlab_path = fullfile(lib_path,'tensorlab');
-lrs_conf.mmread_path = fullfile(lib_path,'mmread');
+%lrs_conf.mmread_path = fullfile(lib_path,'mmread');
 lrs_conf.manopt_path = fullfile(lib_path,'manopt');
 lrs_conf.lib_path = lib_path;
 
@@ -45,13 +46,14 @@ addpath(lrs_conf.lib_path); % add Library Path
 addpath(lrs_conf.pro_path); % add PROPACK
 addpath(lrs_conf.svd_path); % add SVD
 addpath(lrs_conf.tfocs_path); % add TFOCS
+addpath(lrs_conf.yall1_path); % add YALL1
 addpath(lrs_conf.tensor_toolbox_path); % add Tensor-Toolbox
 addpath(lrs_conf.mtt_path); % add MTT
 addpath(lrs_conf.nway_path); % add NWay
 addpath(lrs_conf.poblano_toolbox_path); % add Poblano-Toolbox
 %addpath(lrs_conf.lightspeed_path); % add Lightspeed
 %addpath(lrs_conf.tensorlab_path); % add TensorLab
-addpath(lrs_conf.mmread_path); % add MMRead
+%addpath(lrs_conf.mmread_path); % add MMRead
 addpath(lrs_conf.manopt_path); % add Manopt and subfolders
 addpath(genpath(fullfile(lrs_conf.manopt_path,'manopt')));
 

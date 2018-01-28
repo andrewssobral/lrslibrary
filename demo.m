@@ -119,7 +119,7 @@ process_video('NTF', 'bcuNCP', input_avi, output_avi);
 process_video('TD', 'Tucker-ALS', input_avi, output_avi);
 
 %% DEMO 04 - Process large videos (block by block)
-input_avi = fullfile(lrs_conf.lrs_dir,'dataset','highway.avi');
+input_avi = fullfile(lrs_conf.lrs_dir,'dataset','highway.mpg');
 video = load_video_file(input_avi);
 % show_video(video);
 

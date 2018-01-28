@@ -57,7 +57,7 @@ ST | GRASTA  | Grassmannian Robust Adaptive Subspace Tracking Algorithm (He et a
 ST | GOSUS   | Grassmannian Online Subspace Updates with Structured-sparsity (Xu et al. 2013) | 2
 ST | pROST   | Robust PCA and subspace tracking from incomplete observations using L0-surrogates (Hage and Kleinsteuber, 2013) | 3
 ST | ReProCS | Provable Dynamic Robust PCA or Robust Subspace Tracking (Narayanamurthy and Vaswani, 2017a) | 1
-ST | MEDRoP | Memory Efficient Dynamic Robust PCA (Narayanamurthy and Vaswani, 2017b -- to be uploaded to arXiV) | 1
+ST | MEDRoP | Memory Efficient Dynamic Robust PCA (Narayanamurthy and Vaswani, 2017b) | 1
 ---
 --- MC (Matrix Completion) ---
 MC | PG-RMC | Nearly Optimal Robust matrix Completion (Cherapanamjeri et al. 2016) | 1
