@@ -1,0 +1,75 @@
+LANPRO   Lanczos tridiagonalization with partial reorthogonalization
+   LANPRO computes the Lanczos tridiagonalization of a real symmetric 
+   matrix using the symmetric Lanczos algorithm with partial 
+   reorthogonalization. 
+
+   [Q_K,T_K,R,ANORM,IERR,WORK] = LANPRO(A,K,R0,OPTIONS,Q_old,T_old)
+   [Q_K,T_K,R,ANORM,IERR,WORK] = LANPRO('Afun',N,K,R0,OPTIONS,Q_old,T_old)
+
+   Computes K steps of the Lanczos algorithm with starting vector R0, 
+   and returns the K x K tridiagonal T_K, the N x K matrix Q_K 
+   with semiorthonormal columns and the residual vector R such that 
+
+        A*Q_K = Q_K*T_K + R .
+
+   Partial reorthogonalization is used to keep the columns of Q_K 
+   semiorthogonal:
+        MAX(DIAG((eye(k) - Q_K'*Q_K))) <= OPTIONS.delta.
+
+
+   The first input argument is either a real symmetric matrix, a struct with
+   components A.L and A.U or a string containing the name of an M-file which 
+   applies a linear operator to the columns of a given matrix.  In the latter
+   case, the second input argument must be N, the order of the problem.
+
+   If A is a struct with components A.L and A.U, such that 
+   L*U = (A - sigma*I), a shift-and-invert Lanczos iteration is performed
+
+   The OPTIONS structure is used to control the reorthogonalization:
+     OPTIONS.delta:  Desired level of orthogonality 
+                     (default = sqrt(eps/K)).
+     OPTIONS.eta  :  Level of orthogonality after reorthogonalization 
+                     (default = eps^(3/4)/sqrt(K)).
+     OPTIONS.cgs  :  Flag for switching between different reorthogonalization
+                     algorithms:
+                      0 = iterated modified Gram-Schmidt  (default)
+                      1 = iterated classical Gram-Schmidt 
+     OPTIONS.elr  :  If OPTIONS.elr = 1 (default) then extended local
+                     reorthogonalization is enforced.
+     OPTIONS.Y    :  The lanczos vectors are reorthogonalized against
+                     the columns of the matrix OPTIONS.Y.
+
+   If both R0, Q_old and T_old are provided, they must contain 
+   a partial Lanczos tridiagonalization of A on the form
+
+        A Q_old = Q_old T_old + R0 .  
+
+   In this case the factorization is extended to dimension K x K by
+   continuing the Lanczos algorithm with R0 as starting vector.
+
+   On exit ANORM contains an approximation to ||A||_2. 
+     IERR = 0  :  K steps were performed succesfully.
+     IERR > 0  :  K steps were performed succesfully, but the algorithm
+                  switched to full reorthogonalization after IERR steps.
+     IERR < 0  :  Iteration was terminated after -IERR steps because an
+                  invariant subspace was found, and 3 deflation attempts 
+                  were unsuccessful.
+   On exit WORK(1) contains the number of reorthogonalizations performed, and
+   WORK(2) contains the number of inner products performed in the
+   reorthogonalizations.
+
+   See also LANEIG, REORTH, COMPUTE_INT
+
+ References: 
+ R.M. Larsen, Ph.D. Thesis, Aarhus University, 1998.
+
+ G. H. Golub & C. F. Van Loan, "Matrix Computations",
+ 3. Ed., Johns Hopkins, 1996.  Chapter 9.
+
+ B. N. Parlett, ``The Symmetric Eigenvalue Problem'', 
+ Prentice-Hall, Englewood Cliffs, NJ, 1980.
+
+ H. D. Simon, ``The Lanczos algorithm with partial reorthogonalization'',
+ Math. Comp. 42 (1984), no. 165, 115--142.
+
+ Rasmus Munk Larsen, DAIMI, 1998

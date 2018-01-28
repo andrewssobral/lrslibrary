@@ -1,0 +1,85 @@
+LANBPRO Lanczos bidiagonalization with partial reorthogonalization.
+
+LANBPRO computes the Lanczos bidiagonalization of a real 
+matrix using the  with partial reorthogonalization. 
+
+[U_k,B_k,V_k,R,ierr,work] = LANBPRO(A,K,R0,OPTIONS,U_old,B_old,V_old) 
+[U_k,B_k,V_k,R,ierr,work] = LANBPRO('Afun','Atransfun',M,N,K,R0, ...
+                                    OPTIONS,U_old,B_old,V_old) 
+
+Computes K steps of the Lanczos bidiagonalization algorithm with partial 
+reorthogonalization (BPRO) with M-by-1 starting vector R0, producing a 
+lower bidiagonal K-by-K matrix B_k, an N-by-K matrix V_k, an M-by-K 
+matrix U_k and a M-by-1 vector such that
+     A*V_k = U_k*B_k + R
+Partial reorthogonalization is used to keep the columns of V_K and U_k
+semiorthogonal:
+      MAX(DIAG((EYE(K) - V_K'*V_K))) <= OPTIONS.delta 
+and 
+      MAX(DIAG((EYE(K) - U_K'*U_K))) <= OPTIONS.delta.
+
+B_k = LANBPRO(...) returns the bidiagonal matrix only.
+
+The first input argument is either a real matrix, or a string
+containing the name of an M-file which applies a linear operator 
+to the columns of a given matrix. In the latter case, the second 
+input must be the name of an M-file which applies the transpose of 
+the same linear operator to the columns of a given matrix,  
+and the third and fourth arguments must be M and N, the dimensions 
+of then problem.
+
+The OPTIONS structure is used to control the reorthogonalization:
+  OPTIONS.delta:  Desired level of orthogonality 
+                  (default = sqrt(eps/K)).
+  OPTIONS.eta  :  Level of orthogonality after reorthogonalization 
+                  (default = eps^(3/4)/sqrt(K)).
+  OPTIONS.cgs  :  Flag for switching between different reorthogonalization
+                  algorithms:
+                   0 = iterated modified Gram-Schmidt  (default)
+                   1 = iterated classical Gram-Schmidt 
+  OPTIONS.elr  :  If OPTIONS.elr = 1 (default) then extended local
+                  reorthogonalization is enforced.
+  OPTIONS.onesided
+               :  If OPTIONS.onesided = 0 (default) then both the left
+                  (U) and right (V) Lanczos vectors are kept 
+                  semiorthogonal. 
+                  OPTIONS.onesided = 1 then only the columns of U are
+                  are reorthogonalized.
+                  OPTIONS.onesided = -1 then only the columns of V are
+                  are reorthogonalized.
+  OPTIONS.waitbar
+               :  The progress of the algorithm is display graphically.
+
+If both R0, U_old, B_old, and V_old are provided, they must
+contain a partial Lanczos bidiagonalization of A on the form
+
+     A V_old = U_old B_old + R0 .  
+
+In this case the factorization is extended to dimension K x K by
+continuing the Lanczos bidiagonalization algorithm with R0 as a 
+starting vector.
+
+The output array work contains information about the work used in
+reorthogonalizing the u- and v-vectors.
+   work = [ RU  PU ]
+          [ RV  PV ] 
+where
+   RU = Number of reorthogonalizations of U.
+   PU = Number of inner products used in reorthogonalizing U.
+   RV = Number of reorthogonalizations of V.
+   PV = Number of inner products used in reorthogonalizing V.
+
+References: 
+R.M. Larsen, Ph.D. Thesis, Aarhus University, 1998.
+
+G. H. Golub & C. F. Van Loan, "Matrix Computations",
+3. Ed., Johns Hopkins, 1996.  Section 9.3.4.
+
+B. N. Parlett, ``The Symmetric Eigenvalue Problem'', 
+Prentice-Hall, Englewood Cliffs, NJ, 1980.
+
+H. D. Simon, ``The Lanczos algorithm with partial reorthogonalization'',
+Math. Comp. 42 (1984), no. 165, 115--142.
+
+
+Rasmus Munk Larsen, DAIMI, 1998.
