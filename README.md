@@ -9,7 +9,7 @@ LRSLibrary
 The *LRSLibrary* provides a collection of **low-rank and sparse decomposition** algorithms in MATLAB. The library was designed for moving object detection in videos, but it can be also used for other computer vision and machine learning problems (for more information, please see [here](https://en.wikipedia.org/wiki/Robust_principal_component_analysis#Applications) and [here](https://en.wikipedia.org/wiki/Low-rank_approximation#Applications)). Currently the LRSLibrary offers more than **100** algorithms based on *matrix* and *tensor* methods. The LRSLibrary was tested successfully in several MATLAB versions (e.g. R2014, R2015, R2016, R2017, on both x86 and x64 versions). It requires minimum **R2014b**.
 
 <p align="center"><img src="https://sites.google.com/site/andrewssobral/lrs_results2.png" /></p>
-<p align="center"><img src="https://sites.google.com/site/andrewssobral/lrs-opt.gif" /></p>
+<p align="center"><img src="https://e93b3dc1-a-62cb3a1a-s-sites.googlegroups.com/site/andrewssobral/lrs-opt.gif" /></p>
 
 See also:
 ```
