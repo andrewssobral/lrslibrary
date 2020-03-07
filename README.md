@@ -8,8 +8,8 @@ LRSLibrary
 
 The *LRSLibrary* provides a collection of **low-rank and sparse decomposition** algorithms in MATLAB. The library was designed for moving object detection in videos, but it can be also used for other computer vision and machine learning problems (for more information, please see [here](https://en.wikipedia.org/wiki/Robust_principal_component_analysis#Applications) and [here](https://en.wikipedia.org/wiki/Low-rank_approximation#Applications)). Currently the LRSLibrary offers more than **100** algorithms based on *matrix* and *tensor* methods. The LRSLibrary was tested successfully in several MATLAB versions (e.g. R2014, R2015, R2016, R2017, on both x86 and x64 versions). It requires minimum **R2014b**.
 
-<p align="center"><img src="https://sites.google.com/site/andrewssobral/lrs_results2.png" /></p>
-<p align="center"><img src="https://e93b3dc1-a-62cb3a1a-s-sites.googlegroups.com/site/andrewssobral/lrs-opt.gif" /></p>
+<p align="center"><img src="https://raw.githubusercontent.com/andrewssobral/lrslibrary/master/figs/lrs_results2.png" /></p>
+<p align="center"><img src="https://raw.githubusercontent.com/andrewssobral/lrslibrary/master/figs/lrs-opt.gif" /></p>
 
 See also:
 ```
@@ -65,15 +65,15 @@ GUI
 ---
 The *LRSLibrary* provides an easy-to-use graphical user interface (GUI) for background modeling and subtraction in videos. First, run the setup script **lrs_setup** (or **run('C:/lrslibrary/lrs_setup')**), then run **lrs_gui**, and enjoy it!
 
-<p align="center">
 <p align="center">(Click in the image to see the video)</p>
+<p align="center">
 <a href="https://www.youtube.com/watch?v=zziJ7-WnvV8" target="_blank">
-<img src="https://sites.google.com/site/andrewssobral/lrslibrary_gui2.png" border="0" />
+<img src="https://raw.githubusercontent.com/andrewssobral/lrslibrary/master/figs/lrslibrary_gui2.png" width="500" border="0" />
 </a>
 </p>
 
 Each algorithm is classified by its cpu time consumption with the following icons:
-<p align="center"><img src="https://sites.google.com/site/andrewssobral/time_legend.png?width=300" /></p>
+<p align="center"><img src="https://raw.githubusercontent.com/andrewssobral/lrslibrary/master/figs/time_legend.png" width="300" /></p>
 
 The algorithms were grouped in eight categories: **RPCA** for Robust PCA, **ST** for Subspace Tracking, **MC** for Matrix Completion, **TTD** for Three-Term Decomposition, **LRR** for Low-Rank Representation, **NMF** for Non-negative Matrix Factorization, **NTF** for Non-negative Tensor Factorization, or **TD** for standard Tensor Decomposition.
 
@@ -378,7 +378,7 @@ out = run_algorithm('TD', 'Tucker-ALS', T);
 % Show results
 show_3dtensors(T,out.L,out.S,out.O);
 ```
-<p align="center"><img src="https://sites.google.com/site/andrewssobral/lrs_results.png?width=650" /></p>
+<p align="center"><img src="https://raw.githubusercontent.com/andrewssobral/lrslibrary/master/figs/lrs_results.png" width="650" /></p>
 
 CPU time consumption
 --------------------
@@ -386,7 +386,7 @@ The figure below shows the average CPU time consumption and the speed classifica
 
 ***A complete review evaluating the algorithms in many specific criterias will be published in a paper journal soon***
 
-<p align="center"><img src="https://sites.google.com/site/andrewssobral/algorithms_by_speed.png" /></p>
+<p align="center"><img src="https://raw.githubusercontent.com/andrewssobral/lrslibrary/master/figs/algorithms_by_speed.png" /></p>
 
 About LRSLibrary
 ----------------
