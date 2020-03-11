@@ -47,6 +47,10 @@ url       = {http://arxiv.org/abs/1511.01245}
 }
 ```
 
+## Stargazers over time
+
+[![Stargazers over time](https://starchart.cc/andrewssobral/lrslibrary.svg)](https://starchart.cc/andrewssobral/lrslibrary)
+
 Install
 ---
 Just do the following steps:
