@@ -1,3 +1,5 @@
+[![View LRSLibrary on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/48404-lrslibrary)
+
 Last Page Update: **07/03/2020**
 
 Latest Library Version: **1.0.10** (see Release Notes for more info)
