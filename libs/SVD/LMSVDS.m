@@ -38,10 +38,46 @@ if nargin < 2; r = 6;  end
 % end
 
 r = uint8(r);
+% disp(['r=', num2str(r)])
 
 % set parameters
 mainargin = nargin;
-set_param;
+tol = 1e-8;
+maxit = 300;
+idisp = 0;
+mn = min(m,n);
+
+if r <= mn*0.02
+    memo = 5;
+elseif r <= mn*0.03
+    memo = 4;
+else
+    memo = 3;
+end
+
+if r >= mn*0.015 && r <= mn*0.035
+    sub = 1;
+else
+    sub = 2;
+end
+
+if isfield(opts,  'gvk'); tau = opts.gvk; else tau = 10; end
+% working size
+k = min([2*r,r+tau,m,n]);
+% initial guess
+% disp(n)
+% disp(['k=', num2str(k)])
+% Y = randn(n,k);
+Y = randn(n,round(k));
+
+if mainargin < 3; return; end
+
+if isfield(opts,  'tol');     tol = opts.tol;   end
+if isfield(opts,'maxit');   maxit = opts.maxit; end
+if isfield(opts, 'memo');    memo = opts.memo;  end
+if isfield(opts,'idisp');   idisp = opts.idisp; end
+if isfield(opts,'initY');       Y = opts.initY(:,1:k); end
+if isfield(opts,  'sub');     sub = opts.sub;   end
 
 % initialize
 if isnumeric(A)
@@ -80,55 +116,15 @@ S = S(1:r,1:r);
 
 
 %% %%%%%%% nested functions %%%%%%% %%
-    function set_param
-        
-        tol = 1e-8;
-        maxit = 300;
-        idisp = 0;
-        mn = min(m,n);
-        
-        if r <= mn*0.02;
-            memo = 5;
-        elseif r <= mn*0.03;
-            memo = 4;
-        else
-            memo = 3;
-        end
-        
-        if r >= mn*0.015 & r <= mn*0.035
-            sub = 1;
-        else
-            sub = 2;
-        end
-        
-        if isfield(opts,  'gvk'); tau = opts.gvk; else tau = 10; end
-        % working size
-        k = min([2*r,r+tau,m,n]);
-        % initial guess
-        %disp(n)
-        %disp(k)
-        %Y = randn(n,k);
-        Y = randn(n,round(k));
-        
-        if mainargin < 3; return; end
-        
-        if isfield(opts,  'tol');     tol = opts.tol;   end
-        if isfield(opts,'maxit');   maxit = opts.maxit; end
-        if isfield(opts, 'memo');    memo = opts.memo;  end
-        if isfield(opts,'idisp');   idisp = opts.idisp; end
-        if isfield(opts,'initY');       Y = opts.initY(:,1:k); end
-        if isfield(opts,  'sub');     sub = opts.sub;   end
-        
-    end % set_param
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     function [U,S,V] = get_svd(X,Y)
         method = 2;
         switch method
-            case 1;
+            case 1
                 [V,S,W] = svd(Y,0);
                 U = X*W;
-            case 2;
+            case 2
                 [V,R] = qr(Y,0);
                 [W,S,Z] = svd(R');
                 U = X*W; V = V*Z;
@@ -186,7 +182,6 @@ Ym = zeros(n,(1+memo)*k);
 Xm(:,k+1:2*k) = X;
 Ym(:,k+1:2*k) = Y;
 Lm = k;
-
 
 rvr = zeros(r,1);
 chg_rvr = 1;
@@ -261,7 +256,7 @@ for iter = 1:maxit
         %portion = csum/csum(end);
         %L = find(portion > .999,1)
         L = sum(sdT > 5e-8,1);
-        if L < .95*Lm; %disp([L Lm])
+        if L < .95*Lm %disp([L Lm])
             Lm = L;
             Icut = idx(1:Lm);
             Py = Py(:,Icut);
@@ -326,6 +321,7 @@ m = size(X,1);
 n = size(Y,1);
 mn = min(m,n);
 k = size(Y,2);
+% disp(['k=', num2str(k), ' : r=', num2str(r)])
 if k < r; error('working size too small'); end
 
 if memo > 0
@@ -337,13 +333,13 @@ if memo > 0
 else
     Lm = 0;
 end
-%disp(r)
-%rvr = zeros(r,1);
+% disp(r)
+% rvr = zeros(r,1);
 rvr = zeros(round(r),1);
 chg_rvr = 1;
 chgv = zeros(maxit,1);
 xtrm = zeros(maxit,1);
-%hrvs = zeros(maxit,r);
+% hrvs = zeros(maxit,r);
 hrvs = zeros(maxit,round(r));
 kktc = zeros(maxit,1);
 disp_str = 'iter %3i: memo used %i, chg_rvr %8.4e\n';
@@ -413,7 +409,7 @@ for iter = 1:maxit
         dT = diag(T);
         [sdT,idx] = sort(dT,'descend');
         L = sum(sdT > 5e-10,1);
-        if L < .95*Lm; %disp([L Lm])
+        if L < .95*Lm %disp([L Lm])
             Lm = L;
             Icut = idx(1:Lm);
             Px = Px(:,Icut);

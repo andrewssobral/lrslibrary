@@ -1,8 +1,8 @@
 [![View LRSLibrary on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/48404-lrslibrary)
 
-Last Page Update: **07/03/2020**
+Last Page Update: **29/07/2022**, Previous Page Update: **07/03/2020**
 
-Latest Library Version: **1.0.10** (see Release Notes for more info)
+Latest Library Version: **1.0.11** (see Release Notes for more info)
 
 LRSLibrary
 ----------
@@ -444,6 +444,8 @@ If you have any problems or questions, please contact the author: Andrews Sobral
 
 Release Notes:
 --------------
+* Version 1.0.11: Fixed IALM with LMSVDS (Liu et al. 2012).
+
 * Version 1.0.10: Added ReProCS (Narayanamurthy and Vaswani, 2017a) and MEDRoP (Narayanamurthy and Vaswani, 2017b). Thanks to Praneeth Narayanamurthy.
 
 * Version 1.0.9: Fixed some issues for matrix completion methods.

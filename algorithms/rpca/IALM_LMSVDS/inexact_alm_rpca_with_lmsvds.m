@@ -63,7 +63,6 @@ d_norm = norm(D, 'fro');
 iter = 0;
 total_svd = 0;
 converged = false;
-stopCriterion = 1;
 sv = 10;
 while ~converged
   iter = iter + 1;
@@ -73,8 +72,8 @@ while ~converged
   E_hat = E_hat+min(temp_T + lambda/mu, 0);
   
   myA = D - E_hat + (1/mu)*Y;
-  [myM,myN] = size(myA);
-  myR = 2*myM/100;
+  [myM, ~] = size(myA);
+  myR = (myM/100)/2;
   [U,S,V] = LMSVDS(myA, myR, []);
   
   diagS = diag(S);
