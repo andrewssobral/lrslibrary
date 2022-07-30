@@ -16,7 +16,7 @@
 %%option 1 -- init using batch RPCA
 t_train = 10; %400;
 TrainData = M(:, 1 : t_train);
-rank_init = 40;
+rank_init = 4;
 
 L_hat_init = ncrpca(TrainData, rank_init);
 
@@ -52,7 +52,7 @@ alpha = 60;
 
 tic
 fprintf('alpha = %d\tK = %d\n', alpha, K);
-[BG, FG, L_hat, S_hat, T_hat, t_hat, P_track_full] ...
+[BG, FG, L_hat, S_hat, T_hat, t_hat] ...
     = MEDRoP(M(:, t_train + 1 : end), ...
     L_init, mu, ev_thresh, alpha, K);
 toc
