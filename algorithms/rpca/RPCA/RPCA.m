@@ -47,7 +47,7 @@ c_ini = pinv(basis_ini)*(Data-mean_ini*ones(1,size(Data,2)));
 
 %Compute RPCA
 [rob_mean,Bg,cg,info,Sigma] = ...
-  rob_pca(Data,number_component,300,1,Sigmaf,Sigmai,2,basis_ini,c_ini,mean_ini);   
+  rob_pca(Data,number_component,300,1,Sigmai,Sigmaf,2,basis_ini,c_ini,mean_ini);   
 
 %Compute outliers
 error = Data-rob_mean*ones(1,size(Data,2))-Bg*cg;
