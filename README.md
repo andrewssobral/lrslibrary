@@ -1,4 +1,4 @@
-[![View LRSLibrary on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/48404-lrslibrary)
+[![View LRSLibrary on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/48404-lrslibrary)  [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/andrewssobral/lrslibrary)
 
 Last Page Update: **29/07/2022**, Previous Page Update: **07/03/2020**
 
@@ -312,6 +312,8 @@ List of the algorithms available in LRSLibrary
 
 Usage example
 ----------------------------
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/andrewssobral/lrslibrary)
+
 For complete details and examples, please see the **demo.m** file.
 ```Matlab
 
